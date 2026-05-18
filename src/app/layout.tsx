@@ -1,6 +1,34 @@
 import type { Metadata } from 'next'
+import localFont from 'next/font/local'
 import { THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import './globals.css'
+
+const notoSansThai = localFont({
+  src: [
+    {
+      path: '../../public/fonts/NotoSansThai-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/NotoSansThai-Medium.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/NotoSansThai-SemiBold.ttf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/NotoSansThai-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-noto-sans-thai',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'KHUA — น้ำพริกพะเยา น้ำพริกตำรับล้านนา',
@@ -55,7 +83,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="th" className="h-full antialiased" data-scroll-behavior="smooth">
+    <html
+      lang="th"
+      className={`${notoSansThai.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+    >
       <body className="min-h-full">{children}</body>
     </html>
   )

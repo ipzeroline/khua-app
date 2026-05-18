@@ -43,11 +43,18 @@ function toCartItem(product: ProductData): CartItem {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(() => loadCart())
+  const [items, setItems] = useState<CartItem[]>([])
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
+    setItems(loadCart())
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-  }, [items])
+  }, [hydrated, items])
 
   const value = useMemo<CartContextValue>(() => {
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)

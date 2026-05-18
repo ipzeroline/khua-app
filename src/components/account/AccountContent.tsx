@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Dictionary } from '@/i18n'
 
@@ -24,17 +24,25 @@ function loadProfile(): MemberProfile | null {
 }
 
 export default function AccountContent({ dict }: AccountContentProps) {
-  const [profile, setProfile] = useState<MemberProfile | null>(() => loadProfile())
+  const [profile, setProfile] = useState<MemberProfile | null>(null)
   const [mode, setMode] = useState<'signin' | 'register'>('register')
-  const [form, setForm] = useState(() => {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+  })
+
+  useEffect(() => {
     const saved = loadProfile()
-    return {
+    setProfile(saved)
+    setForm({
       name: saved?.name || '',
       email: saved?.email || '',
       phone: saved?.phone || '',
       password: '',
-    }
-  })
+    })
+  }, [])
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

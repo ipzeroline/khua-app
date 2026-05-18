@@ -10,7 +10,7 @@
   --color-gold-pale: #fbf3df;
   --color-border: #e5e5e7;
   --color-border-light: #f0f0f2;
-  --font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Sukhumvit Set", "Segoe UI", Arial, sans-serif;
+  --font-apple: var(--font-noto-sans-thai), -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Sukhumvit Set", "Segoe UI", Arial, sans-serif;
 }
 
 html {
