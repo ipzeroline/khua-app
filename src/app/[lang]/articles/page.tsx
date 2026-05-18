@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import ArticlesContent from '@/components/articles/ArticlesContent'
 
 interface ArticlesPageProps {
@@ -38,14 +38,13 @@ export async function generateMetadata({ params }: ArticlesPageProps): Promise<M
   return {
     title: dict.articles.title,
     description: dict.articles.subtitle,
-    keywords: Array.from(
-      new Set([
-        dict.articles.title,
-        dict.phayaoSeo.title,
-        dict.products.originValue,
-        ...dict.products.seoTagsBase,
-        ...dict.articles_data.flatMap((article) => article.tags),
-      ]),
+    keywords: mergeKeywords(
+      THAI_SEO_KEYWORDS,
+      dict.articles.title,
+      dict.phayaoSeo.title,
+      dict.products.originValue,
+      dict.products.seoTagsBase,
+      dict.articles_data.flatMap((article) => article.tags),
     ),
     alternates: { canonical: `/${locale}/articles`, languages: alternates },
     openGraph: {

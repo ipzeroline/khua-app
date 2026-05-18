@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import ContactContent from '@/components/contact/ContactContent'
 
 interface ContactPageProps {
@@ -17,7 +17,15 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
 
   return {
     title: dict.contact.title,
-    description: `${dict.contact.lineDesc} — ${dict.site.name}`,
+    description:
+      `${dict.contact.lineDesc} — ${dict.site.name} สั่งน้ำพริกพะเยา น้ำพริกเหนือราคาถูก ใกล้ฉัน พร้อมส่งทั่วไทย`,
+    keywords: mergeKeywords(
+      THAI_SEO_KEYWORDS,
+      'สั่งน้ำพริก',
+      'ซื้อน้ำพริกออนไลน์',
+      'น้ำพริกพร้อมส่ง',
+      dict.products.originValue,
+    ),
     alternates: { canonical: `/${locale}/contact`, languages: alternates },
     openGraph: {
       title: `${dict.contact.title} | ${dict.site.name}`,

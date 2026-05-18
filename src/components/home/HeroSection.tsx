@@ -71,7 +71,7 @@ export default function HeroSection({ dict }: HeroSectionProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="apple-headline text-5xl sm:text-6xl lg:text-7xl gold-text mb-5 drop-shadow-[0_14px_34px_rgba(184,134,11,0.12)]"
+            className="apple-headline hero-gold-title mb-5 text-5xl font-semibold sm:text-6xl lg:text-7xl"
           >
             {dict.hero.title}
           </motion.h1>

@@ -1,12 +1,20 @@
 import type { Metadata } from 'next'
+import { THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'KHUA — Premium Northern Thai Chili Paste',
-  description: 'Crafted Northern Soul — Premium Northern Thai chili pastes, traditional Lanna recipes, artisanal quality.',
+  title: 'KHUA — น้ำพริกพะเยา น้ำพริกตำรับล้านนา',
+  description:
+    'น้ำพริกพะเยา น้ำพริกเหนือพรีเมียมจากตำรับล้านนา คั่วหอมด้วยวัตถุดิบพื้นถิ่นและงานคราฟต์แบบภาคเหนือ',
+  keywords: THAI_SEO_KEYWORDS,
   metadataBase: new URL('https://khua-foods.com'),
+  applicationName: 'KHUA',
+  authors: [{ name: 'KHUA' }],
+  creator: 'KHUA',
+  publisher: 'KHUA',
+  category: 'อาหารเหนือ น้ำพริกพะเยา',
   alternates: {
-    canonical: '/',
+    canonical: '/th',
     languages: {
       th: '/th',
       en: '/en',
@@ -15,6 +23,30 @@ export const metadata: Metadata = {
     },
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/khua-logo.png', type: 'image/png', sizes: '1024x1024' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [{ url: '/khua-logo.png', type: 'image/png', sizes: '1024x1024' }],
+  },
+  openGraph: {
+    title: 'KHUA — น้ำพริกพะเยา น้ำพริกตำรับล้านนา',
+    description:
+      'น้ำพริกเหนือพรีเมียมจากจังหวัดพะเยา ตำรับล้านนา เหมาะสำหรับคนไทยที่ค้นหาน้ำพริกใกล้ฉัน น้ำพริกราคาถูก และของฝากภาคเหนือ',
+    url: '/th',
+    siteName: 'KHUA',
+    locale: 'th_TH',
+    type: 'website',
+    images: [{ url: '/khua-logo.png', width: 1024, height: 1024, alt: 'KHUA น้ำพริกพะเยา' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'KHUA — น้ำพริกพะเยา น้ำพริกตำรับล้านนา',
+    description: 'น้ำพริกเหนือพรีเมียมจากพะเยา ตำรับล้านนา พร้อมส่งทั่วไทย',
+    images: ['/khua-logo.png'],
+  },
 }
 
 export default function RootLayout({

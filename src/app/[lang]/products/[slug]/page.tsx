@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, type ProductData, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import ProductDetailContent from '@/components/products/ProductDetailContent'
 import { notFound } from 'next/navigation'
 
@@ -20,13 +20,17 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}/products/${slug}` })
-  const keywords = Array.from(new Set([
+  const keywords = mergeKeywords([
+    ...THAI_SEO_KEYWORDS,
     product.name,
     product.nameEn,
+    `${product.name} ราคาถูก`,
+    `${product.name} ใกล้ฉัน`,
+    `${product.name} เชียงใหม่`,
     dict.products.originValue,
     ...dict.products.seoTagsBase,
     ...product.ingredients,
-  ]))
+  ])
 
   return {
     title: `${product.name} ${dict.products.originValue} | ${dict.site.name}`,

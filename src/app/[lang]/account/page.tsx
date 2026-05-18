@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import AccountContent from '@/components/account/AccountContent'
 
 interface AccountPageProps {
@@ -18,6 +18,12 @@ export async function generateMetadata({ params }: AccountPageProps): Promise<Me
   return {
     title: dict.account.label,
     description: dict.account.subtitle,
+    keywords: mergeKeywords(
+      THAI_SEO_KEYWORDS,
+      'สมาชิก KHUA',
+      'สมัครสมาชิกน้ำพริก',
+      'สั่งน้ำพริกออนไลน์',
+    ),
     alternates: { canonical: `/${locale}/account`, languages: alternates },
     openGraph: {
       title: `${dict.account.label} | ${dict.site.name}`,

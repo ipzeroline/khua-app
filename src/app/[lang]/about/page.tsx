@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import AboutContent from '@/components/about/AboutContent'
 
 interface AboutPageProps {
@@ -18,6 +18,12 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
   return {
     title: dict.about.title,
     description: dict.about.paragraphs[0],
+    keywords: mergeKeywords(
+      THAI_SEO_KEYWORDS,
+      dict.about.title,
+      dict.products.originValue,
+      dict.products.seoTagsBase,
+    ),
     alternates: { canonical: `/${locale}/about`, languages: alternates },
     openGraph: {
       title: `${dict.about.title} | ${dict.site.name}`,

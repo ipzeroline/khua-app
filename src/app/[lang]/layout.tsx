@@ -3,7 +3,7 @@ import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import { CartProvider } from '@/components/cart/CartProvider'
 import { getDictionary, LOCALES, type Locale } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import { notFound } from 'next/navigation'
 
 interface LangLayoutProps {
@@ -30,10 +30,12 @@ export async function generateMetadata({ params }: LangLayoutProps): Promise<Met
       template: `%s | ${dict.site.name}`,
     },
     description: dict.site.description,
-    keywords: [
-      'น้ำพริกเหนือ', 'Northern Thai chili paste', 'Lanna food', 'น้ำพริกล้านนา',
-      'น้ำพริกลาบเหนือ', 'น้ำพริกตาแดง', 'น้ำพริกแกงเหนือ', 'KHUA',
-    ],
+    keywords: mergeKeywords(
+      THAI_SEO_KEYWORDS,
+      dict.products.originValue,
+      dict.products.seoTagsBase,
+      dict.products_data.map((product) => product.name),
+    ),
     alternates: {
       canonical: `/${lang}`,
       languages: alternates,

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import HeroSection from '@/components/home/HeroSection'
 import StorySection from '@/components/home/StorySection'
 import LannaSoulSection from '@/components/home/LannaSoulSection'
@@ -25,12 +25,13 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   return {
     title: `${dict.hero.title} | ${dict.site.name}`,
     description: dict.hero.description,
-    keywords: Array.from(new Set([
+    keywords: mergeKeywords([
+      ...THAI_SEO_KEYWORDS,
       dict.products.originValue,
       ...dict.products.seoTagsBase,
       dict.articles.homeTitle,
       dict.products.title,
-    ])),
+    ]),
     alternates: { canonical: `/${locale}`, languages: alternates },
     openGraph: {
       title: `${dict.site.name} — ${dict.site.tagline}`,
