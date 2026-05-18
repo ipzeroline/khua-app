@@ -7,7 +7,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/generate-daily-articles.mjs",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 7778",
     "lint": "eslint",
     "articles:generate": "node scripts/generate-daily-articles.mjs"
   },
