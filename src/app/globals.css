@@ -75,28 +75,6 @@ body::before {
   background-clip: text;
 }
 
-.hero-gold-title {
-  color: #5f3d0f;
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.7),
-    0 10px 28px rgba(95, 61, 15, 0.14);
-}
-
-@supports (-webkit-background-clip: text) {
-  .hero-gold-title {
-    background: linear-gradient(
-      135deg,
-      #4f320b 0%,
-      #7a5418 28%,
-      #a87824 58%,
-      #5f3d0f 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-}
-
 .premium-stage {
   background:
     radial-gradient(ellipse 70% 45% at 50% 42%, rgba(217, 181, 106, 0.22), transparent 62%),

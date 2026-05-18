@@ -57,7 +57,11 @@ export default function HeroSection({ dict }: HeroSectionProps) {
           </div>
         </motion.div>
 
-        <div className="max-w-3xl text-center">
+        <div className="relative max-w-3xl text-center">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-[-2rem] top-6 bottom-16 -z-10 rounded-full bg-white/55 blur-3xl"
+          />
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -71,7 +75,7 @@ export default function HeroSection({ dict }: HeroSectionProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="apple-headline hero-gold-title mb-5 text-5xl font-semibold sm:text-6xl lg:text-7xl"
+            className="apple-headline text-5xl sm:text-6xl lg:text-7xl gold-text mb-5 drop-shadow-[0_14px_34px_rgba(184,134,11,0.12)]"
           >
             {dict.hero.title}
           </motion.h1>
