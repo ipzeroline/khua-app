@@ -44,13 +44,13 @@ export default function Navbar({ dict, lang }: NavbarProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'glass border-b border-border' : 'bg-transparent'
+        scrolled ? 'glass border-b border-black/5' : 'bg-white/70 backdrop-blur-xl'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="mx-auto flex h-12 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link
           href={`/${lang}`}
-          className="flex items-center gap-2.5 text-[15px] font-semibold tracking-normal text-text"
+          className="flex items-center gap-2 text-[13px] font-semibold tracking-normal text-text"
         >
           <Image
             src="/khua-logo.png"
@@ -58,14 +58,14 @@ export default function Navbar({ dict, lang }: NavbarProps) {
             width={40}
             height={40}
             priority
-            className="h-9 w-9 rounded-md object-cover"
+            className="h-7 w-7 rounded-md object-cover"
           />
           <span>KHUA</span>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <ul className="flex items-center gap-8">
+        <div className="hidden items-center gap-7 md:flex">
+          <ul className="flex items-center gap-7">
             {navLinks.map((link) => {
               const linkPath = link.href.replace(localePathPattern, '') || '/'
               const isActive = pathWithoutLang === linkPath
@@ -73,7 +73,7 @@ export default function Navbar({ dict, lang }: NavbarProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`premium-link text-[0.8rem] tracking-wide transition-colors duration-300 ${
+                    className={`text-[0.76rem] tracking-normal transition-colors duration-300 ${
                       isActive
                         ? 'text-gold font-medium'
                         : 'text-text-secondary hover:text-text'
@@ -86,10 +86,10 @@ export default function Navbar({ dict, lang }: NavbarProps) {
             })}
           </ul>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
             <Link
               href={`/${lang}/account`}
-              className="premium-link text-[0.8rem] text-text-secondary transition-colors hover:text-text"
+              className="text-[0.76rem] text-text-secondary transition-colors hover:text-text"
             >
               {dict.nav.account}
             </Link>
@@ -97,14 +97,14 @@ export default function Navbar({ dict, lang }: NavbarProps) {
           </div>
 
           {/* Locale switcher */}
-          <div className="flex items-center gap-1 ml-2 pl-4 border-l border-border">
+          <div className="ml-1 flex items-center gap-1 border-l border-border pl-3">
             {LOCALES.map((l) => {
               const newPath = pathname.replace(localePathPattern, `/${l}`)
               return (
                 <Link
                   key={l}
                   href={newPath}
-                  className={`px-2 py-1 text-xs rounded transition-colors ${
+                  className={`rounded px-2 py-1 text-[0.68rem] transition-colors ${
                     lang === l
                       ? 'bg-gold/10 text-gold font-medium'
                       : 'text-text-secondary hover:text-text'
@@ -117,27 +117,27 @@ export default function Navbar({ dict, lang }: NavbarProps) {
           </div>
         </div>
 
-        <div className="md:hidden ml-auto mr-3">
+        <div className="ml-auto mr-2 md:hidden">
           <CartDrawer dict={dict} lang={lang} />
         </div>
 
         {/* Mobile toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          className="flex flex-col gap-1.5 p-2 md:hidden"
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
           <motion.span
             animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className="block w-6 h-px bg-gold"
+            className="block h-px w-5 bg-text"
           />
           <motion.span
             animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="block w-6 h-px bg-gold"
+            className="block h-px w-5 bg-text"
           />
           <motion.span
             animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className="block w-6 h-px bg-gold"
+            className="block h-px w-5 bg-text"
           />
         </button>
       </nav>
@@ -150,9 +150,9 @@ export default function Navbar({ dict, lang }: NavbarProps) {
             animate={{ opacity: 1, height: '100dvh' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="md:hidden glass overflow-hidden"
+            className="glass overflow-hidden md:hidden"
           >
-            <ul className="flex flex-col items-center justify-center h-full gap-8 -mt-16">
+            <ul className="flex h-full flex-col items-start justify-start gap-1 px-8 pt-20">
               {navLinks.map((link, i) => (
                 <motion.li
                   key={link.href}
@@ -163,7 +163,7 @@ export default function Navbar({ dict, lang }: NavbarProps) {
                   <Link
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="text-2xl font-semibold tracking-normal text-text"
+                    className="block py-3 text-3xl font-semibold tracking-normal text-text"
                   >
                     {link.label}
                   </Link>
@@ -177,7 +177,7 @@ export default function Navbar({ dict, lang }: NavbarProps) {
                 <Link
                   href={`/${lang}/account`}
                   onClick={() => setIsOpen(false)}
-                  className="text-2xl font-semibold tracking-normal text-text"
+                  className="block py-3 text-3xl font-semibold tracking-normal text-text"
                 >
                   {dict.nav.account}
                 </Link>
@@ -188,7 +188,7 @@ export default function Navbar({ dict, lang }: NavbarProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <div className="flex items-center gap-3 mt-4">
+                <div className="mt-6 flex items-center gap-3">
                   {LOCALES.map((l) => {
                     const newPath = pathname.replace(localePathPattern, `/${l}`)
                     return (
