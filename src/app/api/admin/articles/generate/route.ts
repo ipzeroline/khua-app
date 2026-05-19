@@ -21,7 +21,14 @@ type ArticleGenerator = {
   generateCoverImage: (
     slug: string,
     article: GeneratedArticle,
-  ) => Promise<{ coverImageUrl: string; imagePrompt: string }>
+  ) => Promise<{
+    coverImageUrl: string
+    imagePrompt: string
+    fallback?: boolean
+    generated?: boolean
+    reason?: string
+    reused?: boolean
+  }>
   todayBangkok: () => string
 }
 
@@ -57,7 +64,8 @@ export async function POST() {
       locales.map((locale) => [locale, generator.buildArticle(date, locale)]),
     ) as Record<string, GeneratedArticle>
     const primary = localizedArticles.th ?? Object.values(localizedArticles)[0]
-    const { coverImageUrl, imagePrompt } = await generator.generateCoverImage(primary.slug, primary)
+    const imageResult = await generator.generateCoverImage(primary.slug, primary)
+    const { coverImageUrl, imagePrompt } = imageResult
 
     await connection.beginTransaction()
 
@@ -92,7 +100,20 @@ export async function POST() {
     }
 
     await connection.commit()
-    return Response.json({ id: articleId, slug: primary.slug, cover_image_url: coverImageUrl }, { status: 201 })
+    return Response.json(
+      {
+        id: articleId,
+        slug: primary.slug,
+        cover_image_url: coverImageUrl,
+        image: {
+          fallback: Boolean(imageResult.fallback),
+          generated: Boolean(imageResult.generated),
+          reason: imageResult.reason,
+          reused: Boolean(imageResult.reused),
+        },
+      },
+      { status: 201 },
+    )
   } catch (error) {
     await connection.rollback()
     console.error('Generate article error:', error)

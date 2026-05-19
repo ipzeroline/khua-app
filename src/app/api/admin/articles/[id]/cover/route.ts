@@ -14,7 +14,14 @@ type ArticleGenerator = {
     slug: string,
     article: GeneratedArticle,
     options?: { force?: boolean; variant?: string },
-  ) => Promise<{ coverImageUrl: string; imagePrompt: string }>
+  ) => Promise<{
+    coverImageUrl: string
+    imagePrompt: string
+    fallback?: boolean
+    generated?: boolean
+    reason?: string
+    reused?: boolean
+  }>
 }
 
 interface ArticleCoverRow extends RowDataPacket {
@@ -52,18 +59,28 @@ export async function POST(
 
     const generator = await loadGenerator()
     const variant = Date.now().toString(36)
-    const { coverImageUrl, imagePrompt } = await generator.generateCoverImage(
+    const imageResult = await generator.generateCoverImage(
       article.slug,
       { slug: article.slug, title: article.title || article.slug },
       { force: true, variant },
     )
+    const { coverImageUrl, imagePrompt } = imageResult
 
     await connection.execute(
       'UPDATE articles SET cover_image_url = ?, image_prompt = ? WHERE id = ?',
       [coverImageUrl, imagePrompt, id],
     )
 
-    return Response.json({ cover_image_url: coverImageUrl, image_prompt: imagePrompt })
+    return Response.json({
+      cover_image_url: coverImageUrl,
+      image_prompt: imagePrompt,
+      image: {
+        fallback: Boolean(imageResult.fallback),
+        generated: Boolean(imageResult.generated),
+        reason: imageResult.reason,
+        reused: Boolean(imageResult.reused),
+      },
+    })
   } catch (error) {
     console.error('Regenerate article cover error:', error)
     return Response.json({ error: 'Failed to regenerate cover image' }, { status: 500 })

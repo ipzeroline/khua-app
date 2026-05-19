@@ -11,6 +11,7 @@ const uploadsDir = path.join(root, 'public', 'uploads', 'articles')
 const websiteLogoPath = path.join(root, 'public', 'khua-logo.webp')
 const locales = ['th', 'en', 'lo', 'zh']
 
+loadEnvFile(path.join(root, '.env'))
 loadEnvFile(path.join(root, '.env.local'))
 
 const fallback = {
@@ -537,11 +538,18 @@ export async function generateCoverImage(slug, article, options = {}) {
   const prompt = buildImagePrompt(article)
 
   if (!options.force && fs.existsSync(existingPath)) {
-    return { coverImageUrl: publicPath, imagePrompt: prompt }
+    return { coverImageUrl: publicPath, imagePrompt: prompt, generated: false, reused: true }
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    return { coverImageUrl: '/khua-lanna-table-scene.png', imagePrompt: prompt }
+    console.warn('Article image generation skipped: OPENAI_API_KEY is not set.')
+    return {
+      coverImageUrl: '/khua-lanna-table-scene.png',
+      imagePrompt: prompt,
+      generated: false,
+      fallback: true,
+      reason: 'OPENAI_API_KEY is not set',
+    }
   }
 
   try {
@@ -561,7 +569,8 @@ export async function generateCoverImage(slug, article, options = {}) {
     })
 
     if (!response.ok) {
-      throw new Error(`OpenAI image generation failed: ${response.status}`)
+      const body = await response.text()
+      throw new Error(`OpenAI image generation failed: ${response.status} ${body.slice(0, 500)}`)
     }
 
     const data = await response.json()
@@ -573,10 +582,16 @@ export async function generateCoverImage(slug, article, options = {}) {
     fs.mkdirSync(uploadsDir, { recursive: true })
     fs.writeFileSync(existingPath, Buffer.from(base64, 'base64'))
     await addWebsiteLogoToImage(existingPath)
-    return { coverImageUrl: publicPath, imagePrompt: prompt }
+    return { coverImageUrl: publicPath, imagePrompt: prompt, generated: true, fallback: false }
   } catch (error) {
-    console.warn(error)
-    return { coverImageUrl: '/khua-lanna-table-scene.png', imagePrompt: prompt }
+    console.warn('Article image generation failed:', error)
+    return {
+      coverImageUrl: '/khua-lanna-table-scene.png',
+      imagePrompt: prompt,
+      generated: false,
+      fallback: true,
+      reason: error instanceof Error ? error.message : String(error),
+    }
   }
 }
 
