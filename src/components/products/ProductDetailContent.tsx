@@ -17,6 +17,8 @@ export default function ProductDetailContent({
   product,
   dict,
 }: ProductDetailContentProps) {
+  const displayImage = product.detailImage || product.image
+  const galleryImages = product.galleryImages || []
   const seoTags = [
     product.name,
     product.nameEn,
@@ -35,9 +37,9 @@ export default function ProductDetailContent({
             transition={{ duration: 0.6 }}
             className="relative aspect-[4/5] bg-gold-pale rounded-2xl overflow-hidden shadow-sm"
           >
-            {product.image ? (
+            {displayImage ? (
               <Image
-                src={product.image}
+                src={displayImage}
                 alt={product.name}
                 fill
                 priority
@@ -60,7 +62,9 @@ export default function ProductDetailContent({
             <p className="apple-eyebrow text-gold/60 text-xs uppercase mb-3">
               {product.weight}
             </p>
-            <h1 className="apple-headline text-3xl sm:text-4xl gold-text">
+            <h1
+              className="apple-headline gold-text overflow-visible break-words py-1 text-3xl leading-[1.28] sm:text-4xl sm:leading-[1.28] [overflow-wrap:anywhere]"
+            >
               {product.name}
             </h1>
             <p className="text-gold/50 text-sm mt-2 font-medium">
@@ -75,7 +79,7 @@ export default function ProductDetailContent({
 
             <div className="rounded-2xl border border-gold/15 bg-gold-pale/40 p-5">
               <p className="apple-eyebrow text-xs uppercase text-gold/70">
-                {dict.products.originLabel}
+                {product.badge || dict.products.originLabel}
               </p>
               <p className="apple-headline mt-2 text-xl text-text">
                 {dict.products.originValue}
@@ -96,10 +100,10 @@ export default function ProductDetailContent({
             <SectionDivider />
 
             <h2 className="apple-headline text-lg text-text mb-4">
-              {dict.products.ingredients}
+              {product.type === 'bundle' && product.badge ? product.badge : dict.products.ingredients}
             </h2>
             <ul className="space-y-2">
-              {product.ingredients.map((ingredient) => (
+              {(product.bundleItems || product.ingredients).map((ingredient) => (
                 <li
                   key={ingredient}
                   className="flex items-center gap-3 text-text-secondary text-sm"
@@ -111,9 +115,16 @@ export default function ProductDetailContent({
             </ul>
 
             <div className="mt-8 pt-8 border-t border-border">
-              <p className="text-gold text-2xl font-medium tracking-wide">
-                ฿{product.price}
-              </p>
+              <div className="flex flex-wrap items-end gap-3">
+                <p className="text-gold text-2xl font-medium tracking-wide">
+                  ฿{product.price}
+                </p>
+                {product.compareAtPrice ? (
+                  <p className="pb-1 text-sm text-text-secondary line-through">
+                    ฿{product.compareAtPrice}
+                  </p>
+                ) : null}
+              </div>
               <p className="text-text-secondary text-xs mt-1">
                 {dict.products.pricePerUnit} ({product.weight})
               </p>
@@ -129,6 +140,54 @@ export default function ProductDetailContent({
             </div>
           </motion.div>
         </div>
+
+        {galleryImages.length > 0 ? (
+          <motion.section
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.18 }}
+            className="mt-20 border-t border-gold/10 pt-14 sm:mt-24 sm:pt-16"
+          >
+            <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
+              <p className="apple-eyebrow text-xs uppercase text-gold/55">
+                {product.badge || product.weight}
+              </p>
+              <h2 className="apple-headline mt-3 text-2xl text-text sm:text-4xl">
+                {product.name}
+              </h2>
+            </div>
+
+            <div className="grid gap-3 sm:gap-4 md:grid-cols-12">
+              {galleryImages.map((image, index) => {
+                const tileClass =
+                  index === 0
+                    ? 'md:col-span-5 md:row-span-2 md:aspect-[4/5]'
+                    : index === 1
+                      ? 'md:col-span-7 md:aspect-[7/5]'
+                      : index === 2
+                        ? 'md:col-span-7 md:aspect-[7/5]'
+                        : 'md:col-span-5 md:aspect-[4/5]'
+
+                return (
+                  <div
+                    key={image}
+                    className={`group relative aspect-[4/5] overflow-hidden rounded-[18px] border border-gold/10 bg-[#efe4d3] shadow-[0_18px_50px_rgba(48,31,16,0.08)] ${tileClass}`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.name} ${index + 2}`}
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.025]"
+                    />
+                    <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/20" />
+                    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent_35%,rgba(28,18,10,0.12))]" />
+                  </div>
+                )
+              })}
+            </div>
+          </motion.section>
+        ) : null}
       </div>
     </div>
   )

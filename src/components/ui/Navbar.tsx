@@ -53,11 +53,10 @@ export default function Navbar({ dict, lang }: NavbarProps) {
           className="flex items-center gap-2 text-[13px] font-semibold tracking-normal text-text"
         >
           <Image
-            src="/khua-logo.png"
+            src="/khua-logo.webp"
             alt="KHUA"
             width={40}
             height={40}
-            priority
             className="h-7 w-7 rounded-md object-cover"
           />
           <span>KHUA</span>

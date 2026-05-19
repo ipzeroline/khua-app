@@ -141,6 +141,28 @@ const dict: Dictionary = {
     quantity: 'Quantity',
     items: 'items',
     currency: '฿',
+    shipping: 'Shipping',
+    total: 'Total',
+    checkoutTitle: 'Confirm Order',
+    checkoutLoginRequired: 'Please sign in before checkout',
+    checkoutAddressRequired: 'Please add a shipping address in your account first',
+    selectAddress: 'Select shipping address',
+    note: 'Note to KHUA',
+    placeOrder: 'Place Order',
+    orderCreated: 'Order created',
+    paymentTitle: 'Transfer to Confirm Your Order',
+    paymentSubtitle: 'Check the amount, then upload your payment slip so KHUA can verify and prepare your order.',
+    bankName: 'Bank',
+    accountNumber: 'Account number',
+    accountName: 'Account name',
+    transferAmount: 'Transfer amount',
+    qrCode: 'QR Code',
+    uploadSlip: 'Upload Slip',
+    slipUploaded: 'Slip submitted',
+    slipHelp: 'JPG, PNG, or WebP up to 5MB',
+    thankYouTitle: 'Thank You',
+    thankYouMessage: 'Your payment slip has been received. The KHUA team will verify it and prepare your order with care.',
+    backToProducts: 'Continue Shopping',
   },
 
   account: {
@@ -164,7 +186,35 @@ const dict: Dictionary = {
       'Prepare for loyalty points and order history in the next release',
     ],
     ordersTitle: 'Order History',
-    noOrders: 'No orders yet. This section is ready to connect when full online checkout is enabled.',
+    noOrders: 'No orders yet.',
+    pointsBalance: 'Loyalty Points',
+    profileTitle: 'Profile',
+    addressesTitle: 'Shipping Addresses',
+    addAddress: 'Add Address',
+    editAddress: 'Edit Address',
+    deleteAddress: 'Delete Address',
+    defaultAddress: 'Default address',
+    setDefault: 'Set default',
+    recipientName: 'Recipient name',
+    addressLine1: 'Address line 1',
+    addressLine2: 'Address line 2',
+    subdistrict: 'Subdistrict',
+    district: 'District',
+    province: 'Province',
+    postalCode: 'Postal code',
+    country: 'Country',
+    noAddresses: 'No shipping addresses yet.',
+    orderNumber: 'Order number',
+    orderStatus: 'Status',
+    orderTotal: 'Total',
+    shippingCarrier: 'Carrier',
+    trackingNumber: 'Tracking number',
+    pending: 'Pending',
+    confirmed: 'Confirmed',
+    preparing: 'Preparing',
+    shipped: 'Shipped',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
   },
 
   articles: {
@@ -218,6 +268,57 @@ const dict: Dictionary = {
       'We grind each batch in a stone mortar, roast our spices over a low flame until the aroma fills the room. Every step is deliberate, unhurried, uncompromised — just as our grandmothers did. Because good food takes time.',
       'KHUA is more than chili paste — it is an invitation to taste the Lanna we are so proud of.',
     ],
+    detailTitle: 'From a Phayao kitchen to a flavor you remember',
+    detailParagraphs: [
+      'KHUA began with a simple question: what should a Northern chili paste feel like when it belongs on the table every day? Our recipes keep the aroma of Lanna herbs, dried chilies, and roasted spices while staying balanced enough for daily meals.',
+      'Phayao is more than a name on the label. It is our sense of place: wooden kitchens, seasonal ingredients, and cooking that moves with patience. Every recipe is designed to carry that origin with clarity and care.',
+      'In every batch, aroma comes first. Chilies, garlic, shallots, and Northern spices are slowly roasted, then ground and seasoned for texture, depth, and a flavor that does not flatten the ingredients.',
+    ],
+    principlesTitle: 'What Guides Us',
+    principles: [
+      {
+        title: 'Rooted in origin',
+        description:
+          'Phayao anchors our story, ingredients, and flavor so every jar has a clear identity.',
+      },
+      {
+        title: 'Premium but practical',
+        description:
+          'The paste must feel refined, but it also has to be easy to open, share, and enjoy in everyday meals.',
+      },
+      {
+        title: 'Respect for tradition',
+        description:
+          'We preserve roasting, pounding, and Lanna seasoning while improving consistency, cleanliness, and packaging.',
+      },
+    ],
+    timelineTitle: 'The Path of Flavor',
+    timeline: [
+      {
+        period: 'Select',
+        title: 'Start with trusted ingredients',
+        description:
+          'Chilies, garlic, shallots, ma-khwaen, and Northern herbs are checked for aroma, color, and dryness.',
+      },
+      {
+        period: 'Roast',
+        title: 'Open the aroma over low heat',
+        description:
+          'Ingredients are slowly roasted to draw out depth without burning or bitterness.',
+      },
+      {
+        period: 'Pound',
+        title: 'Build texture by hand',
+        description:
+          'Stone grinding brings heat, salt, aroma, and spice together while preserving real texture.',
+      },
+      {
+        period: 'Pack',
+        title: 'Send it forward with care',
+        description:
+          'Each jar is prepared as a gift, a pantry staple, and a Northern flavor ready for your table.',
+      },
+    ],
   },
 
   contact: {
@@ -244,6 +345,43 @@ const dict: Dictionary = {
 
   products_data: [
     {
+      slug: 'khua-lanna-set-5',
+      name: 'KHUA Lanna Set of 5',
+      nameEn: 'KHUA Lanna Set of 5',
+      description:
+        'A complete five-jar Northern Thai tasting set: Larb Nuea, Ta Daeng, Ta Daeng Mang Da, Northern Curry Paste, and Nam Ngiao Paste at a special bundle price.',
+      longDescription:
+        'The KHUA Lanna Set of 5 is made for anyone who wants the full Northern Thai flavor experience in one gift-ready bundle. It includes the spice-rich Nam Prik Larb Nuea, smoky Nam Prik Ta Daeng, aromatic Ta Daeng Mang Da, cooking-ready Northern Curry Paste, and Nam Ngiao Paste for classic Northern noodle soup. This set is ideal as a premium Phayao gift, a pantry starter for Lanna cooking, or a tasting set for sharing different layers of roasted Northern flavor.',
+      ingredients: [
+        'Nam Prik Larb Nuea',
+        'Nam Prik Ta Daeng Nuea',
+        'Nam Prik Ta Daeng Mang Da',
+        'Northern Curry Paste',
+        'Northern Nam Ngiao Chili Paste',
+      ],
+      price: '799',
+      compareAtPrice: '865',
+      weight: '5 jars',
+      featured: true,
+      type: 'bundle',
+      badge: '5-Jar Set',
+      bundleItems: [
+        'Nam Prik Larb Nuea x 1 jar',
+        'Nam Prik Ta Daeng Nuea x 1 jar',
+        'Nam Prik Ta Daeng Mang Da x 1 jar',
+        'Northern Curry Paste x 1 jar',
+        'Northern Nam Ngiao Chili Paste x 1 jar',
+      ],
+      image: '/khua-lanna-set-5-premium-20260519.png',
+      detailImage: '/khua-lanna-set-5-premium-20260519.png',
+      galleryImages: [
+        '/khua-lanna-set-5-gallery-2.png',
+        '/khua-lanna-set-5-gallery-3.png',
+        '/khua-lanna-set-5-gallery-4.png',
+        '/khua-lanna-set-5-gallery-5.png',
+      ],
+    },
+    {
       slug: 'nam-prik-larb-nuea',
       name: 'Nam Prik Larb Nuea',
       nameEn: 'Northern Larb Chili Paste',
@@ -262,7 +400,13 @@ const dict: Dictionary = {
       price: '189',
       weight: '200 g',
       featured: true,
-      image: '/khua-larb-nuea.png',
+      image: '/khua-larb-nuea-hero.png',
+      detailImage: '/khua-larb-nuea-hero.png',
+      galleryImages: [
+        '/khua-larb-nuea-ingredients.png',
+        '/khua-larb-nuea-roasting.png',
+        '/khua-larb-nuea-serving.png',
+      ],
     },
     {
       slug: 'nam-prik-ta-daeng',
@@ -282,7 +426,39 @@ const dict: Dictionary = {
       price: '169',
       weight: '200 g',
       featured: true,
-      image: '/khua-ta-daeng.png',
+      image: '/khua-ta-daeng-2026.png',
+      galleryImages: [
+        '/khua-ta-daeng-ingredients.png',
+        '/khua-ta-daeng-roasting.png',
+        '/khua-ta-daeng-serving.png',
+      ],
+    },
+    {
+      slug: 'nam-prik-ta-daeng-mang-da',
+      name: 'Nam Prik Ta Daeng Mang Da',
+      nameEn: 'Northern Chili Paste with Giant Water Bug',
+      description:
+        'A bold Northern red chili paste with the distinctive aroma of mang da. Smoky roasted chilies, rounded heat, and a deep savory finish.',
+      longDescription:
+        'Nam Prik Ta Daeng Mang Da is a Phayao-style Lanna recipe built from classic Northern red chili paste and lifted with the unmistakable aroma of mang da, or giant water bug. Dried chilies, shallots, and garlic are slow-roasted before grinding, giving the paste a smoky heat, coarse roasted texture, and a fragrant savory depth. It pairs beautifully with sticky rice, fresh vegetables, boiled eggs, grilled pork, or any meal that calls for a strong Northern flavor.',
+      ingredients: [
+        'Dried roasted chilies',
+        'Roasted shallots',
+        'Roasted garlic',
+        'Giant water bug aroma',
+        'Himalayan salt',
+        'Northern fermented fish sauce',
+      ],
+      price: '189',
+      weight: '200 g',
+      featured: true,
+      image: '/khua-ta-daeng-mang-da-hero-v2.png',
+      detailImage: '/khua-ta-daeng-mang-da-hero-v2.png',
+      galleryImages: [
+        '/khua-ta-daeng-mang-da-ingredients.png',
+        '/khua-ta-daeng-mang-da-roasting.png',
+        '/khua-ta-daeng-mang-da-serving.png',
+      ],
     },
     {
       slug: 'nam-prik-kaeng-nuea',
@@ -304,7 +480,13 @@ const dict: Dictionary = {
       price: '159',
       weight: '250 g',
       featured: true,
-      image: '/khua-kaeng-nuea.png',
+      image: '/khua-kaeng-nuea-hero-v2.png',
+      detailImage: '/khua-kaeng-nuea-hero-v2.png',
+      galleryImages: [
+        '/khua-kaeng-nuea-ingredients.png',
+        '/khua-kaeng-nuea-process.png',
+        '/khua-kaeng-nuea-serving.png',
+      ],
     },
     {
       slug: 'nam-prik-nam-ngiao-nuea',
@@ -325,7 +507,13 @@ const dict: Dictionary = {
       price: '159',
       weight: '200 g',
       featured: true,
-      image: '/khua-nam-ngiao.png',
+      image: '/khua-nam-ngiao-nuea-hero-v2.png',
+      detailImage: '/khua-nam-ngiao-nuea-hero-v2.png',
+      galleryImages: [
+        '/khua-nam-ngiao-nuea-ingredients-v2.png',
+        '/khua-nam-ngiao-nuea-process-v2.png',
+        '/khua-nam-ngiao-nuea-serving-v2.png',
+      ],
     },
   ],
 
@@ -424,6 +612,27 @@ const dict: Dictionary = {
       ],
     },
   ],
+
+  admin: {
+    dashboard: 'Dashboard',
+    members: 'Members',
+    articles: 'Articles',
+    staff: 'Staff',
+    login_title: 'Admin Login',
+    email: 'Email',
+    password: 'Password',
+    sign_in: 'Sign in',
+    create_article: 'New Article',
+    edit_article: 'Edit Article',
+    publish: 'Publish',
+    draft: 'Draft',
+    member_since: 'Member since',
+    role: 'Role',
+    status: 'Status',
+    actions: 'Actions',
+    back_to_site: 'Back to site',
+    logout: 'Logout',
+  },
 
   social: {
     instagram: 'https://instagram.com/khua.foods',

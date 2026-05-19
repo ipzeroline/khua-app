@@ -141,6 +141,28 @@ const dict: Dictionary = {
     quantity: 'จำนวน',
     items: 'รายการ',
     currency: '฿',
+    shipping: 'ค่าจัดส่ง',
+    total: 'ยอดชำระ',
+    checkoutTitle: 'ยืนยันคำสั่งซื้อ',
+    checkoutLoginRequired: 'กรุณาเข้าสู่ระบบก่อนสั่งซื้อ',
+    checkoutAddressRequired: 'กรุณาเพิ่มที่อยู่จัดส่งในหน้าสมาชิกก่อน',
+    selectAddress: 'เลือกที่อยู่จัดส่ง',
+    note: 'หมายเหตุถึงร้าน',
+    placeOrder: 'ยืนยันคำสั่งซื้อ',
+    orderCreated: 'สร้างคำสั่งซื้อเรียบร้อย',
+    paymentTitle: 'โอนเงินเพื่อยืนยันคำสั่งซื้อ',
+    paymentSubtitle: 'ตรวจสอบยอดโอน แล้วอัปโหลดสลิปเพื่อให้ทีม KHUA ตรวจสอบและเริ่มจัดเตรียมสินค้า',
+    bankName: 'ธนาคาร',
+    accountNumber: 'เลขบัญชี',
+    accountName: 'ชื่อบัญชี',
+    transferAmount: 'ยอดที่ต้องโอน',
+    qrCode: 'QR Code',
+    uploadSlip: 'อัปโหลดสลิป',
+    slipUploaded: 'ส่งสลิปเรียบร้อย',
+    slipHelp: 'รองรับไฟล์ JPG, PNG หรือ WebP ขนาดไม่เกิน 5MB',
+    thankYouTitle: 'ขอบคุณเจ้า',
+    thankYouMessage: 'ได้ฮับสลิปเรียบร้อยแล้วเจ้า ทีมคั่วจะตรวจสอบยอด แล้วจัดเตรียมของหื้ออย่างพิถีพิถันเน้อเจ้า',
+    backToProducts: 'เลือกสินค้าต่อ',
   },
 
   account: {
@@ -164,7 +186,35 @@ const dict: Dictionary = {
       'เตรียมรับคะแนนสะสมและประวัติคำสั่งซื้อในรอบถัดไป',
     ],
     ordersTitle: 'ประวัติคำสั่งซื้อ',
-    noOrders: 'ยังไม่มีคำสั่งซื้อ ระบบนี้พร้อมเชื่อมต่อเมื่อเปิดขายออนไลน์เต็มรูปแบบ',
+    noOrders: 'ยังไม่มีคำสั่งซื้อ',
+    pointsBalance: 'คะแนนสะสม',
+    profileTitle: 'ข้อมูลส่วนตัว',
+    addressesTitle: 'ที่อยู่จัดส่ง',
+    addAddress: 'เพิ่มที่อยู่',
+    editAddress: 'แก้ไขที่อยู่',
+    deleteAddress: 'ลบที่อยู่',
+    defaultAddress: 'ที่อยู่หลัก',
+    setDefault: 'ตั้งเป็นที่อยู่หลัก',
+    recipientName: 'ชื่อผู้รับ',
+    addressLine1: 'บ้านเลขที่ ถนน หมู่บ้าน',
+    addressLine2: 'รายละเอียดเพิ่มเติม',
+    subdistrict: 'ตำบล/แขวง',
+    district: 'อำเภอ/เขต',
+    province: 'จังหวัด',
+    postalCode: 'รหัสไปรษณีย์',
+    country: 'ประเทศ',
+    noAddresses: 'ยังไม่มีที่อยู่จัดส่ง',
+    orderNumber: 'เลขที่คำสั่งซื้อ',
+    orderStatus: 'สถานะ',
+    orderTotal: 'ยอดรวม',
+    shippingCarrier: 'ขนส่ง',
+    trackingNumber: 'หมายเลขพัสดุ',
+    pending: 'รอดำเนินการ',
+    confirmed: 'ยืนยันแล้ว',
+    preparing: 'กำลังเตรียมสินค้า',
+    shipped: 'จัดส่งแล้ว',
+    completed: 'สำเร็จ',
+    cancelled: 'ยกเลิก',
   },
 
   articles: {
@@ -218,6 +268,57 @@ const dict: Dictionary = {
       'เราตำน้ำพริกด้วยครกหินทีละครก คั่วเครื่องเทศด้วยไฟอ่อนจนหอมได้ที่ ทุกขั้นตอนคือความตั้งใจ ไม่เร่ง ไม่ลดทอน เหมือนที่คุณย่าคุณยายเคยทำ เพราะเราเชื่อว่าอาหารที่ดีต้องใช้เวลา',
       'KHUA ไม่ใช่แค่น้ำพริก แต่มันคือคำเชิญให้คุณได้ลิ้มลองรสชาติแห่งล้านนา ที่เราภาคภูมิใจ',
     ],
+    detailTitle: 'จากครัวพะเยาสู่รสคั่วที่จำได้',
+    detailParagraphs: [
+      'รสชาติของ KHUA เริ่มจากคำถามง่าย ๆ ว่า น้ำพริกเหนือที่กินได้ทุกวันควรเป็นอย่างไร เราจึงพัฒนาสูตรให้ยังคงกลิ่นสมุนไพรล้านนา ความเผ็ดหอมของพริกแห้ง และความกลมกล่อมที่เข้ากับข้าวเหนียว ผักสด หรืออาหารประจำบ้านได้จริง',
+      'เราเลือกเล่าแหล่งที่มาจากจังหวัดพะเยาอย่างชัดเจน เพราะพะเยาไม่ใช่แค่ชื่อจังหวัดบนฉลาก แต่คือภาพของครัวไม้ วัตถุดิบท้องถิ่น ฤดูกาล และวิธีปรุงที่ค่อยเป็นค่อยไป ทุกสูตรจึงถูกออกแบบให้มีราก มีที่มา และมีความจริงใจในรสชาติ',
+      'ในทุกชุดการผลิต เราให้ความสำคัญกับกลิ่นก่อนรส พริก กระเทียม หอมแดง และเครื่องเทศเหนือถูกคั่วด้วยไฟอ่อนจนกลิ่นเปิด จากนั้นจึงตำและปรุงให้เนื้อสัมผัสยังมีมิติ ไม่แบน ไม่หวานจัด และไม่กลบรสของวัตถุดิบ',
+    ],
+    principlesTitle: 'หลักคิดของเรา',
+    principles: [
+      {
+        title: 'ชัดเจนในที่มา',
+        description:
+          'ยึดจังหวัดพะเยาเป็นแกนของแบรนด์ ตั้งแต่เรื่องเล่า วัตถุดิบ ไปจนถึงรสชาติ เพื่อให้ทุกกระปุกมีบริบทและตัวตนที่จำได้',
+      },
+      {
+        title: 'พิถีพิถันแต่กินง่าย',
+        description:
+          'น้ำพริกของเราต้องหอมลึกและมีรายละเอียด แต่ยังเปิดกระปุกแล้วกินได้จริงกับมื้อประจำวัน ไม่ใช่ของฝากที่วางสวยแต่ไม่ถูกหยิบกิน',
+      },
+      {
+        title: 'เคารพวิธีดั้งเดิม',
+        description:
+          'เรารักษาแก่นของการคั่ว การตำ และการปรุงแบบล้านนา พร้อมปรับความสะอาด ความสม่ำเสมอ และบรรจุภัณฑ์ให้เหมาะกับคนยุคใหม่',
+      },
+    ],
+    timelineTitle: 'เส้นทางของรสชาติ',
+    timeline: [
+      {
+        period: 'คัดเลือก',
+        title: 'เริ่มจากวัตถุดิบที่ไว้ใจได้',
+        description:
+          'พริกแห้ง กระเทียม หอมแดง มะแขว่น และสมุนไพรเหนือถูกตรวจกลิ่น สี และความแห้งก่อนเข้าครัว',
+      },
+      {
+        period: 'คั่ว',
+        title: 'เปิดกลิ่นด้วยไฟอ่อน',
+        description:
+          'วัตถุดิบถูกคั่วอย่างใจเย็น เพื่อดึงกลิ่นหอมลึกโดยไม่ให้ไหม้หรือขมเกินไป',
+      },
+      {
+        period: 'ตำและปรุง',
+        title: 'สร้างเนื้อสัมผัสด้วยมือ',
+        description:
+          'การตำทำให้รสเผ็ด เค็ม หอม และมันของเครื่องเทศเชื่อมกัน โดยยังเหลือ texture ให้รู้สึกถึงวัตถุดิบจริง',
+      },
+      {
+        period: 'บรรจุ',
+        title: 'ส่งต่ออย่างตั้งใจ',
+        description:
+          'ทุกกระปุกถูกแพ็กให้พร้อมเป็นของฝาก เป็นของติดครัว และเป็นรสเหนือที่เดินทางไปถึงโต๊ะอาหารของคุณ',
+      },
+    ],
   },
 
   contact: {
@@ -244,6 +345,43 @@ const dict: Dictionary = {
 
   products_data: [
     {
+      slug: 'khua-lanna-set-5',
+      name: 'ชุดรวม 5 สูตร KHUA',
+      nameEn: 'KHUA Lanna Set of 5',
+      description:
+        'ชุดรวมรสเหนือครบ 5 กระปุก ทั้งลาบเหนือ ตาแดงเหนือ ตาแดงแมงดา แกงเหนือ และน้ำเงี้ยวเหนือ ในราคาพิเศษสำหรับคนอยากชิมครบทุกสูตร',
+      longDescription:
+        'ชุดรวม 5 สูตร KHUA คือชุดน้ำพริกเหนือพรีเมียมสำหรับคนที่อยากรู้จักรสล้านนาให้ครบทุกมิติในครั้งเดียว ตั้งแต่น้ำพริกลาบเหนือหอมเครื่องเทศแห้ง น้ำพริกตาแดงเหนือรสจัด หอมควันไฟ น้ำพริกตาแดงแมงดากลิ่นเฉพาะตัว น้ำพริกแกงเหนือสำหรับเข้าครัว และน้ำพริกน้ำเงี้ยวเหนือสำหรับทำเมนูเส้นเหนือ ชุดนี้เหมาะทั้งเป็นของฝากพะเยา ของขวัญสำหรับคนรักอาหารเหนือ หรือชุดติดครัวสำหรับบ้านที่อยากมีรสคั่วพร้อมใช้ทุกวัน',
+      ingredients: [
+        'น้ำพริกลาบเหนือ',
+        'น้ำพริกตาแดงเหนือ',
+        'น้ำพริกตาแดงแมงดา',
+        'น้ำพริกแกงเหนือ',
+        'น้ำพริกน้ำเงี้ยวเหนือ',
+      ],
+      price: '799',
+      compareAtPrice: '865',
+      weight: '5 กระปุก',
+      featured: true,
+      type: 'bundle',
+      badge: 'ครบ 5 สูตร',
+      bundleItems: [
+        'น้ำพริกลาบเหนือ 1 กระปุก',
+        'น้ำพริกตาแดงเหนือ 1 กระปุก',
+        'น้ำพริกตาแดงแมงดา 1 กระปุก',
+        'น้ำพริกแกงเหนือ 1 กระปุก',
+        'น้ำพริกน้ำเงี้ยวเหนือ 1 กระปุก',
+      ],
+      image: '/khua-lanna-set-5-premium-20260519.png',
+      detailImage: '/khua-lanna-set-5-premium-20260519.png',
+      galleryImages: [
+        '/khua-lanna-set-5-gallery-2.png',
+        '/khua-lanna-set-5-gallery-3.png',
+        '/khua-lanna-set-5-gallery-4.png',
+        '/khua-lanna-set-5-gallery-5.png',
+      ],
+    },
+    {
       slug: 'nam-prik-larb-nuea',
       name: 'น้ำพริกลาบเหนือ',
       nameEn: 'Northern Larb Chili Paste',
@@ -262,7 +400,13 @@ const dict: Dictionary = {
       price: '189',
       weight: '200 กรัม',
       featured: true,
-      image: '/khua-larb-nuea.png',
+      image: '/khua-larb-nuea-hero.png',
+      detailImage: '/khua-larb-nuea-hero.png',
+      galleryImages: [
+        '/khua-larb-nuea-ingredients.png',
+        '/khua-larb-nuea-roasting.png',
+        '/khua-larb-nuea-serving.png',
+      ],
     },
     {
       slug: 'nam-prik-ta-daeng',
@@ -282,7 +426,39 @@ const dict: Dictionary = {
       price: '169',
       weight: '200 กรัม',
       featured: true,
-      image: '/khua-ta-daeng.png',
+      image: '/khua-ta-daeng-2026.png',
+      galleryImages: [
+        '/khua-ta-daeng-ingredients.png',
+        '/khua-ta-daeng-roasting.png',
+        '/khua-ta-daeng-serving.png',
+      ],
+    },
+    {
+      slug: 'nam-prik-ta-daeng-mang-da',
+      name: 'น้ำพริกตาแดงแมงดา',
+      nameEn: 'Nam Prik Ta Daeng Mang Da',
+      description:
+        'น้ำพริกตาแดงเหนือสูตรแมงดา หอมพริกแห้งคั่วและกลิ่นแมงดาเฉพาะตัว รสเผ็ดจัด กลมกล่อม และเข้ากับข้าวเหนียวร้อนๆ',
+      longDescription:
+        'น้ำพริกตาแดงแมงดา ตำรับล้านนาจากจังหวัดพะเยา พัฒนาจากน้ำพริกตาแดงเหนือแบบดั้งเดิม เพิ่มกลิ่นหอมลึกของแมงดาให้มีเอกลักษณ์ชัดขึ้น เราคั่วพริกแห้ง หอมแดง และกระเทียมด้วยไฟอ่อนก่อนตำ เพื่อให้ได้รสเผ็ดหอม มีเนื้อสัมผัสของพริกคั่ว และกลิ่นแมงดาที่พอดี เหมาะกับข้าวเหนียว ผักสด ไข่ต้ม หมูย่าง หรือกินเป็นน้ำพริกประจำบ้านสำหรับคนชอบรสจัด',
+      ingredients: [
+        'พริกแห้งคั่ว',
+        'หอมแดงคั่ว',
+        'กระเทียมคั่ว',
+        'แมงดา',
+        'เกลือสินเธาว์',
+        'น้ำปลาร้าเหนือ',
+      ],
+      price: '189',
+      weight: '200 กรัม',
+      featured: true,
+      image: '/khua-ta-daeng-mang-da-hero-v2.png',
+      detailImage: '/khua-ta-daeng-mang-da-hero-v2.png',
+      galleryImages: [
+        '/khua-ta-daeng-mang-da-ingredients.png',
+        '/khua-ta-daeng-mang-da-roasting.png',
+        '/khua-ta-daeng-mang-da-serving.png',
+      ],
     },
     {
       slug: 'nam-prik-kaeng-nuea',
@@ -304,7 +480,13 @@ const dict: Dictionary = {
       price: '159',
       weight: '250 กรัม',
       featured: true,
-      image: '/khua-kaeng-nuea.png',
+      image: '/khua-kaeng-nuea-hero-v2.png',
+      detailImage: '/khua-kaeng-nuea-hero-v2.png',
+      galleryImages: [
+        '/khua-kaeng-nuea-ingredients.png',
+        '/khua-kaeng-nuea-process.png',
+        '/khua-kaeng-nuea-serving.png',
+      ],
     },
     {
       slug: 'nam-prik-nam-ngiao-nuea',
@@ -325,7 +507,13 @@ const dict: Dictionary = {
       price: '159',
       weight: '200 กรัม',
       featured: true,
-      image: '/khua-nam-ngiao.png',
+      image: '/khua-nam-ngiao-nuea-hero-v2.png',
+      detailImage: '/khua-nam-ngiao-nuea-hero-v2.png',
+      galleryImages: [
+        '/khua-nam-ngiao-nuea-ingredients-v2.png',
+        '/khua-nam-ngiao-nuea-process-v2.png',
+        '/khua-nam-ngiao-nuea-serving-v2.png',
+      ],
     },
   ],
 
@@ -424,6 +612,27 @@ const dict: Dictionary = {
       ],
     },
   ],
+
+  admin: {
+    dashboard: 'แดชบอร์ด',
+    members: 'สมาชิก',
+    articles: 'บทความ',
+    staff: 'ทีมงาน',
+    login_title: 'เข้าสู่ระบบผู้ดูแล',
+    email: 'อีเมล',
+    password: 'รหัสผ่าน',
+    sign_in: 'เข้าสู่ระบบ',
+    create_article: 'บทความใหม่',
+    edit_article: 'แก้ไขบทความ',
+    publish: 'เผยแพร่',
+    draft: 'ฉบับร่าง',
+    member_since: 'เป็นสมาชิกตั้งแต่',
+    role: 'บทบาท',
+    status: 'สถานะ',
+    actions: 'จัดการ',
+    back_to_site: 'กลับไปเว็บไซต์',
+    logout: 'ออกจากระบบ',
+  },
 
   social: {
     instagram: 'https://instagram.com/khua.foods',

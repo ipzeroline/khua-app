@@ -9,6 +9,7 @@ export interface CartItem {
   nameEn: string
   price: number
   weight: string
+  type: 'single' | 'bundle'
   quantity: number
 }
 
@@ -38,6 +39,7 @@ function toCartItem(product: ProductData): CartItem {
     nameEn: product.nameEn,
     price: Number(product.price),
     weight: product.weight,
+    type: product.type || 'single',
     quantity: 1,
   }
 }

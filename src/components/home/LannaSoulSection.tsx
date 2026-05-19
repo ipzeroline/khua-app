@@ -1,6 +1,3 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import { Dictionary } from '@/i18n'
 
 interface LannaSoulSectionProps {
@@ -20,12 +17,7 @@ export default function LannaSoulSection({ dict }: LannaSoulSectionProps) {
 
       <div className="relative mx-auto max-w-7xl">
         <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
+          <div>
             <p className="apple-eyebrow mb-5 text-xs uppercase text-gold-light">
               {dict.lanna.label}
             </p>
@@ -51,16 +43,12 @@ export default function LannaSoulSection({ dict }: LannaSoulSectionProps) {
                 {dict.lanna.quote}
               </p>
             </div>
-          </motion.div>
+          </div>
 
           <div className="grid gap-5 sm:grid-cols-3 lg:grid-cols-1">
             {dict.lanna.items.map((item, index) => (
-              <motion.div
+              <div
                 key={item.title}
-                initial={{ opacity: 0, x: 24 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.12, duration: 0.6 }}
                 className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.07] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)] backdrop-blur-sm transition-colors hover:border-gold/35"
               >
                 <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gold/10 blur-3xl transition-opacity group-hover:opacity-100" />
@@ -75,7 +63,7 @@ export default function LannaSoulSection({ dict }: LannaSoulSectionProps) {
                     {item.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

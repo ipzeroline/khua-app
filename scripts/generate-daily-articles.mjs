@@ -1,11 +1,17 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import mysql from 'mysql2/promise'
+import sharp from 'sharp'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
 const outputPath = path.join(root, 'src', 'data', 'articles.generated.json')
+const uploadsDir = path.join(root, 'public', 'uploads', 'articles')
+const websiteLogoPath = path.join(root, 'public', 'khua-logo.webp')
 const locales = ['th', 'en', 'lo', 'zh']
+
+loadEnvFile(path.join(root, '.env.local'))
 
 const fallback = {
   th: [],
@@ -254,7 +260,7 @@ const topics = [
   },
 ]
 
-function todayBangkok() {
+export function todayBangkok() {
   const formatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Asia/Bangkok',
     year: 'numeric',
@@ -264,7 +270,7 @@ function todayBangkok() {
   return formatter.format(new Date())
 }
 
-function addDays(date, amount) {
+export function addDays(date, amount) {
   const next = new Date(`${date}T00:00:00.000Z`)
   next.setUTCDate(next.getUTCDate() + amount)
   return next.toISOString().slice(0, 10)
@@ -316,6 +322,369 @@ function readData() {
   }
 }
 
+function loadEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return
+
+  const lines = fs.readFileSync(filePath, 'utf8').split('\n')
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) continue
+    const separator = trimmed.indexOf('=')
+    if (separator === -1) continue
+    const key = trimmed.slice(0, separator).trim()
+    const value = trimmed.slice(separator + 1).trim().replace(/^['"]|['"]$/g, '')
+    if (key && process.env[key] === undefined) {
+      process.env[key] = value
+    }
+  }
+}
+
+function hasDbConfig() {
+  return Boolean(
+    process.env.MARIADB_HOST &&
+      process.env.MARIADB_DATABASE &&
+      process.env.MARIADB_USER &&
+      process.env.MARIADB_PASSWORD,
+  )
+}
+
+function dbConfig() {
+  return {
+    host: process.env.MARIADB_HOST,
+    database: process.env.MARIADB_DATABASE,
+    user: process.env.MARIADB_USER,
+    password: process.env.MARIADB_PASSWORD,
+    charset: 'utf8mb4',
+    multipleStatements: false,
+  }
+}
+
+async function connectDb() {
+  if (!hasDbConfig()) return null
+  try {
+    return await mysql.createConnection(dbConfig())
+  } catch (error) {
+    console.warn('MariaDB unavailable. Falling back to local article generation.', error)
+    return null
+  }
+}
+
+async function ensureSchema(connection) {
+  await connection.execute(`
+    CREATE TABLE IF NOT EXISTS articles (
+      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+      slug VARCHAR(255) NOT NULL,
+      status ENUM('draft', 'published') NOT NULL DEFAULT 'published',
+      cover_image_url VARCHAR(500) NULL,
+      image_prompt TEXT NULL,
+      published_at DATETIME NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      UNIQUE KEY articles_slug_unique (slug),
+      KEY articles_status_published_idx (status, published_at)
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+  `)
+
+  await connection.execute(`
+    CREATE TABLE IF NOT EXISTS article_translations (
+      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+      article_id BIGINT UNSIGNED NOT NULL,
+      locale VARCHAR(10) NOT NULL,
+      title VARCHAR(255) NOT NULL,
+      excerpt TEXT NOT NULL,
+      category VARCHAR(100) NOT NULL,
+      date_label VARCHAR(100) NOT NULL,
+      read_time VARCHAR(50) NOT NULL,
+      tags_json JSON NOT NULL,
+      highlights_json JSON NOT NULL,
+      content_json JSON NOT NULL,
+      meta_title VARCHAR(255) NULL,
+      meta_description TEXT NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      UNIQUE KEY article_locale_unique (article_id, locale),
+      KEY article_translations_locale_idx (locale),
+      CONSTRAINT article_translations_article_id_fk
+        FOREIGN KEY (article_id) REFERENCES articles(id)
+        ON DELETE CASCADE
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+  `)
+}
+
+export function buildImagePrompt(article) {
+  const tags = Array.isArray(article.tags) ? article.tags.slice(0, 6).join(', ') : ''
+  const highlights = Array.isArray(article.highlights) ? article.highlights.slice(0, 3).join(' | ') : ''
+  const opening = Array.isArray(article.content) ? article.content[0] : ''
+
+  return [
+    `Create a premium professional editorial cover image for a KHUA article titled "${article.title}".`,
+    `Most important requirement: the image must clearly support this exact article topic, not a generic Northern Thai food scene. Category: ${article.category || 'Northern Thai food'}. Excerpt: ${article.excerpt || ''}. Tags: ${tags}. Key points: ${highlights}. Opening idea: ${opening}.`,
+    'Translate the article topic into simple, instantly understandable visual storytelling: choose ingredients, props, dish style, and mood that directly match the title and key points.',
+    'Use one clear main subject, one supporting subject, and clean negative space. The viewer should understand the article theme within two seconds.',
+    'Photorealistic commercial food photography for a high-end Northern Thai chili paste brand.',
+    'Composition must look professionally art-directed and easy to read: clear focal point, balanced foreground/midground/background, refined negative space, strong depth, elegant visual hierarchy, no random clutter, no scattered props that do not serve the article.',
+    'Use a warm Lanna craft mood with a wooden table, roasted dried chilies, herbs, sticky rice, fresh vegetables, small ceramic bowls, and refined food styling.',
+    'Do not generate product packaging, jars, boxes, pouches, product labels, blank labels, fake labels, or any branded objects. If a product shot is needed, it will be added later from the real KHUA website product assets, not generated by AI.',
+    'Absolutely no generated text or typography anywhere in the image: no Thai text, no English text, no fake letters, no random glyphs, no captions, no signs, no product names, no label text, no packaging typography, no watermarks.',
+    'Absolutely no generated logos or brand marks anywhere in the image. The real KHUA website logo will be composited as a separate website badge after generation.',
+    'Leave clean negative space for article text overlay on the website.',
+    'Lighting: soft directional natural light, realistic shadows, warm highlights, crisp food texture, premium magazine quality, 50mm lens feel, shallow depth of field but main objects sharp.',
+    'No people, no hands, no messy background, no low-end stock photo look.',
+  ].join(' ')
+}
+
+async function transparentWebsiteLogo(width, height) {
+  const source = sharp(websiteLogoPath)
+  const metadata = await source.metadata()
+  const sourceWidth = metadata.width ?? 1024
+  const sourceHeight = metadata.height ?? 1024
+  const cropLeft = Math.round(sourceWidth * 0.08)
+  const cropTop = Math.round(sourceHeight * 0.12)
+  const cropWidth = Math.round(sourceWidth * 0.7)
+  const cropHeight = Math.round(sourceHeight * 0.64)
+
+  const { data, info } = await sharp(websiteLogoPath)
+    .extract({ left: cropLeft, top: cropTop, width: cropWidth, height: cropHeight })
+    .resize(width, height, { fit: 'contain' })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true })
+
+  for (let index = 0; index < data.length; index += 4) {
+    const sourceAlpha = data[index + 3]
+    if (sourceAlpha < 10) {
+      data[index + 3] = 0
+      continue
+    }
+
+    const red = data[index]
+    const green = data[index + 1]
+    const blue = data[index + 2]
+    const max = Math.max(red, green, blue)
+    const min = Math.min(red, green, blue)
+    const saturation = max - min
+
+    if (max < 18 && saturation < 10) {
+      data[index + 3] = 0
+      continue
+    }
+
+    const darkInk = Math.max(0, 120 - max) * 3.2
+    const warmInk = Math.max(0, red - green - 18) * 3 + Math.max(0, red - blue - 24) * 2.4
+    const brightStroke = max > 222 && saturation < 42 ? (max - 222) * 3 : 0
+    const alpha = Math.max(darkInk, warmInk, brightStroke)
+
+    data[index + 3] = alpha < 28 ? 0 : Math.min(255, Math.round(alpha))
+  }
+
+  return sharp(data, {
+    raw: {
+      width: info.width,
+      height: info.height,
+      channels: 4,
+    },
+  })
+    .png()
+    .toBuffer()
+}
+
+export async function addWebsiteLogoToImage(imagePath) {
+  if (!fs.existsSync(websiteLogoPath)) return
+
+  const metadata = await sharp(imagePath).metadata()
+  const width = metadata.width ?? 1536
+  const height = metadata.height ?? 1024
+
+  const badgeSize = Math.round(width * 0.095)
+  const badgeLogoSize = Math.round(badgeSize * 0.72)
+  const badgeMargin = Math.round(width * 0.032)
+  const badgeRadius = Math.round(badgeSize * 0.16)
+
+  const websiteBadge = Buffer.from(`
+    <svg width="${badgeSize}" height="${badgeSize}" viewBox="0 0 ${badgeSize} ${badgeSize}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="${badgeSize}" height="${badgeSize}" rx="${badgeRadius}" fill="rgba(255,248,232,0.88)"/>
+      <rect x="1" y="1" width="${badgeSize - 2}" height="${badgeSize - 2}" rx="${badgeRadius}" fill="none" stroke="rgba(168,120,36,0.28)" stroke-width="2"/>
+    </svg>
+  `)
+
+  const websiteLogo = await transparentWebsiteLogo(badgeLogoSize, badgeLogoSize)
+
+  const output = await sharp(imagePath)
+    .composite([
+      {
+        input: websiteBadge,
+        left: width - badgeSize - badgeMargin,
+        top: badgeMargin,
+      },
+      {
+        input: websiteLogo,
+        left: width - badgeSize - badgeMargin + Math.round((badgeSize - badgeLogoSize) / 2),
+        top: badgeMargin + Math.round((badgeSize - badgeLogoSize) / 2),
+      },
+    ])
+    .png()
+    .toBuffer()
+
+  fs.writeFileSync(imagePath, output)
+}
+
+export async function generateCoverImage(slug, article, options = {}) {
+  const fileSlug = options.variant ? `${slug}-${options.variant}` : slug
+  const existingPath = path.join(uploadsDir, `${fileSlug}.png`)
+  const publicPath = `/uploads/articles/${fileSlug}.png`
+  const prompt = buildImagePrompt(article)
+
+  if (!options.force && fs.existsSync(existingPath)) {
+    return { coverImageUrl: publicPath, imagePrompt: prompt }
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return { coverImageUrl: '/khua-lanna-table-scene.png', imagePrompt: prompt }
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_IMAGE_MODEL || 'gpt-image-1',
+        prompt,
+        size: '1536x1024',
+        quality: process.env.OPENAI_IMAGE_QUALITY || 'medium',
+        output_format: 'png',
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`OpenAI image generation failed: ${response.status}`)
+    }
+
+    const data = await response.json()
+    const base64 = data?.data?.[0]?.b64_json
+    if (!base64) {
+      throw new Error('OpenAI image generation returned no image data')
+    }
+
+    fs.mkdirSync(uploadsDir, { recursive: true })
+    fs.writeFileSync(existingPath, Buffer.from(base64, 'base64'))
+    await addWebsiteLogoToImage(existingPath)
+    return { coverImageUrl: publicPath, imagePrompt: prompt }
+  } catch (error) {
+    console.warn(error)
+    return { coverImageUrl: '/khua-lanna-table-scene.png', imagePrompt: prompt }
+  }
+}
+
+async function latestGeneratedDateFromDb(connection) {
+  const [rows] = await connection.execute(`
+    SELECT slug FROM articles
+    WHERE slug LIKE 'daily-%'
+    ORDER BY published_at DESC, id DESC
+    LIMIT 1
+  `)
+  const slug = rows?.[0]?.slug
+  return slug?.match(/^daily-(\d{4}-\d{2}-\d{2})-/)?.[1]
+}
+
+async function upsertArticle(connection, date, localizedArticles) {
+  const primary = localizedArticles.th ?? Object.values(localizedArticles)[0]
+  const slug = primary.slug
+  const { coverImageUrl, imagePrompt } = await generateCoverImage(slug, primary)
+
+  await connection.execute(
+    `
+      INSERT INTO articles (slug, status, cover_image_url, image_prompt, published_at)
+      VALUES (?, 'published', ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        status = VALUES(status),
+        cover_image_url = VALUES(cover_image_url),
+        image_prompt = VALUES(image_prompt),
+        published_at = VALUES(published_at)
+    `,
+    [slug, coverImageUrl, imagePrompt, `${date} 08:00:00`],
+  )
+
+  const [articleRows] = await connection.execute('SELECT id FROM articles WHERE slug = ? LIMIT 1', [slug])
+  const articleId = articleRows?.[0]?.id
+  if (!articleId) throw new Error(`Could not resolve article id for ${slug}`)
+
+  for (const locale of locales) {
+    const article = localizedArticles[locale]
+    await connection.execute(
+      `
+        INSERT INTO article_translations (
+          article_id,
+          locale,
+          title,
+          excerpt,
+          category,
+          date_label,
+          read_time,
+          tags_json,
+          highlights_json,
+          content_json,
+          meta_title,
+          meta_description
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          title = VALUES(title),
+          excerpt = VALUES(excerpt),
+          category = VALUES(category),
+          date_label = VALUES(date_label),
+          read_time = VALUES(read_time),
+          tags_json = VALUES(tags_json),
+          highlights_json = VALUES(highlights_json),
+          content_json = VALUES(content_json),
+          meta_title = VALUES(meta_title),
+          meta_description = VALUES(meta_description)
+      `,
+      [
+        articleId,
+        locale,
+        article.title,
+        article.excerpt,
+        article.category,
+        article.date,
+        article.readTime,
+        JSON.stringify(article.tags),
+        JSON.stringify(article.highlights),
+        JSON.stringify(article.content),
+        article.title,
+        article.excerpt,
+      ],
+    )
+  }
+}
+
+async function seedLegacyGeneratedArticles(connection, data) {
+  const slugs = new Set()
+
+  for (const locale of locales) {
+    for (const article of data[locale] ?? []) {
+      slugs.add(article.slug)
+    }
+  }
+
+  for (const slug of slugs) {
+    const match = slug.match(/^daily-(\d{4}-\d{2}-\d{2})-/)
+    if (!match) continue
+    const localizedArticles = {}
+    for (const locale of locales) {
+      const found = data[locale]?.find((article) => article.slug === slug)
+      if (found) localizedArticles[locale] = found
+    }
+    if (locales.every((locale) => localizedArticles[locale])) {
+      await upsertArticle(connection, match[1], localizedArticles)
+    }
+  }
+}
+
 function latestGeneratedDate(data) {
   const dates = locales.flatMap((locale) =>
     data[locale]
@@ -325,7 +694,7 @@ function latestGeneratedDate(data) {
   return dates.sort().at(-1)
 }
 
-function buildArticle(date, locale) {
+export function buildArticle(date, locale) {
   const index = Math.abs(date.split('-').join('')) % topics.length
   const topic = topics[index]
   const text = topic[locale]
@@ -343,29 +712,57 @@ function buildArticle(date, locale) {
   }
 }
 
-function run() {
+async function run() {
   const data = readData()
   const today = todayBangkok()
-  const latest = latestGeneratedDate(data)
+  const connection = await connectDb()
+
+  if (connection) {
+    await ensureSchema(connection)
+    await seedLegacyGeneratedArticles(connection, data)
+  }
+
+  const latest = connection
+    ? (await latestGeneratedDateFromDb(connection)) ?? latestGeneratedDate(data)
+    : latestGeneratedDate(data)
   const start = latest ? addDays(latest, 1) : today
   let cursor = start
   let added = 0
 
   while (cursor <= today) {
+    const localizedArticles = {}
     for (const locale of locales) {
       const article = buildArticle(cursor, locale)
+      localizedArticles[locale] = article
       const exists = data[locale].some((item) => item.slug === article.slug)
       if (!exists) {
         data[locale].unshift(article)
         added += 1
       }
     }
+    if (connection) {
+      await upsertArticle(connection, cursor, localizedArticles)
+    }
     cursor = addDays(cursor, 1)
   }
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true })
   fs.writeFileSync(outputPath, `${JSON.stringify(data, null, 2)}\n`)
-  console.log(added ? `Generated ${added} localized daily articles.` : 'Daily articles are up to date.')
+  if (connection) {
+    await connection.end()
+  }
+  console.log(
+    added
+      ? `Generated ${added} localized daily articles and synced MariaDB.`
+      : connection
+        ? 'Daily articles are up to date in MariaDB.'
+        : 'Daily articles are up to date.',
+  )
 }
 
-run()
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  run().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+  })
+}

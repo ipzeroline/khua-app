@@ -1,6 +1,4 @@
-'use client'
-
-import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { Dictionary } from '@/i18n'
 
 interface HomeFaqSectionProps {
@@ -9,31 +7,33 @@ interface HomeFaqSectionProps {
 
 export default function HomeFaqSection({ dict }: HomeFaqSectionProps) {
   return (
-    <section className="bg-bg px-6 py-24">
-      <div className="mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 text-center"
-        >
+    <section className="relative overflow-hidden bg-[#21150f] px-6 py-24">
+      <Image
+        src="/khua-chili-texture-macro.webp"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover object-center"
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-[#f5f5f7]/90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(168,120,36,0.12),transparent_58%)]" />
+
+      <div className="relative z-10 mx-auto max-w-4xl">
+        <div className="mb-12 text-center">
           <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
             {dict.faq.label}
           </p>
           <h2 className="apple-headline text-3xl text-text sm:text-4xl">
             {dict.faq.title}
           </h2>
-        </motion.div>
+        </div>
 
         <div className="space-y-4">
           {dict.faq.items.map((item, index) => (
-            <motion.details
+            <details
               key={item.question}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
-              className="group rounded-2xl border border-border bg-surface p-5 shadow-sm"
+              className="group rounded-2xl border border-white/70 bg-white/86 p-5 shadow-[0_18px_55px_rgba(29,29,31,0.08)] backdrop-blur-md"
               open={index === 0}
             >
               <summary className="cursor-pointer list-none apple-headline text-lg text-text">
@@ -42,7 +42,7 @@ export default function HomeFaqSection({ dict }: HomeFaqSectionProps) {
               <p className="mt-4 text-sm leading-relaxed text-text-secondary">
                 {item.answer}
               </p>
-            </motion.details>
+            </details>
           ))}
         </div>
       </div>

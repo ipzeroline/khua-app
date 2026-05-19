@@ -18,9 +18,15 @@ export interface ProductData {
   longDescription: string
   ingredients: string[]
   price: string
+  compareAtPrice?: string
   weight: string
   featured: boolean
+  type?: 'single' | 'bundle'
+  badge?: string
+  bundleItems?: string[]
   image?: string
+  detailImage?: string
+  galleryImages?: string[]
 }
 
 export interface ArticleData {
@@ -30,6 +36,7 @@ export interface ArticleData {
   category: string
   date: string
   readTime: string
+  coverImage?: string
   tags: string[]
   highlights: string[]
   content: string[]
@@ -131,6 +138,28 @@ export interface Dictionary {
     quantity: string
     items: string
     currency: string
+    shipping: string
+    total: string
+    checkoutTitle: string
+    checkoutLoginRequired: string
+    checkoutAddressRequired: string
+    selectAddress: string
+    note: string
+    placeOrder: string
+    orderCreated: string
+    paymentTitle: string
+    paymentSubtitle: string
+    bankName: string
+    accountNumber: string
+    accountName: string
+    transferAmount: string
+    qrCode: string
+    uploadSlip: string
+    slipUploaded: string
+    slipHelp: string
+    thankYouTitle: string
+    thankYouMessage: string
+    backToProducts: string
   }
 
   account: {
@@ -151,6 +180,34 @@ export interface Dictionary {
     benefits: string[]
     ordersTitle: string
     noOrders: string
+    pointsBalance: string
+    profileTitle: string
+    addressesTitle: string
+    addAddress: string
+    editAddress: string
+    deleteAddress: string
+    defaultAddress: string
+    setDefault: string
+    recipientName: string
+    addressLine1: string
+    addressLine2: string
+    subdistrict: string
+    district: string
+    province: string
+    postalCode: string
+    country: string
+    noAddresses: string
+    orderNumber: string
+    orderStatus: string
+    orderTotal: string
+    shippingCarrier: string
+    trackingNumber: string
+    pending: string
+    confirmed: string
+    preparing: string
+    shipped: string
+    completed: string
+    cancelled: string
   }
 
   articles: {
@@ -185,6 +242,19 @@ export interface Dictionary {
     title: string
     subtitle: string
     paragraphs: string[]
+    detailTitle: string
+    detailParagraphs: string[]
+    principlesTitle: string
+    principles: Array<{
+      title: string
+      description: string
+    }>
+    timelineTitle: string
+    timeline: Array<{
+      period: string
+      title: string
+      description: string
+    }>
   }
 
   contact: {
@@ -211,6 +281,27 @@ export interface Dictionary {
 
   products_data: ProductData[]
   articles_data: ArticleData[]
+
+  admin: {
+    dashboard: string
+    members: string
+    articles: string
+    staff: string
+    login_title: string
+    email: string
+    password: string
+    sign_in: string
+    create_article: string
+    edit_article: string
+    publish: string
+    draft: string
+    member_since: string
+    role: string
+    status: string
+    actions: string
+    back_to_site: string
+    logout: string
+  }
 
   social: {
     instagram: string

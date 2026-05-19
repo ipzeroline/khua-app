@@ -113,6 +113,39 @@ export default function AboutContent({ dict }: AboutContentProps) {
         <SectionDivider />
       </div>
 
+      <section className="px-3 sm:px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="relative mx-auto max-w-[1480px] overflow-hidden bg-[#21150f]"
+        >
+          <div className="relative aspect-[4/5] sm:aspect-[16/9] lg:aspect-[2.1/1]">
+            <Image
+              src="/khua-phayao-lanna-origin.png"
+              alt={dict.products.originValue}
+              fill
+              sizes="(max-width: 640px) 100vw, 96vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.52)_100%)]" />
+            <div className="absolute inset-x-0 bottom-0 px-6 pb-8 text-center text-white sm:px-10 sm:pb-12">
+              <p className="apple-eyebrow mb-2 text-xs uppercase text-gold-light">
+                {dict.products.originLabel}
+              </p>
+              <h2 className="apple-display text-3xl sm:text-5xl">
+                {dict.products.originValue}
+              </h2>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      <div className="py-16">
+        <SectionDivider />
+      </div>
+
       {/* Story */}
       <section className="px-6 max-w-3xl mx-auto relative z-10">
         <motion.div
@@ -135,6 +168,264 @@ export default function AboutContent({ dict }: AboutContentProps) {
             </p>
           ))}
         </motion.div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="relative z-10 mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start"
+        >
+          <div>
+            <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+              {dict.about.label}
+            </p>
+            <h2 className="apple-display text-4xl text-text sm:text-5xl">
+              {dict.about.detailTitle}
+            </h2>
+          </div>
+          <div className="space-y-6 text-base leading-8 text-text-secondary">
+            {dict.about.detailParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="relative z-10 mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-10 text-center"
+        >
+          <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+            KHUA
+          </p>
+          <h2 className="apple-display text-4xl text-text sm:text-5xl">
+            {dict.about.principlesTitle}
+          </h2>
+        </motion.div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {dict.about.principles.map((principle, index) => (
+            <motion.article
+              key={principle.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 }}
+              className="bg-surface p-6 text-center shadow-[0_18px_55px_rgba(29,29,31,0.05)]"
+            >
+              <span className="mx-auto mb-5 grid h-10 w-10 place-items-center rounded-full bg-gold-pale text-sm font-semibold text-gold">
+                {index + 1}
+              </span>
+              <h3 className="apple-headline text-xl text-text">
+                {principle.title}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-text-secondary">
+                {principle.description}
+              </p>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="px-3 sm:px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto grid max-w-[1480px] gap-3 bg-[#f5f5f7] lg:grid-cols-2"
+        >
+          <div className="flex flex-col justify-center bg-surface p-6 text-center sm:p-10 lg:p-14 lg:text-left">
+            <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+              {dict.craftsmanship.label}
+            </p>
+            <h2 className="apple-display text-4xl text-text sm:text-5xl">
+              {dict.craftsmanship.items[0]?.title}
+            </h2>
+            <p className="mt-6 text-base leading-8 text-text-secondary">
+              {dict.craftsmanship.items[0]?.description}
+            </p>
+          </div>
+          <div className="relative min-h-[440px] overflow-hidden bg-[#21150f] sm:min-h-[560px]">
+            <Image
+              src="/khua-local-ingredients.png"
+              alt={dict.craftsmanship.items[0]?.title || dict.craftsmanship.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.04)_50%,rgba(0,0,0,0.18)_100%)]" />
+          </div>
+        </motion.div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="px-3 sm:px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto grid max-w-[1480px] gap-3 bg-[#f5f5f7] lg:grid-cols-2"
+        >
+          <div className="relative min-h-[440px] overflow-hidden bg-[#21150f] sm:min-h-[560px]">
+            <Image
+              src="/khua-roasting-process.png"
+              alt={dict.craftsmanship.items[1]?.title || dict.craftsmanship.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.1)_50%,rgba(0,0,0,0.32)_100%)]" />
+          </div>
+          <div className="flex flex-col justify-center bg-surface p-6 text-center sm:p-10 lg:p-14 lg:text-left">
+            <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+              {dict.craftsmanship.label}
+            </p>
+            <h2 className="apple-display text-4xl text-text sm:text-5xl">
+              {dict.craftsmanship.items[1]?.title}
+            </h2>
+            <p className="mt-6 text-base leading-8 text-text-secondary">
+              {dict.craftsmanship.items[1]?.description}
+            </p>
+          </div>
+        </motion.div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="px-3 sm:px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto grid max-w-[1480px] gap-3 bg-[#f5f5f7] lg:grid-cols-2"
+        >
+          <div className="flex flex-col justify-center bg-surface p-6 text-center sm:p-10 lg:p-14 lg:text-left">
+            <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+              {dict.craftsmanship.label}
+            </p>
+            <h2 className="apple-display text-4xl text-text sm:text-5xl">
+              {dict.lanna.items[1]?.title}
+            </h2>
+            <p className="mt-6 text-base leading-8 text-text-secondary">
+              {dict.lanna.items[1]?.description}
+            </p>
+          </div>
+          <div className="relative min-h-[440px] overflow-hidden bg-[#21150f] sm:min-h-[560px]">
+            <Image
+              src="/khua-stone-mortar-closeup.png"
+              alt={dict.lanna.items[1]?.title || dict.craftsmanship.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.08)_50%,rgba(0,0,0,0.28)_100%)]" />
+          </div>
+        </motion.div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="px-3 sm:px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto grid max-w-[1480px] gap-3 bg-[#f5f5f7] lg:grid-cols-2"
+        >
+          <div className="relative min-h-[520px] overflow-hidden bg-[#21150f] sm:min-h-[640px] lg:order-2">
+            <Image
+              src="/khua-handmade-packaging.png"
+              alt={dict.site.name}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.06)_50%,rgba(0,0,0,0.3)_100%)]" />
+          </div>
+          <div className="flex flex-col justify-center bg-surface p-6 text-center sm:p-10 lg:p-14 lg:text-left">
+            <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+              {dict.site.name}
+            </p>
+            <h2 className="apple-display text-4xl text-text sm:text-5xl">
+              {dict.craftsmanship.items[2]?.title}
+            </h2>
+            <p className="mt-6 text-base leading-8 text-text-secondary">
+              {dict.about.paragraphs[dict.about.paragraphs.length - 1]}
+            </p>
+          </div>
+        </motion.div>
+      </section>
+
+      <div className="py-12">
+        <SectionDivider />
+      </div>
+
+      <section className="relative z-10 mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-10 text-center"
+        >
+          <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
+            {dict.craftsmanship.label}
+          </p>
+          <h2 className="apple-display text-4xl text-text sm:text-5xl">
+            {dict.about.timelineTitle}
+          </h2>
+        </motion.div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {dict.about.timeline.map((step, index) => (
+            <motion.article
+              key={step.title}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.06 }}
+              className="border border-border bg-surface p-6"
+            >
+              <p className="apple-eyebrow text-xs uppercase text-gold/70">
+                {String(index + 1).padStart(2, '0')} / {step.period}
+              </p>
+              <h3 className="apple-headline mt-4 text-2xl text-text">
+                {step.title}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-text-secondary">
+                {step.description}
+              </p>
+            </motion.article>
+          ))}
+        </div>
       </section>
 
       <div className="py-12">

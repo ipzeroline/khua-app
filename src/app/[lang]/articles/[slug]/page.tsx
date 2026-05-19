@@ -1,18 +1,21 @@
 import type { Metadata } from 'next'
+import { connection } from 'next/server'
 import { notFound } from 'next/navigation'
 import { getDictionary, type ArticleData, type Locale, LOCALES } from '@/i18n'
 import { getOpenGraphLocale } from '@/i18n/seo'
 import ArticleDetailContent from '@/components/articles/ArticleDetailContent'
+import { getPublishedArticle } from '@/lib/articles'
 
 interface ArticleDetailPageProps {
   params: Promise<{ lang: string; slug: string }>
 }
 
 export async function generateMetadata({ params }: ArticleDetailPageProps): Promise<Metadata> {
+  await connection()
   const { lang, slug } = await params
   const locale = lang as Locale
   const dict = await getDictionary(locale)
-  const article: ArticleData | undefined = dict.articles_data.find((item) => item.slug === slug)
+  const article: ArticleData | undefined = await getPublishedArticle(locale, slug, dict)
 
   if (!article) {
     return { title: dict.articles.notFound }
@@ -31,26 +34,17 @@ export async function generateMetadata({ params }: ArticleDetailPageProps): Prom
       description: article.excerpt,
       locale: getOpenGraphLocale(locale),
       type: 'article',
+      images: article.coverImage ? [{ url: article.coverImage, alt: article.title }] : undefined,
     },
   }
 }
 
-export async function generateStaticParams() {
-  const params: Array<{ lang: Locale; slug: string }> = []
-  for (const lang of LOCALES) {
-    const dict = await getDictionary(lang)
-    dict.articles_data.forEach((article) => {
-      params.push({ lang, slug: article.slug })
-    })
-  }
-  return params
-}
-
 export default async function ArticleDetailPage({ params }: ArticleDetailPageProps) {
+  await connection()
   const { lang, slug } = await params
   const locale = lang as Locale
   const dict = await getDictionary(locale)
-  const article = dict.articles_data.find((item) => item.slug === slug)
+  const article = await getPublishedArticle(locale, slug, dict)
 
   if (!article) {
     notFound()
@@ -63,8 +57,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
     description: article.excerpt,
     keywords: article.tags.join(', '),
     datePublished: '2026-05-18',
-    dateModified: '2026-05-18',
+    dateModified: article.date,
     inLanguage: locale,
+    image: article.coverImage,
     author: {
       '@type': 'Organization',
       name: dict.site.name,

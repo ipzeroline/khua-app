@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" role="img" aria-label="KHUA payment QR placeholder">
+  <rect width="360" height="360" rx="28" fill="#fff8ed"/>
+  <rect x="26" y="26" width="308" height="308" rx="20" fill="#ffffff" stroke="#b8860b" stroke-width="6"/>
+  <g fill="#21150f">
+    <path d="M54 54h78v78H54zM228 54h78v78h-78zM54 228h78v78H54z"/>
+    <path fill="#fff" d="M73 73h40v40H73zM247 73h40v40h-40zM73 247h40v40H73z"/>
+    <path d="M154 56h18v18h-18zM188 56h24v18h-24zM154 92h58v18h-58zM154 128h20v40h-20zM190 128h18v18h-18zM226 150h28v18h-28zM272 150h34v18h-34zM150 190h18v18h-18zM188 188h58v20h-58zM266 190h40v18h-40zM150 226h54v18h-54zM224 226h18v54h-18zM260 226h46v18h-46zM150 262h18v44h-18zM188 262h20v18h-20zM260 262h18v44h-18zM296 262h10v44h-10z"/>
+  </g>
+  <circle cx="180" cy="180" r="42" fill="#fff8ed" stroke="#b8860b" stroke-width="4"/>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#21150f">KHUA</text>
+  <text x="180" y="196" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#8a5a16">PAYMENT</text>
+</svg>

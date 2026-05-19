@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArticleData, Dictionary, Locale } from '@/i18n'
@@ -37,39 +38,53 @@ export default function ArticleDetailContent({
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="premium-card mx-auto mt-12 max-w-3xl rounded-2xl border border-white/70 bg-surface p-6 sm:p-10"
+        className="premium-card mx-auto mt-12 max-w-3xl overflow-hidden rounded-2xl border border-white/70 bg-surface"
       >
-        <div className="mb-8 flex flex-wrap justify-center gap-2">
-          {article.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1 text-xs font-medium text-text-secondary"
-            >
-              {tag}
-            </span>
-          ))}
+        {article.coverImage ? (
+          <div className="relative aspect-[16/9] bg-gold-pale">
+            <Image
+              src={article.coverImage}
+              alt={article.title}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="object-cover object-center"
+            />
+          </div>
+        ) : null}
+        <div className="p-6 sm:p-10">
+          <div className="mb-8 flex flex-wrap justify-center gap-2">
+            {article.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-gold/20 bg-gold/10 px-3 py-1 text-xs font-medium text-text-secondary"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          <div className="mb-8 grid gap-3 border-b border-border pb-8 sm:grid-cols-3">
+            {article.highlights.map((highlight) => (
+              <p
+                key={highlight}
+                className="rounded-xl border border-border bg-white/45 p-4 text-sm leading-relaxed text-text-secondary"
+              >
+                {highlight}
+              </p>
+            ))}
+          </div>
+          <div className="space-y-6 text-base leading-8 text-text-secondary">
+            {article.content.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+          <Link
+            href={`/${lang}/articles`}
+            className="premium-link mt-10 inline-flex text-sm font-medium text-gold"
+          >
+            {dict.articles.backToArticles}
+          </Link>
         </div>
-        <div className="mb-8 grid gap-3 border-b border-border pb-8 sm:grid-cols-3">
-          {article.highlights.map((highlight) => (
-            <p
-              key={highlight}
-              className="rounded-xl border border-border bg-white/45 p-4 text-sm leading-relaxed text-text-secondary"
-            >
-              {highlight}
-            </p>
-          ))}
-        </div>
-        <div className="space-y-6 text-base leading-8 text-text-secondary">
-          {article.content.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
-        <Link
-          href={`/${lang}/articles`}
-          className="premium-link mt-10 inline-flex text-sm font-medium text-gold"
-        >
-          {dict.articles.backToArticles}
-        </Link>
       </motion.div>
     </article>
   )

@@ -44,7 +44,7 @@ body::before {
   font-family: var(--font-apple);
   font-weight: 600;
   letter-spacing: 0;
-  line-height: 1.07143;
+  line-height: 1.28;
 }
 
 .apple-display {
@@ -89,6 +89,15 @@ body::before {
 
 .apple-cta-link:hover::after {
   transform: translate(0.12em, -0.02em);
+}
+
+.apple-cta-link-light {
+  color: #f0d38b;
+  text-shadow: 0 12px 32px rgba(0, 0, 0, 0.32);
+}
+
+.apple-cta-link-light:hover {
+  color: #fff3c9;
 }
 
 .apple-hero-stage {

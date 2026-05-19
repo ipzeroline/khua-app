@@ -29,5 +29,5 @@ export function getDefaultLocale(): Locale {
   return DEFAULT_LOCALE
 }
 
-export { type Locale, type Dictionary, LOCALES, DEFAULT_LOCALE } from './types'
+export { type Locale, type Dictionary, LOCALES, DEFAULT_LOCALE, LOCALE_NAMES } from './types'
 export type { ArticleData, ProductData } from './types'

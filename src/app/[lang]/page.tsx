@@ -4,6 +4,8 @@ import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo
 import HeroSection from '@/components/home/HeroSection'
 import StorySection from '@/components/home/StorySection'
 import LannaSoulSection from '@/components/home/LannaSoulSection'
+import HomeRoastingSection from '@/components/home/HomeRoastingSection'
+import HomeServingSection from '@/components/home/HomeServingSection'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
 import CraftsmanshipSection from '@/components/home/CraftsmanshipSection'
 import HomeArticlesSection from '@/components/home/HomeArticlesSection'
@@ -113,8 +115,10 @@ export default async function HomePage({ params }: HomePageProps) {
       <HeroSection dict={dict} />
       <PhayaoSeoSection dict={dict} />
       <StorySection dict={dict} />
+      <HomeRoastingSection dict={dict} />
       <LannaSoulSection dict={dict} />
       <FeaturedProducts dict={dict} lang={locale} />
+      <HomeServingSection dict={dict} />
       <HomeArticlesSection dict={dict} lang={locale} />
       <HomeFaqSection dict={dict} />
       <CraftsmanshipSection dict={dict} />

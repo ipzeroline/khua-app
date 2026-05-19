@@ -1,6 +1,3 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dictionary } from '@/i18n'
@@ -10,7 +7,6 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ dict }: HeroSectionProps) {
-  const heroProducts = dict.products_data.slice(0, 3)
   const heroTitleLength = [...dict.hero.title].length
   const heroTitleViewport =
     dict.locale === 'en'
@@ -20,119 +16,70 @@ export default function HeroSection({ dict }: HeroSectionProps) {
         : 118 / heroTitleLength
 
   return (
-    <section className="apple-hero-stage relative min-h-[760px] overflow-hidden bg-[#fbfbfd] px-5 pt-24 text-center sm:min-h-screen sm:px-6 sm:pt-28">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,#fff_0%,#fbfbfd_35%,#f5f5f7_100%)]" />
-      <div className="absolute inset-x-0 top-0 h-40 bg-white/80" />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(ellipse_at_50%_100%,rgba(168,120,36,0.18),transparent_58%)]" />
+    <section className="apple-hero-stage relative min-h-[760px] overflow-hidden bg-[#24170f] px-5 pt-20 text-center text-white sm:min-h-screen sm:px-8 sm:pt-24 lg:text-left">
+      <Image
+        src="/khua-hero-lifestyle-wide-20260519-2.webp"
+        alt="KHUA premium Northern Thai chili pastes served with sticky rice and fresh vegetables"
+        fill
+        priority
+        sizes="(min-width: 640px) 100vw, 0vw"
+        className="hidden object-cover object-center sm:block"
+      />
+      <Image
+        src="/khua-hero-lifestyle-mobile-20260519.webp"
+        alt="KHUA premium Northern Thai chili pastes arranged for mobile view"
+        fill
+        sizes="(max-width: 639px) 100vw, 0vw"
+        className="object-cover object-[center_58%] sm:hidden"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.42)_0%,rgba(0,0,0,0.08)_34%,rgba(0,0,0,0.42)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.38)_0%,rgba(0,0,0,0.08)_34%,rgba(0,0,0,0.42)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,11,7,0.74)_0%,rgba(18,11,7,0.42)_34%,rgba(18,11,7,0.08)_66%,rgba(18,11,7,0.38)_100%)] sm:bg-[linear-gradient(90deg,rgba(18,11,7,0.78)_0%,rgba(18,11,7,0.5)_36%,rgba(18,11,7,0.1)_68%,rgba(18,11,7,0.34)_100%)]" />
+      <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.42),transparent)]" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="mb-4 flex items-center gap-2 text-sm font-semibold text-[#6e6e73]"
-        >
-          <Image
-            src="/khua-logo.png"
-            alt=""
-            width={32}
-            height={32}
-            priority
-            className="h-7 w-7 rounded-md object-cover"
-          />
-          <span>{dict.hero.subtitle}</span>
-        </motion.div>
-
-        <div className="relative max-w-4xl">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="apple-eyebrow mb-3 text-xs uppercase text-gold/70"
-          >
+      <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl flex-col items-center justify-center sm:min-h-[calc(100vh-6rem)] lg:items-start">
+        <div className="mb-6 flex flex-col items-center gap-3 text-sm font-semibold text-white/78 lg:items-start">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/khua-logo.webp"
+              alt=""
+              width={32}
+              height={32}
+              className="h-7 w-7 rounded-md object-cover"
+            />
+            <span>{dict.hero.subtitle}</span>
+          </div>
+          <span className="inline-flex whitespace-nowrap rounded-full border border-gold-light/25 bg-black/20 px-3 py-1 text-xs font-medium leading-none text-gold-light shadow-[0_12px_30px_rgba(0,0,0,0.18)] backdrop-blur-sm">
             {dict.site.nameThai} จากพะเยา
-          </motion.p>
+          </span>
+        </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.28 }}
-            className="apple-display mx-auto max-w-[94vw] whitespace-nowrap text-text"
+        <div className="relative max-w-[94vw] sm:max-w-4xl">
+          <h1
+            className="apple-display mx-auto max-w-[94vw] whitespace-nowrap text-white drop-shadow-[0_16px_46px_rgba(0,0,0,0.28)] lg:mx-0"
             style={{
               fontSize: `clamp(0.8rem, ${heroTitleViewport.toFixed(2)}vw, 5.7rem)`,
             }}
           >
             {dict.hero.title}
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.42 }}
-            className="apple-subheadline mx-auto mt-3 max-w-2xl text-2xl text-text sm:text-3xl"
-          >
+          <p className="apple-subheadline mx-auto mt-3 max-w-2xl text-2xl text-white/92 sm:text-3xl lg:mx-0">
             {dict.site.tagline}
-          </motion.p>
+          </p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.54 }}
-            className="mx-auto mt-4 max-w-2xl text-base leading-7 text-text-secondary sm:text-lg"
-          >
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-white/72 sm:text-lg lg:mx-0">
             {dict.hero.description}
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.68 }}
-            className="mt-7 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-lg"
-          >
-            <Link href={`/${dict.locale}/products`} className="apple-cta-link">
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-lg lg:justify-start">
+            <Link href={`/${dict.locale}/products`} className="apple-cta-link apple-cta-link-light">
               {dict.hero.cta}
             </Link>
-            <Link href={`/${dict.locale}/about`} className="apple-cta-link">
+            <Link href={`/${dict.locale}/about`} className="apple-cta-link apple-cta-link-light">
               {dict.nav.about}
             </Link>
-          </motion.div>
+          </div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 34, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.78 }}
-          className="relative mt-10 h-[315px] w-full max-w-5xl sm:mt-12 sm:h-[390px] lg:h-[440px]"
-          aria-label={dict.products.title}
-        >
-          <div className="absolute inset-x-2 bottom-0 h-28 rounded-[100%] bg-[radial-gradient(ellipse_at_center,rgba(29,29,31,0.18),transparent_68%)] blur-2xl" />
-          {heroProducts.map((product, index) => {
-            const positions = [
-              'left-1/2 top-2 z-20 h-[255px] w-[190px] -translate-x-1/2 sm:h-[340px] sm:w-[250px] lg:h-[390px] lg:w-[290px]',
-              'left-[15%] top-20 z-10 h-[210px] w-[155px] -rotate-6 sm:left-[18%] sm:h-[285px] sm:w-[210px] lg:h-[330px] lg:w-[245px]',
-              'right-[15%] top-20 z-10 h-[210px] w-[155px] rotate-6 sm:right-[18%] sm:h-[285px] sm:w-[210px] lg:h-[330px] lg:w-[245px]',
-            ]
-
-            return (
-              <Link
-                key={product.slug}
-                href={`/${dict.locale}/products/${product.slug}`}
-                className={`absolute ${positions[index]} block overflow-hidden rounded-[34px] bg-white shadow-[0_34px_90px_rgba(29,29,31,0.16)] ring-1 ring-black/5 transition-transform duration-500 hover:-translate-y-2`}
-              >
-                {product.image && (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 640px) 55vw, (max-width: 1024px) 34vw, 290px"
-                    className="object-cover"
-                    priority={index === 0}
-                  />
-                )}
-              </Link>
-            )
-          })}
-        </motion.div>
       </div>
     </section>
   )
