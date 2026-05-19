@@ -261,6 +261,10 @@ const topics = [
   },
 ]
 
+export function getGeneratedTopicCount() {
+  return topics.length
+}
+
 export function todayBangkok() {
   const formatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Asia/Bangkok',

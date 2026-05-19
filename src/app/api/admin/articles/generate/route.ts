@@ -18,6 +18,7 @@ type GeneratedArticle = {
 type ArticleGenerator = {
   addDays: (date: string, amount: number) => string
   buildArticle: (date: string, locale: string) => GeneratedArticle
+  getGeneratedTopicCount: () => number
   generateCoverImage: (
     slug: string,
     article: GeneratedArticle,
@@ -40,6 +41,11 @@ interface LatestArticleRow extends RowDataPacket {
   slug: string
 }
 
+interface ExistingArticleRow extends RowDataPacket {
+  slug: string
+  title: string
+}
+
 export async function POST() {
   const auth = await requirePermission(PERMISSIONS.MANAGE_ARTICLES)
   if (auth instanceof Response) return auth
@@ -57,12 +63,44 @@ export async function POST() {
     `)
     const latestSlug = latestRows[0]?.slug
     const latestDate = latestSlug?.match(/^daily-(\d{4}-\d{2}-\d{2})-/)?.[1]
+    const [existingRows] = await connection.execute<ExistingArticleRow[]>(`
+      SELECT a.slug, t.title
+      FROM articles a
+      INNER JOIN article_translations t ON t.article_id = a.id AND t.locale = 'th'
+      WHERE a.slug LIKE 'daily-%'
+    `)
+    const existingSlugs = new Set(existingRows.map((row) => row.slug))
+    const existingTitles = new Set(existingRows.map((row) => row.title.trim()))
+
     const today = generator.todayBangkok()
-    const date = latestDate ? generator.addDays(latestDate, 1) : today
+    let date = latestDate ? generator.addDays(latestDate, 1) : today
+    let localizedArticles: Record<string, GeneratedArticle> | null = null
     const locales = ['th', 'en', 'lo', 'zh']
-    const localizedArticles = Object.fromEntries(
-      locales.map((locale) => [locale, generator.buildArticle(date, locale)]),
-    ) as Record<string, GeneratedArticle>
+
+    for (let attempt = 0; attempt < generator.getGeneratedTopicCount(); attempt += 1) {
+      const candidate = Object.fromEntries(
+        locales.map((locale) => [locale, generator.buildArticle(date, locale)]),
+      ) as Record<string, GeneratedArticle>
+      const primaryCandidate = candidate.th ?? Object.values(candidate)[0]
+
+      if (!existingSlugs.has(primaryCandidate.slug) && !existingTitles.has(primaryCandidate.title.trim())) {
+        localizedArticles = candidate
+        break
+      }
+
+      date = generator.addDays(date, 1)
+    }
+
+    if (!localizedArticles) {
+      return Response.json(
+        {
+          error:
+            'All generated article templates have already been used. Add more article templates before generating again.',
+        },
+        { status: 409 },
+      )
+    }
+
     const primary = localizedArticles.th ?? Object.values(localizedArticles)[0]
     const imageResult = await generator.generateCoverImage(primary.slug, primary)
     const { coverImageUrl, imagePrompt } = imageResult
