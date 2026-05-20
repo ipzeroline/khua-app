@@ -1204,11 +1204,14 @@ function buildTopicImageBrief(article) {
   ) {
     return [
       'Title-specific visual brief: this article is about Northern travel, Phayao, local markets, and food souvenirs.',
-      'The visual hero must be a travel-souvenir scene, not a meal: a woven market basket or cloth travel tote filled with unbranded Northern food souvenirs, dried chilies, local herbs, small sealed ceramic crocks without labels, and market ingredients ready to take home.',
-      'Add clear travel context through non-text visual cues: soft Phayao lakeside or mountain silhouette in the far background, morning market table, woven basket handle, local craft texture, and a sense of buying gifts before returning home.',
+      'The visual hero must be a premium travel-souvenir gift scene, not a meal and not a raw market pile: an elegant woven gift basket or natural cloth travel tote arranged like a luxury Northern Thai food hamper.',
+      'Show gift-ready, take-home objects without any text or labels: sealed unbranded ceramic crocks, small cloth-wrapped bundles, neat clear spice sachets tied with plain natural cord, dried chili bundles, local herbs tucked as accents, and one small bowl of finished chili paste only as a tasting cue.',
+      'Make the styling feel curated and high-end: fewer objects, precise spacing, clean hierarchy, refined negative space, no clutter, no random loose ingredients, no cheap souvenir look, no crowded market pile.',
+      'Add clear Phayao travel context through non-text visual cues: soft Kwan Phayao lakeside water, distant mountain silhouette, warm morning light, local craft texture, woven basket handle, and the feeling of choosing a special food gift before returning home.',
       'Strictly exclude sticky rice, plain rice, cooked rice bowls, eating plates, full meal spreads, and a single bowl of chili paste as the main subject. This is not a serving suggestion or dinner article.',
-      'Do not use signs, maps with writing, labels, package text, shop names, or any readable typography. Use only objects and place atmosphere to communicate travel and souvenir.',
-      'The viewer should immediately think "travel in Phayao and Northern food souvenirs" rather than "Northern chili paste meal."',
+      'Strictly avoid scattered raw chilies outside the basket, oversized herbs, large empty jars, unlidded containers that feel unfinished, or any object that looks like a product package with missing label space.',
+      'Do not use signs, maps with writing, labels, package text, shop names, price tags, stamps, seals with text, or any readable typography. Use only objects and place atmosphere to communicate travel and souvenir.',
+      'The viewer should immediately think "premium Phayao food souvenir basket" and "Northern travel gift" rather than "Northern chili paste meal" or "ingredient shopping."',
     ].join(' ')
   }
 
