@@ -962,24 +962,76 @@ async function ensureSchema(connection) {
   `)
 }
 
-export function buildImagePrompt(article) {
+function hashString(value) {
+  return [...String(value)].reduce((hash, char) => {
+    const next = ((hash << 5) - hash + char.charCodeAt(0)) | 0
+    return Math.abs(next)
+  }, 0)
+}
+
+function pickBySeed(items, seed, offset = 0) {
+  return items[(seed + offset) % items.length]
+}
+
+export function buildImagePrompt(article, seedValue = article.slug || article.title || '') {
   const tags = Array.isArray(article.tags) ? article.tags.slice(0, 6).join(', ') : ''
   const highlights = Array.isArray(article.highlights) ? article.highlights.slice(0, 3).join(' | ') : ''
   const opening = Array.isArray(article.content) ? article.content[0] : ''
+  const seed = hashString(`${seedValue}-${article.title}-${article.category}`)
+  const composition = pickBySeed([
+    'top-down editorial flat lay with a strong diagonal arrangement and generous clean negative space in the upper third',
+    'low 45-degree three-quarter table scene with a single hero bowl in the foreground and soft layered depth behind it',
+    'tight macro ingredient portrait with one premium focal ingredient, supporting textures, and creamy blurred background',
+    'asymmetrical magazine cover composition with the hero subject placed off-center and refined empty space for overlay text',
+    'vertical culinary still life cropped like a luxury cookbook cover, with tall foreground layers and a calm background plane',
+    'minimal museum-style food study on stone or dark ceramic, one precise focal point, restrained props, and elegant shadows',
+    'market-to-table editorial scene showing carefully selected local ingredients arranged in neat clusters with natural rhythm',
+    'process-focused composition with roasted aromatics, mortar texture, and finished paste implied without using packaging',
+  ], seed)
+  const surface = pickBySeed([
+    'handmade dark ceramic on warm teak',
+    'matte charcoal stone with a small linen accent',
+    'aged Lanna wooden tray with subtle grain',
+    'brushed brass spoon against deep brown ceramic',
+    'banana leaf and natural fiber mat used sparingly',
+    'unglazed clay bowl on a clean neutral plaster surface',
+  ], seed, 3)
+  const lighting = pickBySeed([
+    'soft morning side light from the left with long gentle shadows',
+    'late afternoon golden window light with warm highlights and controlled contrast',
+    'diffused overhead studio light with crisp texture and minimal glare',
+    'moody directional restaurant light with deep background falloff and sharp food detail',
+    'bright premium cookbook light, natural color, airy but not washed out',
+  ], seed, 7)
+  const lens = pickBySeed([
+    '50mm editorial lens feel, natural perspective',
+    '85mm food portrait compression, shallow depth of field',
+    '35mm environmental food photography with controlled context',
+    'macro lens detail for herbs, chili texture, and roasted aromatics',
+  ], seed, 11)
+  const colorMood = pickBySeed([
+    'deep chili red, fresh herb green, warm rice white, and muted gold accents',
+    'earthy charcoal, roasted red, turmeric gold, and fresh vegetable green',
+    'soft ivory, dark wood, clay brown, and precise red-orange highlights',
+    'premium natural palette with balanced greens, warm browns, and restrained red accents',
+  ], seed, 17)
 
   return [
     `Create a premium professional editorial cover image for a KHUA article titled "${article.title}".`,
     `Most important requirement: the image must clearly support this exact article topic, not a generic Northern Thai food scene. Category: ${article.category || 'Northern Thai food'}. Excerpt: ${article.excerpt || ''}. Tags: ${tags}. Key points: ${highlights}. Opening idea: ${opening}.`,
     'Translate the article topic into simple, instantly understandable visual storytelling: choose ingredients, props, dish style, and mood that directly match the title and key points.',
+    `Use this specific visual direction for this generation: ${composition}.`,
+    `Surface and prop language: ${surface}. Avoid repeating the same default wooden-table setup unless it is essential to the selected direction.`,
+    `Lighting: ${lighting}. Lens and camera language: ${lens}. Color palette: ${colorMood}.`,
     'Use one clear main subject, one supporting subject, and clean negative space. The viewer should understand the article theme within two seconds.',
     'Photorealistic commercial food photography for a high-end Northern Thai chili paste brand.',
     'Composition must look professionally art-directed and easy to read: clear focal point, balanced foreground/midground/background, refined negative space, strong depth, elegant visual hierarchy, no random clutter, no scattered props that do not serve the article.',
-    'Use a warm Lanna craft mood with a wooden table, roasted dried chilies, herbs, sticky rice, fresh vegetables, small ceramic bowls, and refined food styling.',
+    'Use a warm Lanna craft mood, but vary the food styling and camera setup for every generated image. Choose only the props that serve this article topic: roasted dried chilies, herbs, sticky rice, fresh vegetables, small ceramic bowls, mortar texture, market ingredients, or finished dish details as appropriate.',
     'Do not generate product packaging, jars, boxes, pouches, product labels, blank labels, fake labels, or any branded objects. If a product shot is needed, it will be added later from the real KHUA website product assets, not generated by AI.',
     'Absolutely no generated text or typography anywhere in the image: no Thai text, no English text, no fake letters, no random glyphs, no captions, no signs, no product names, no label text, no packaging typography, no watermarks.',
     'Absolutely no generated logos or brand marks anywhere in the image. The real KHUA website logo will be composited as a separate website badge after generation.',
     'Leave clean negative space for article text overlay on the website.',
-    'Lighting: soft directional natural light, realistic shadows, warm highlights, crisp food texture, premium magazine quality, 50mm lens feel, shallow depth of field but main objects sharp.',
+    'Premium magazine quality, realistic shadows, crisp food texture, shallow depth of field when appropriate but main objects sharp.',
     'No people, no hands, no messy background, no low-end stock photo look.',
   ].join(' ')
 }
@@ -1083,7 +1135,7 @@ export async function generateCoverImage(slug, article, options = {}) {
   const fileSlug = options.variant ? `${slug}-${options.variant}` : slug
   const existingPath = path.join(uploadsDir, `${fileSlug}.png`)
   const publicPath = `/uploads/articles/${fileSlug}.png`
-  const prompt = buildImagePrompt(article)
+  const prompt = buildImagePrompt(article, fileSlug)
 
   if (!options.force && fs.existsSync(existingPath)) {
     return { coverImageUrl: publicPath, imagePrompt: prompt, generated: false, reused: true }

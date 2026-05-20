@@ -7,6 +7,11 @@ import { PERMISSIONS } from '@/lib/permissions'
 type GeneratedArticle = {
   slug: string
   title: string
+  excerpt?: string
+  category?: string
+  tags?: string[]
+  highlights?: string[]
+  content?: string[]
 }
 
 type ArticleGenerator = {
@@ -27,10 +32,26 @@ type ArticleGenerator = {
 interface ArticleCoverRow extends RowDataPacket {
   slug: string
   title: string | null
+  excerpt: string | null
+  category: string | null
+  tags_json: string | null
+  highlights_json: string | null
+  content_json: string | null
 }
 
 async function loadGenerator(): Promise<ArticleGenerator> {
   return import('../../../../../../../scripts/generate-daily-articles.mjs') as Promise<ArticleGenerator>
+}
+
+function parseJsonArray(value: string | null) {
+  if (!value) return []
+
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed.map(String) : []
+  } catch {
+    return []
+  }
 }
 
 export async function POST(
@@ -45,7 +66,14 @@ export async function POST(
 
   try {
     const [rows] = await connection.execute<ArticleCoverRow[]>(
-      `SELECT a.slug, t.title
+      `SELECT
+         a.slug,
+         t.title,
+         t.excerpt,
+         t.category,
+         t.tags_json,
+         t.highlights_json,
+         t.content_json
        FROM articles a
        LEFT JOIN article_translations t ON t.article_id = a.id AND t.locale = 'th'
        WHERE a.id = ?
@@ -61,7 +89,15 @@ export async function POST(
     const variant = Date.now().toString(36)
     const imageResult = await generator.generateCoverImage(
       article.slug,
-      { slug: article.slug, title: article.title || article.slug },
+      {
+        slug: article.slug,
+        title: article.title || article.slug,
+        excerpt: article.excerpt || '',
+        category: article.category || '',
+        tags: parseJsonArray(article.tags_json),
+        highlights: parseJsonArray(article.highlights_json),
+        content: parseJsonArray(article.content_json),
+      },
       { force: true, variant },
     )
     const { coverImageUrl, imagePrompt } = imageResult

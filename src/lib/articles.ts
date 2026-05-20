@@ -49,6 +49,8 @@ function rowToArticle(row: ArticleRow): ArticleData {
     date: row.date_label,
     readTime: row.read_time,
     coverImage: row.cover_image_url ?? undefined,
+    metaTitle: row.meta_title ?? undefined,
+    metaDescription: row.meta_description ?? undefined,
     tags: parseJsonArray(row.tags_json),
     highlights: parseJsonArray(row.highlights_json),
     content: parseJsonArray(row.content_json),

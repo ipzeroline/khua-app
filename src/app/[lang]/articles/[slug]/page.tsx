@@ -10,6 +10,32 @@ interface ArticleDetailPageProps {
   params: Promise<{ lang: string; slug: string }>
 }
 
+function compactText(value: string) {
+  return value.replace(/\s+/g, ' ').trim()
+}
+
+function fitSeoText(value: string, maxLength: number) {
+  const text = compactText(value)
+  if (text.length <= maxLength) return text
+
+  const sliced = text.slice(0, maxLength - 1).trim()
+  const lastSpace = sliced.lastIndexOf(' ')
+  const safe = lastSpace > 42 ? sliced.slice(0, lastSpace) : sliced
+  return `${safe.replace(/[|,.;:，。]+$/, '')}…`
+}
+
+function articleSeoTitle(article: ArticleData, siteName: string) {
+  return fitSeoText(article.metaTitle || `${article.title} | ${siteName}`, 60)
+}
+
+function articleSeoDescription(article: ArticleData) {
+  return fitSeoText(article.metaDescription || article.excerpt, 160)
+}
+
+function articleIsoDate(article: ArticleData) {
+  return article.slug.match(/^daily-(\d{4}-\d{2}-\d{2})-/)?.[1] || undefined
+}
+
 export async function generateMetadata({ params }: ArticleDetailPageProps): Promise<Metadata> {
   await connection()
   const { lang, slug } = await params
@@ -23,18 +49,34 @@ export async function generateMetadata({ params }: ArticleDetailPageProps): Prom
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}/articles/${slug}` })
+  const title = articleSeoTitle(article, dict.site.name)
+  const description = articleSeoDescription(article)
+  const canonical = `/${locale}/articles/${slug}`
+  const image = article.coverImage || '/khua-logo.png'
+  const isoDate = articleIsoDate(article)
 
   return {
-    title: `${article.title} | ${dict.site.name}`,
-    description: article.excerpt,
+    title: { absolute: title },
+    description,
     keywords: article.tags,
-    alternates: { canonical: `/${locale}/articles/${slug}`, languages: alternates },
+    robots: { index: true, follow: true },
+    alternates: { canonical, languages: alternates },
     openGraph: {
-      title: `${article.title} | ${dict.site.name}`,
-      description: article.excerpt,
+      title,
+      description,
+      url: canonical,
+      siteName: dict.site.name,
       locale: getOpenGraphLocale(locale),
       type: 'article',
-      images: article.coverImage ? [{ url: article.coverImage, alt: article.title }] : undefined,
+      publishedTime: isoDate,
+      modifiedTime: isoDate,
+      images: [{ url: image, alt: article.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
     },
   }
 }
@@ -49,15 +91,21 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
   if (!article) {
     notFound()
   }
+  const canonical = `/${locale}/articles/${slug}`
+  const isoDate = articleIsoDate(article)
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: article.title,
-    description: article.excerpt,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonical,
+    },
+    headline: articleSeoTitle(article, dict.site.name),
+    description: articleSeoDescription(article),
     keywords: article.tags.join(', '),
-    datePublished: '2026-05-18',
-    dateModified: article.date,
+    datePublished: isoDate,
+    dateModified: isoDate,
     inLanguage: locale,
     image: article.coverImage,
     author: {
@@ -74,12 +122,40 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
     },
     articleBody: article.content.join('\n\n'),
   }
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: dict.nav.home,
+        item: `/${locale}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: dict.nav.articles,
+        item: `/${locale}/articles`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: article.title,
+        item: canonical,
+      },
+    ],
+  }
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ArticleDetailContent article={article} dict={dict} lang={locale} />
     </>

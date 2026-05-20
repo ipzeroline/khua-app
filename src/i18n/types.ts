@@ -37,6 +37,8 @@ export interface ArticleData {
   date: string
   readTime: string
   coverImage?: string
+  metaTitle?: string
+  metaDescription?: string
   tags: string[]
   highlights: string[]
   content: string[]
