@@ -105,6 +105,85 @@ const topics = [
     },
   },
   {
+    key: 'northern-cooking-methods',
+    th: {
+      title: 'วิธีทำอาหารเหนือเมนูต่างๆ: เริ่มจากน้ำพริกและเครื่องแกงให้รสล้านนาแท้',
+      excerpt:
+        'คู่มือวิธีทำอาหารเหนือแบบเข้าใจง่าย ตั้งแต่ผัดเครื่องแกง ทำน้ำพริก จัดผัก ไปจนถึงต่อยอดเป็นลาบเหนือ แกงเหนือ และมื้อข้าวเหนียว',
+      category: 'วิธีทำอาหารเหนือ',
+      tags: ['วิธีทำอาหารเหนือ', 'สูตรอาหารเหนือ', 'เมนูอาหารเหนือ', 'เครื่องแกงเหนือ', 'น้ำพริกเหนือ'],
+      highlights: [
+        'อาหารเหนือเริ่มจากการเปิดกลิ่นพริกคั่ว หอม กระเทียม และสมุนไพร',
+        'เครื่องแกงเหนือใช้ต่อยอดได้ทั้งผัด แกง หมัก และเมนูขลุกขลิก',
+        'การจัดผัก ข้าวเหนียว และน้ำพริกช่วยให้มื้อเหนือครบโดยไม่ซับซ้อน',
+      ],
+      content: [
+        'วิธีทำอาหารเหนือให้อร่อยไม่จำเป็นต้องเริ่มจากสูตรยากเสมอไป หัวใจอยู่ที่การเข้าใจฐานรสของครัวล้านนา ได้แก่ กลิ่นพริกคั่ว หอมแดง กระเทียม มะแขว่น สมุนไพร และความพอดีของรสเค็ม เผ็ด หอม และมันนิดๆ',
+        'ถ้าจะทำเมนูผัดหรือแกงเหนือ ให้เริ่มจากผัดเครื่องแกงเหนือกับน้ำมันเล็กน้อยจนกลิ่นเปิด จากนั้นใส่หมู ไก่ เห็ด หรือผักพื้นบ้าน เติมน้ำหรือซุปเล็กน้อย แล้วเคี่ยวสั้นๆ ให้รสซึมเข้าเนื้อ วิธีนี้ใช้ได้กับแกงขลุกขลิก ผัดเครื่องแกง และเมนูวันทำงาน',
+        'สำหรับน้ำพริกเหนือ ให้คิดเป็นเมนูหลักของโต๊ะอาหาร ไม่ใช่แค่เครื่องจิ้ม จัดคู่กับข้าวเหนียวร้อน ผักสด ผักลวก ไข่ต้ม และโปรตีนย่าง จะได้มื้อที่ครบทั้งรสชาติและเนื้อสัมผัส',
+        'เมนูอย่างลาบเหนือ แกงฮังเล แกงโฮะ ไส้อั่ว และข้าวซอยมีรายละเอียดต่างกัน แต่ใช้หลักเดียวกันคือสร้างกลิ่นก่อนปรุงรส วัตถุดิบแห้งควรถูกคั่วหรือผัดให้หอม ส่วนสมุนไพรสดควรเติมในจังหวะที่ยังรักษากลิ่นได้ดี',
+        'ถ้าต้องการเขียนหรือค้นหาวิธีทำอาหารเหนือให้ได้ผล ควรเริ่มจากคำถามที่คนใช้จริง เช่น วิธีทำอาหารเหนือแบบง่ายๆ เครื่องแกงเหนือทำเมนูอะไรได้บ้าง และน้ำพริกเหนือกินกับอะไรดี คำตอบที่เป็นขั้นตอนชัดเจนจะทำให้บทความมีคุณภาพและช่วย SEO ได้มากขึ้น',
+      ],
+    },
+    en: {
+      title: 'How to Cook Northern Thai Dishes: Start with Chili Paste and Curry Paste for Real Lanna Flavor',
+      excerpt:
+        'A practical guide to cooking Northern Thai food, from blooming curry paste and serving chili paste to building larb, curries, and sticky-rice meals.',
+      category: 'Northern Cooking Methods',
+      tags: ['how to cook Northern Thai food', 'Northern Thai recipes', 'Northern Thai dishes', 'Northern curry paste', 'Northern chili paste'],
+      highlights: [
+        'Northern cooking begins by opening the aroma of roasted chilies, shallots, garlic, and herbs.',
+        'Northern curry paste can become stir-fries, curries, marinades, and moist rustic dishes.',
+        'Vegetables, sticky rice, and chili paste make a complete Northern meal without complexity.',
+      ],
+      content: [
+        'Learning how to cook Northern Thai food does not need to begin with the most difficult recipe. The foundation is understanding Lanna flavor: roasted chili aroma, shallots, garlic, ma-khwaen, herbs, and a balanced mix of salt, heat, fragrance, and gentle richness.',
+        'For stir-fries or Northern curries, start by frying Northern curry paste in a little oil until fragrant. Add pork, chicken, mushrooms, or local vegetables, then add a small amount of water or stock and simmer briefly until the flavor coats the ingredients. This method works for moist stir-fries, rustic curries, and weeknight meals.',
+        'For Northern chili paste, think of it as the center of the table, not only a dip. Serve it with warm sticky rice, fresh vegetables, blanched vegetables, boiled eggs, and grilled protein for a balanced meal with several textures.',
+        'Dishes such as Northern larb, hang lay curry, gaeng ho, sai ua, and khao soi have different details, but they share one principle: build aroma before adjusting flavor. Dry ingredients should be roasted or fried until fragrant, while fresh herbs should be added at a moment that preserves their lift.',
+        'A useful cooking article should answer real search questions: how to cook easy Northern Thai food, what to make with Northern curry paste, and what to eat with Northern chili paste. Clear steps make the content more useful and stronger for SEO.',
+      ],
+    },
+    lo: {
+      title: 'ວິທີເຮັດອາຫານເໜືອເມນູຕ່າງໆ: ເລີ່ມຈາກນ້ຳພິກແລະເຄື່ອງແກງໃຫ້ໄດ້ລົດລ້ານນາ',
+      excerpt:
+        'ຄູ່ມືວິທີເຮັດອາຫານເໜືອແບບເຂົ້າໃຈງ່າຍ ຕັ້ງແຕ່ຜັດເຄື່ອງແກງ ຈັດນ້ຳພິກ ໄປຫາລາບເໜືອ ແກງ ແລະມື້ເຂົ້າໜຽວ',
+      category: 'ວິທີເຮັດອາຫານເໜືອ',
+      tags: ['ວິທີເຮັດອາຫານເໜືອ', 'ສູດອາຫານເໜືອ', 'ເມນູອາຫານເໜືອ', 'ເຄື່ອງແກງເໜືອ', 'ນ້ຳພິກເໜືອ'],
+      highlights: [
+        'ອາຫານເໜືອເລີ່ມຈາກການເປີດກິ່ນພິກຄົ່ວ ຫອມ ກະທຽມ ແລະສະໝຸນໄພ',
+        'ເຄື່ອງແກງເໜືອໃຊ້ໄດ້ທັງຜັດ ແກງ ໝັກ ແລະເມນູຂຸກຂິກ',
+        'ຜັກ ເຂົ້າໜຽວ ແລະນ້ຳພິກຊ່ວຍໃຫ້ມື້ເໜືອຄົບໄດ້ງ່າຍ',
+      ],
+      content: [
+        'ວິທີເຮັດອາຫານເໜືອໃຫ້ອອກລົດດີບໍ່ຈຳເປັນຕ້ອງເລີ່ມຈາກສູດຍາກ ຫົວໃຈຄືການເຂົ້າໃຈຖານລົດລ້ານນາ ກິ່ນພິກຄົ່ວ ຫອມແດງ ກະທຽມ ໝາກແຂ່ວ ແລະສະໝຸນໄພ',
+        'ຖ້າຈະເຮັດເມນູຜັດຫຼືແກງເໜືອ ໃຫ້ເລີ່ມຈາກຜັດເຄື່ອງແກງກັບນ້ຳມັນນ້ອຍໜຶ່ງຈົນຫອມ ແລ້ວໃສ່ໝູ ໄກ່ ເຫັດ ຫຼືຜັກພື້ນບ້ານ ເຕີມນ້ຳນ້ອຍໜຶ່ງແລ້ວຕົ້ມສັ້ນໆ',
+        'ສຳລັບນ້ຳພິກເໜືອ ໃຫ້ຄິດວ່າເປັນຈຸດກາງຂອງໂຕະອາຫານ ຈັດຄູ່ກັບເຂົ້າໜຽວຮ້ອນ ຜັກສົດ ຜັກລວກ ໄຂ່ຕົ້ມ ແລະໂປຣຕີນປີ້ງ',
+        'ເມນູເຊັ່ນ ລາບເໜືອ ແກງຮັງເລ ແກງໂຮະ ໄສ້ອົ່ວ ແລະເຂົ້າຊອຍ ມີລາຍລະອຽດຕ່າງກັນ ແຕ່ມີຫຼັກດຽວຄືສ້າງກິ່ນກ່ອນປຸງລົດ',
+        'ບົດຄວາມວິທີເຮັດອາຫານເໜືອທີ່ດີຄວນຕອບຄຳຖາມຈິງ ເຊັ່ນ ວິທີເຮັດອາຫານເໜືອງ່າຍໆ ເຄື່ອງແກງເໜືອເຮັດເມນູຫຍັງໄດ້ ແລະນ້ຳພິກເໜືອກິນກັບຫຍັງ',
+      ],
+    },
+    zh: {
+      title: '泰北菜怎么做：从辣椒酱与咖喱酱开始做出兰纳风味',
+      excerpt:
+        '实用说明泰北菜做法，从炒香咖喱酱、搭配辣椒酱，到延伸为泰北拉布、咖喱与糯米餐。',
+      category: '泰北菜做法',
+      tags: ['泰北菜做法', '泰北食谱', '泰北美食菜单', '泰北咖喱酱', '泰北辣椒酱'],
+      highlights: [
+        '泰北料理先打开烘烤辣椒、红葱、蒜与香草的香气。',
+        '泰北咖喱酱可用于热炒、咖喱、腌制与带汤汁的乡土菜。',
+        '蔬菜、糯米与辣椒酱能组成简单完整的泰北餐。',
+      ],
+      content: [
+        '学习泰北菜怎么做，不一定要从最复杂的食谱开始。关键是理解兰纳风味基础：烘烤辣椒香、红葱、蒜、马告、香草，以及咸、辣、香和轻微油润感之间的平衡。',
+        '做泰北热炒或咖喱时，可以先用少量油把泰北咖喱酱炒香，再加入猪肉、鸡肉、菇类或本地蔬菜，加入少量水或高汤，短时间煮到味道包裹食材。这个方法适合快炒、乡土咖喱与工作日晚餐。',
+        '泰北辣椒酱不只是蘸料，也可以成为餐桌中心。搭配热糯米、鲜蔬、烫蔬菜、水煮蛋和烤蛋白质，就能组成有层次且平衡的一餐。',
+        '泰北拉布、杭雷咖喱、杂菜咖喱、泰北香肠和清迈咖喱面细节不同，但原则相同：先建立香气，再调整味道。干香料应先烘烤或炒香，新鲜香草则要在保留香气的时机加入。',
+        '有用的泰北菜做法文章应回答真实搜索问题：泰北菜怎么简单做、泰北咖喱酱能做什么、泰北辣椒酱配什么好吃。清楚的步骤会让内容更有帮助，也更利于 SEO。',
+      ],
+    },
+  },
+  {
     key: 'northern-food-menu-guide',
     th: {
       title: 'เมนูอาหารเหนือยอดนิยม: กินอะไรดีให้ได้รสล้านนาแท้จากพะเยา',
@@ -1010,6 +1089,23 @@ function buildTopicImageBrief(article) {
       'Title-specific visual brief: this article is about Northern Thai herbs and spices.',
       'The visual hero must be identifiable herbs and aromatics such as ma-khwaen, Vietnamese coriander, lemongrass, galangal, kaffir lime leaf, shallots, and garlic.',
       'Do not turn this into a generic chili paste meal; herbs and spices must dominate the frame.',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('northern-cooking-methods') ||
+    searchable.includes('วิธีทำอาหารเหนือ') ||
+    searchable.includes('สูตรอาหารเหนือ') ||
+    searchable.includes('how to cook') ||
+    searchable.includes('cooking methods') ||
+    searchable.includes('泰北菜做法')
+  ) {
+    return [
+      'Title-specific visual brief: this article is a practical how-to guide for cooking different Northern Thai dishes.',
+      'The image must show cooking method and transformation, not only a finished dish: curry paste blooming in oil, aromatics beside a pan, measured herbs, vegetables, and a small finished dish or chili paste bowl as the result.',
+      'Use process cues such as a pan, spoon, mortar, prepared ingredients, and steam or glossy fried paste, but keep the scene clean, premium, and editorial.',
+      'The viewer should immediately understand this is about how to cook Northern Thai food and how to use chili paste or curry paste across menus.',
+      'Avoid a static generic Lanna table spread with no visible cooking action or method.',
     ].join(' ')
   }
 
