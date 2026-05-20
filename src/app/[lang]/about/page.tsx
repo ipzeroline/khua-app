@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import { DEFAULT_OG_IMAGE, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import AboutContent from '@/components/about/AboutContent'
 
 interface AboutPageProps {
@@ -14,22 +14,37 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}/about` })
+  const title = fitSeoText(`เกี่ยวกับ KHUA น้ำพริกพะเยาตำรับล้านนา`, 60)
+  const description = fitSeoText(
+    `รู้จัก KHUA แบรนด์น้ำพริกพะเยาและน้ำพริกเหนือพรีเมียม ตำรับล้านนา คั่วหอมจากวัตถุดิบพื้นถิ่น เหมาะเป็นของฝากภาคเหนือ`,
+    160,
+  )
 
   return {
-    title: dict.about.title,
-    description: dict.about.paragraphs[0],
+    title: { absolute: title },
+    description,
     keywords: mergeKeywords(
       THAI_SEO_KEYWORDS,
       dict.about.title,
       dict.products.originValue,
       dict.products.seoTagsBase,
     ),
+    robots: { index: true, follow: true },
     alternates: { canonical: `/${locale}/about`, languages: alternates },
     openGraph: {
-      title: `${dict.about.title} | ${dict.site.name}`,
-      description: dict.about.paragraphs[0],
+      title,
+      description,
+      url: `/${locale}/about`,
+      siteName: dict.site.name,
       locale: getOpenGraphLocale(locale),
       type: 'website',
+      images: [{ url: DEFAULT_OG_IMAGE, width: 1024, height: 1024, alt: 'เกี่ยวกับ KHUA น้ำพริกพะเยา' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE],
     },
   }
 }

@@ -1,6 +1,14 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_URL,
+  absoluteUrl,
+  fitSeoText,
+  getOpenGraphLocale,
+  mergeKeywords,
+  THAI_SEO_KEYWORDS,
+} from '@/i18n/seo'
 import HeroSection from '@/components/home/HeroSection'
 import StorySection from '@/components/home/StorySection'
 import LannaSoulSection from '@/components/home/LannaSoulSection'
@@ -23,10 +31,15 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}` })
+  const title = fitSeoText(`น้ำพริกพะเยา น้ำพริกเหนือพรีเมียม | ${dict.site.name}`, 60)
+  const description = fitSeoText(
+    `${dict.site.name} น้ำพริกพะเยาและน้ำพริกเหนือพรีเมียมตำรับล้านนา คั่วหอม พร้อมส่งทั่วไทย เหมาะเป็นของฝากพะเยาและของฝากภาคเหนือ`,
+    160,
+  )
 
   return {
-    title: `${dict.hero.title} | ${dict.site.name}`,
-    description: dict.hero.description,
+    title: { absolute: title },
+    description,
     keywords: mergeKeywords([
       ...THAI_SEO_KEYWORDS,
       dict.products.originValue,
@@ -34,12 +47,22 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
       dict.articles.homeTitle,
       dict.products.title,
     ]),
+    robots: { index: true, follow: true },
     alternates: { canonical: `/${locale}`, languages: alternates },
     openGraph: {
-      title: `${dict.site.name} — ${dict.site.tagline}`,
-      description: dict.site.description,
+      title,
+      description,
+      url: `/${locale}`,
+      siteName: dict.site.name,
       locale: getOpenGraphLocale(locale),
       type: 'website',
+      images: [{ url: DEFAULT_OG_IMAGE, width: 1024, height: 1024, alt: 'KHUA น้ำพริกพะเยา' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE],
     },
   }
 }
@@ -48,7 +71,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const { lang } = await params
   const locale = lang as Locale
   const dict = await getDictionary(locale)
-  const siteUrl = `https://khua-foods.com/${locale}`
+  const siteUrl = `${SITE_URL}/${locale}`
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -77,7 +100,7 @@ export default async function HomePage({ params }: HomePageProps) {
           '@type': 'Product',
           name: product.name,
           description: product.description,
-          image: product.image ? `https://khua-foods.com${product.image}` : undefined,
+          image: product.image ? absoluteUrl(product.image) : undefined,
           brand: {
             '@type': 'Brand',
             name: dict.site.name,
@@ -91,6 +114,30 @@ export default async function HomePage({ params }: HomePageProps) {
           },
         },
       })),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: dict.site.name,
+      url: SITE_URL,
+      inLanguage: locale,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${SITE_URL}/${locale}/articles?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: dict.nav.home,
+          item: siteUrl,
+        },
+      ],
     },
     {
       '@context': 'https://schema.org',

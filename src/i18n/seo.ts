@@ -1,5 +1,8 @@
 import { Locale } from './types'
 
+export const SITE_URL = 'https://khua-foods.com'
+export const DEFAULT_OG_IMAGE = '/khua-logo.png'
+
 export const THAI_SEO_KEYWORDS = [
   'น้ำพริก',
   'น้ำพริกเหนือ',
@@ -7,8 +10,17 @@ export const THAI_SEO_KEYWORDS = [
   'น้ำพริกล้านนา',
   'น้ำพริกตาแดงเหนือ',
   'น้ำพริกลาบเหนือ',
+  'น้ำพริกลาบพะเยา',
+  'น้ำพริกลาบพรีเมี่ยม',
+  'น้ำพริกลาบใกล้ฉัน',
+  'สั่งซื้อน้ำพริกลาบเหนือ',
+  'น้ำพริกลาบเผ็ดๆ',
   'น้ำพริกแกงเหนือ',
   'น้ำพริกน้ำเงี้ยวเหนือ',
+  'น้ำพริกตาแดงพะเยา',
+  'น้ำพริกตาแดงแมงดาพะเยา',
+  'น้ำพริกแกงพะเยา',
+  'น้ำพริกน้ำเงี้ยวพะเยา',
   'ของฝากพะเยา',
   'ของฝากภาคเหนือ',
   'อาหารเหนือ',
@@ -49,4 +61,23 @@ export function getOpenGraphLocale(locale: Locale | string) {
   if (locale === 'lo') return 'lo_LA'
   if (locale === 'zh') return 'zh_CN'
   return 'en_US'
+}
+
+export function compactSeoText(value: string) {
+  return value.replace(/\s+/g, ' ').trim()
+}
+
+export function fitSeoText(value: string, maxLength: number, minWordBreak = 42) {
+  const text = compactSeoText(value)
+  if (text.length <= maxLength) return text
+
+  const sliced = text.slice(0, maxLength - 1).trim()
+  const lastSpace = sliced.lastIndexOf(' ')
+  const safe = lastSpace > minWordBreak ? sliced.slice(0, lastSpace) : sliced
+  return `${safe.replace(/[|,.;:，。]+$/, '')}…`
+}
+
+export function absoluteUrl(path: string) {
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }

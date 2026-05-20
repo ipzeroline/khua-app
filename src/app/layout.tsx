@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import { DEFAULT_OG_IMAGE, SITE_URL, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import './globals.css'
 
 const notoSansThai = localFont({
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   description:
     'น้ำพริกพะเยา น้ำพริกเหนือพรีเมียมจากตำรับล้านนา คั่วหอมด้วยวัตถุดิบพื้นถิ่นและงานคราฟต์แบบภาคเหนือ',
   keywords: THAI_SEO_KEYWORDS,
-  metadataBase: new URL('https://khua-foods.com'),
+  metadataBase: new URL(SITE_URL),
   applicationName: 'KHUA',
   authors: [{ name: 'KHUA' }],
   creator: 'KHUA',
@@ -67,13 +67,13 @@ export const metadata: Metadata = {
     siteName: 'KHUA',
     locale: 'th_TH',
     type: 'website',
-    images: [{ url: '/khua-logo.png', width: 1024, height: 1024, alt: 'KHUA น้ำพริกพะเยา' }],
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1024, height: 1024, alt: 'KHUA น้ำพริกพะเยา' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'KHUA — น้ำพริกพะเยา น้ำพริกตำรับล้านนา',
     description: 'น้ำพริกเหนือพรีเมียมจากพะเยา ตำรับล้านนา พร้อมส่งทั่วไทย',
-    images: ['/khua-logo.png'],
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { connection } from 'next/server'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import { DEFAULT_OG_IMAGE, SITE_URL, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import ArticlesContent from '@/components/articles/ArticlesContent'
 import { getPublishedArticles } from '@/lib/articles'
 
@@ -36,10 +36,15 @@ export async function generateMetadata({ params }: ArticlesPageProps): Promise<M
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}/articles` })
+  const title = fitSeoText(`บทความอาหารเหนือ น้ำพริกพะเยา | ${dict.site.name}`, 60)
+  const description = fitSeoText(
+    `อ่านบทความอาหารเหนือ น้ำพริกพะเยา เมนูอาหารเหนือ ผักพื้นบ้าน สมุนไพรล้านนา และของฝากพะเยา พร้อมแนวทางเลือกซื้อและทำอาหาร`,
+    160,
+  )
 
   return {
-    title: dict.articles.title,
-    description: dict.articles.subtitle,
+    title: { absolute: title },
+    description,
     keywords: mergeKeywords(
       THAI_SEO_KEYWORDS,
       dict.articles.title,
@@ -48,12 +53,22 @@ export async function generateMetadata({ params }: ArticlesPageProps): Promise<M
       dict.products.seoTagsBase,
       dict.articles_data.flatMap((article) => article.tags),
     ),
+    robots: { index: true, follow: true },
     alternates: { canonical: `/${locale}/articles`, languages: alternates },
     openGraph: {
-      title: `${dict.articles.title} | ${dict.site.name}`,
-      description: dict.articles.subtitle,
+      title,
+      description,
+      url: `/${locale}/articles`,
+      siteName: dict.site.name,
       locale: getOpenGraphLocale(locale),
       type: 'website',
+      images: [{ url: DEFAULT_OG_IMAGE, width: 1024, height: 1024, alt: 'KHUA บทความอาหารเหนือ' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE],
     },
   }
 }
@@ -81,6 +96,7 @@ export default async function ArticlesPage({ params, searchParams }: ArticlesPag
     '@type': 'CollectionPage',
     name: dict.articles.title,
     description: dict.articles.subtitle,
+    url: `${SITE_URL}/${locale}/articles`,
     inLanguage: locale,
     mainEntity: allArticles.map((article) => ({
       '@type': 'Article',
@@ -95,12 +111,24 @@ export default async function ArticlesPage({ params, searchParams }: ArticlesPag
       },
     })),
   }
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: dict.nav.home, item: `${SITE_URL}/${locale}` },
+      { '@type': 'ListItem', position: 2, name: dict.nav.articles, item: `${SITE_URL}/${locale}/articles` },
+    ],
+  }
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ArticlesContent
         dict={dict}
