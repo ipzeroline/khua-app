@@ -7,12 +7,15 @@ import sharp from 'sharp'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
 const outputPath = path.join(root, 'src', 'data', 'articles.generated.json')
-const uploadsDir = path.join(root, 'public', 'uploads', 'articles')
 const websiteLogoPath = path.join(root, 'public', 'khua-logo.webp')
 const locales = ['th', 'en', 'lo', 'zh']
 
 loadEnvFile(path.join(root, '.env'))
 loadEnvFile(path.join(root, '.env.local'))
+
+const uploadsDir = process.env.KHUA_ARTICLE_UPLOADS_DIR
+  ? path.resolve(process.env.KHUA_ARTICLE_UPLOADS_DIR)
+  : path.join(process.cwd(), 'public', 'uploads', 'articles')
 
 const fallback = {
   th: [],
@@ -98,6 +101,322 @@ const topics = [
         '如果使用烫蔬菜，建议快速汆烫后充分沥干。多余水分会稀释辣椒酱，让原本集中的香气变弱。',
         '想让泰北餐桌更精致，可以用多色蔬菜搭配糯米、白煮蛋，以及一到两种辣椒酱，例如泰北红眼辣椒酱与泰北拉布辣椒酱。',
         '兰纳餐桌的核心是平衡。好蔬菜、好辣椒酱与热米饭，就能让日常一餐变得值得记住。',
+      ],
+    },
+  },
+  {
+    key: 'northern-food-menu-guide',
+    th: {
+      title: 'เมนูอาหารเหนือยอดนิยม: กินอะไรดีให้ได้รสล้านนาแท้จากพะเยา',
+      excerpt:
+        'รวมเมนูอาหารเหนือที่คนค้นหาบ่อย พร้อมวิธีจับคู่กับน้ำพริกพะเยา เครื่องแกงเหนือ และผักพื้นบ้านให้มื้ออาหารอร่อยครบ',
+      category: 'เมนูอาหารเหนือ',
+      tags: ['เมนูอาหารเหนือ', 'อาหารเหนือยอดนิยม', 'น้ำพริกพะเยา', 'เครื่องแกงเหนือ', 'อาหารล้านนา'],
+      highlights: [
+        'เมนูเหนือที่ดีควรมีทั้งกลิ่นคั่ว เครื่องเทศ และผักสดหรือผักลวก',
+        'น้ำพริกเหนือช่วยต่อยอดเป็นจานจิ้ม ผัด แกง และมื้อข้าวเหนียวได้ง่าย',
+        'การเลือกเมนูตามโอกาสช่วยให้โต๊ะอาหารล้านนาดูครบและมีคุณภาพ',
+      ],
+      content: [
+        'ถ้าค้นหาว่าเมนูอาหารเหนือกินอะไรดี ให้เริ่มจากกลุ่มรสหลักของครัวล้านนา ได้แก่ น้ำพริก เครื่องแกง ลาบเหนือ แกงฮังเล แกงโฮะ ไส้อั่ว ข้าวซอย และชุดผักพื้นบ้าน เมนูเหล่านี้มีจุดร่วมคือกลิ่นคั่ว เครื่องเทศ และความกลมกล่อมที่กินกับข้าวเหนียวได้ดี',
+        'น้ำพริกตาแดงเหนือเหมาะกับมื้อที่อยากได้รสจัด หอมพริกคั่ว และกินง่ายกับผักสด ไข่ต้ม หรือหมูย่าง ส่วนเครื่องแกงเหนือเหมาะสำหรับทำแกง ผัด หรือเมนูขลุกขลิกที่ต้องการกลิ่นสมุนไพรลึก',
+        'สำหรับมื้อครอบครัว ควรจัดเมนูให้มีรสและเนื้อสัมผัสหลากหลาย เช่น น้ำพริกหนึ่งชนิด ผักลวกหนึ่งจาน โปรตีนย่างหรือทอด และแกงหนึ่งหม้อ วิธีนี้ทำให้โต๊ะเหนือดูครบโดยไม่ต้องทำหลายอย่างเกินไป',
+        'คำสำคัญของเมนูอาหารเหนือคุณภาพคือวัตถุดิบดีและความพอดี รสเผ็ดไม่ควรกลบกลิ่นหอมของหอมแดง กระเทียม พริกแห้ง และมะแขว่น เพราะกลิ่นเหล่านี้คือเอกลักษณ์ของอาหารล้านนา',
+        'เมื่อเลือกเมนูอาหารเหนือจากพะเยา ให้มองหาอาหารที่เล่าเรื่องพื้นที่ได้ชัด ทั้งน้ำพริก เครื่องแกง ผักพื้นบ้าน และการคั่วอย่างพิถีพิถัน นี่คือจุดที่ทำให้มื้อธรรมดามีคุณค่าและช่วยให้บทความด้านอาหารเหนือค้นเจอได้ดีขึ้น',
+      ],
+    },
+    en: {
+      title: 'Popular Northern Thai Food Menu: What to Eat for Real Lanna Flavor from Phayao',
+      excerpt:
+        'A search-friendly guide to Northern Thai dishes and how to pair them with Phayao chili paste, curry paste, and local vegetables.',
+      category: 'Northern Food Menu',
+      tags: ['Northern Thai food menu', 'popular Northern Thai food', 'Phayao chili paste', 'Northern curry paste', 'Lanna food'],
+      highlights: [
+        'A strong Northern meal balances roasted aroma, spices, and fresh or blanched vegetables.',
+        'Northern chili paste can become a dip, stir-fry, curry base, or sticky-rice meal.',
+        'Choosing dishes by occasion makes a Lanna table feel complete and high quality.',
+      ],
+      content: [
+        'When people search for what to eat in Northern Thai cuisine, the best starting point is the Lanna flavor family: chili paste, curry paste, Northern larb, hang lay curry, gaeng ho, sai ua, khao soi, and local vegetables. These dishes share roasted aroma, spice depth, and a natural fit with sticky rice.',
+        'Nam Prik Ta Daeng Nuea suits a bold meal with roasted chili aroma and fresh vegetables, boiled eggs, or grilled pork. Northern curry paste works beautifully in curries, stir-fries, and moist rustic dishes that need deeper herbal flavor.',
+        'For a family table, build variety without overcrowding the meal: one chili paste, one vegetable plate, one grilled or fried protein, and one curry. This creates a complete Northern spread with practical effort.',
+        'Quality Northern food depends on good ingredients and balance. Chili heat should not cover shallots, garlic, dried chilies, or ma-khwaen, because those aromas define Lanna cooking.',
+        'When choosing Phayao-style Northern food, look for dishes that clearly express place through chili paste, curry paste, local vegetables, and careful roasting. That specificity makes the meal richer and the article more useful for search.',
+      ],
+    },
+    lo: {
+      title: 'ເມນູອາຫານເໜືອຍອດນິຍົມ: ກິນຫຍັງດີໃຫ້ໄດ້ລົດລ້ານນາຈາກພະເຍົາ',
+      excerpt:
+        'ຮວບຮວມເມນູອາຫານເໜືອທີ່ຄົນຄົ້ນຫາບ່ອຍ ພ້ອມວິທີຈັບຄູ່ກັບນ້ຳພິກພະເຍົາ ເຄື່ອງແກງ ແລະຜັກພື້ນບ້ານ',
+      category: 'ເມນູອາຫານເໜືອ',
+      tags: ['ເມນູອາຫານເໜືອ', 'ອາຫານເໜືອຍອດນິຍົມ', 'ນ້ຳພິກພະເຍົາ', 'ເຄື່ອງແກງເໜືອ', 'ອາຫານລ້ານນາ'],
+      highlights: [
+        'ມື້ເໜືອທີ່ດີຄວນມີກິ່ນຄົ່ວ ເຄື່ອງເທດ ແລະຜັກສົດຫຼືຜັກລວກ',
+        'ນ້ຳພິກເໜືອຕໍ່ຍອດເປັນເຄື່ອງຈິ້ມ ຜັດ ແກງ ແລະມື້ເຂົ້າໜຽວໄດ້',
+        'ເລືອກເມນູຕາມໂອກາດຊ່ວຍໃຫ້ໂຕະລ້ານນາຄົບແລະດູດີ',
+      ],
+      content: [
+        'ຖ້າຄົ້ນຫາວ່າອາຫານເໜືອກິນຫຍັງດີ ໃຫ້ເລີ່ມຈາກນ້ຳພິກ ເຄື່ອງແກງ ລາບເໜືອ ແກງຮັງເລ ແກງໂຮະ ໄສ້ອົ່ວ ເຂົ້າຊອຍ ແລະຜັກພື້ນບ້ານ',
+        'ນ້ຳພິກຕາແດງເໜືອເໝາະກັບມື້ທີ່ຢາກໄດ້ລົດຈັດ ກິ່ນພິກຄົ່ວ ແລະກິນງ່າຍກັບຜັກ ໄຂ່ຕົ້ມ ຫຼືໝູປີ້ງ',
+        'ສຳລັບມື້ຄອບຄົວ ຄວນຈັດໃຫ້ມີນ້ຳພິກໜຶ່ງຊະນິດ ຜັກລວກ ໂປຣຕີນປີ້ງຫຼືທອດ ແລະແກງໜຶ່ງຢ່າງ',
+        'ຄຳສຳຄັນຂອງອາຫານເໜືອຄຸນນະພາບຄືວັດຖຸດິບດີ ແລະຄວາມພໍດີ ຄວາມເຜັດບໍ່ຄວນກົບກິ່ນຫອມຂອງພິກແຫ້ງ ກະທຽມ ແລະໝາກແຂ່ວ',
+        'ເມື່ອເລືອກເມນູອາຫານເໜືອຈາກພະເຍົາ ໃຫ້ມອງຫາອາຫານທີ່ເລົ່າເລື່ອງພື້ນທີ່ໄດ້ຊັດ ນັ້ນເຮັດໃຫ້ມື້ອາຫານມີຄຸນຄ່າ',
+      ],
+    },
+    zh: {
+      title: '泰北美食菜单指南：到帕尧风味里吃什么才有兰纳味',
+      excerpt:
+        '整理常被搜索的泰北菜，并说明如何搭配帕尧辣椒酱、泰北咖喱酱与本地蔬菜。',
+      category: '泰北美食菜单',
+      tags: ['泰北美食菜单', '热门泰北料理', '帕尧辣椒酱', '泰北咖喱酱', '兰纳料理'],
+      highlights: [
+        '好的泰北餐桌应有烘烤香、香料层次与新鲜或烫蔬菜。',
+        '泰北辣椒酱能作为蘸酱、热炒、咖喱底与糯米餐核心。',
+        '按场合选择菜色能让兰纳餐桌完整而有质感。',
+      ],
+      content: [
+        '搜索泰北料理吃什么时，可以从兰纳风味家族开始：辣椒酱、咖喱酱、泰北拉布、杭雷咖喱、杂菜咖喱、泰北香肠、清迈咖喱面与本地蔬菜。这些菜共同拥有烘烤香、香料深度，并适合搭配糯米。',
+        '泰北红眼辣椒酱适合需要明显辣香与烘烤气息的一餐，可配鲜蔬、水煮蛋或烤猪肉。泰北咖喱酱则适合做咖喱、热炒与带汤汁的乡土菜。',
+        '家庭餐桌可以用一个辣椒酱、一盘蔬菜、一份烤或炸蛋白质，再加一道咖喱来建立丰富度，不必准备过多菜色。',
+        '高品质泰北料理依靠好食材与平衡。辣味不应盖过红葱、蒜、干辣椒与马告，因为这些香气才是兰纳料理的识别点。',
+        '选择帕尧风格泰北菜时，留意它是否通过辣椒酱、咖喱酱、本地蔬菜与细致烘烤表达地方感。这样的内容对读者更有帮助，也更适合搜索。',
+      ],
+    },
+  },
+  {
+    key: 'northern-travel-food-route',
+    th: {
+      title: 'สถานที่ท่องเที่ยวภาคเหนือสายกิน: เที่ยวพะเยาแล้วซื้ออะไรเป็นของฝาก',
+      excerpt:
+        'แนะนำไอเดียเที่ยวเหนือแบบสายอาหาร ตั้งแต่กว๊านพะเยา ตลาดท้องถิ่น ไปจนถึงของฝากน้ำพริกและเครื่องแกงเหนือที่พกกลับบ้านง่าย',
+      category: 'สถานที่ท่องเที่ยวเหนือ',
+      tags: ['สถานที่ท่องเที่ยวภาคเหนือ', 'เที่ยวพะเยา', 'ของฝากพะเยา', 'น้ำพริกเหนือ', 'ตลาดท้องถิ่น'],
+      highlights: [
+        'ทริปเหนือสายกินควรเชื่อมสถานที่ท่องเที่ยวกับรสชาติท้องถิ่น',
+        'พะเยาเหมาะกับการซื้อของฝากที่เล่าเรื่องครัวล้านนาได้ชัด',
+        'น้ำพริกและเครื่องแกงเป็นของฝากที่ใช้ง่าย เก็บง่าย และเข้ากับหลายเมนู',
+      ],
+      content: [
+        'การเที่ยวภาคเหนือจะน่าจดจำขึ้นเมื่อไม่ได้ดูแค่สถานที่ แต่ได้ชิมรสชาติของพื้นที่ไปพร้อมกัน สำหรับพะเยา จุดหมายอย่างกว๊านพะเยา วัดริมกว๊าน ถนนคนเดิน และตลาดท้องถิ่นช่วยให้เห็นทั้งวิถีชีวิตและวัตถุดิบของครัวล้านนา',
+        'นักท่องเที่ยวสายกินมักมองหาของฝากที่กินได้จริงและมีเรื่องราว น้ำพริกเหนือ น้ำพริกพะเยา เครื่องแกงเหนือ และเครื่องเทศอย่างมะแขว่นจึงเหมาะมาก เพราะพกกลับบ้านง่ายและต่อยอดเป็นมื้ออาหารได้หลายแบบ',
+        'ถ้าอยากให้ทริปมีรสชาติครบ ให้แวะตลาดเช้าเพื่อดูผักพื้นบ้าน พริกแห้ง หอมแดง กระเทียม และอาหารปรุงสด จากนั้นเลือกของฝากที่สะท้อนกลิ่นคั่วและเครื่องเทศของพื้นที่',
+        'ของฝากที่ดีไม่ควรมีแค่หน้าตาสวย แต่ต้องใช้ได้จริงในครัว เช่น นำไปกินกับข้าวเหนียว ทำแกงขลุกขลิก ผัดกับหมูหรือเห็ด หรือจัดคู่กับผักลวกในมื้อเร็ว',
+        'เมื่อบทความท่องเที่ยวเหนือเชื่อมคำค้นอย่างเที่ยวพะเยา ของฝากพะเยา น้ำพริกเหนือ และอาหารล้านนาเข้าด้วยกัน ผู้อ่านจะได้ทั้งแรงบันดาลใจเดินทางและเหตุผลในการเลือกซื้อของฝากคุณภาพ',
+      ],
+    },
+    en: {
+      title: 'Northern Thailand Food Travel: What to Buy as a Souvenir from Phayao',
+      excerpt:
+        'A food-focused Northern Thailand travel guide linking Kwan Phayao, local markets, chili paste, and curry paste souvenirs.',
+      category: 'Northern Travel',
+      tags: ['Northern Thailand travel', 'Phayao travel', 'Phayao souvenir', 'Northern chili paste', 'local market'],
+      highlights: [
+        'A memorable Northern trip connects attractions with local flavor.',
+        'Phayao is well suited for souvenirs that tell a Lanna kitchen story.',
+        'Chili paste and curry paste are practical, easy-to-use food souvenirs.',
+      ],
+      content: [
+        'Travel in Northern Thailand becomes more memorable when places and flavors are experienced together. In Phayao, Kwan Phayao, lakeside temples, walking streets, and local markets reveal both daily life and the ingredients behind Lanna cooking.',
+        'Food-minded travelers often look for souvenirs that are useful and meaningful. Northern chili paste, Phayao chili paste, Northern curry paste, and spices such as ma-khwaen work well because they travel easily and can become many home meals.',
+        'For a richer trip, visit a morning market to see local vegetables, dried chilies, shallots, garlic, and prepared foods. Then choose souvenirs that express the roasted aroma and spice profile of the region.',
+        'A good souvenir should be more than attractive packaging. It should be useful with sticky rice, rustic curries, pork or mushroom stir-fries, and quick meals with blanched vegetables.',
+        'When a Northern travel article connects search terms such as Phayao travel, Phayao souvenir, Northern chili paste, and Lanna food, readers get both trip inspiration and a clear reason to choose quality local food gifts.',
+      ],
+    },
+    lo: {
+      title: 'ສະຖານທີ່ທ່ອງທ່ຽວເໜືອສາຍກິນ: ໄປພະເຍົາແລ້ວຊື້ຫຍັງເປັນຂອງຝາກ',
+      excerpt:
+        'ໄອເດຍທ່ຽວເໜືອສາຍອາຫານ ຈາກກວ໊ານພະເຍົາ ຕະຫຼາດທ້ອງຖິ່ນ ໄປຫາຂອງຝາກນ້ຳພິກແລະເຄື່ອງແກງ',
+      category: 'ສະຖານທີ່ທ່ອງທ່ຽວເໜືອ',
+      tags: ['ທ່ຽວພາກເໜືອ', 'ທ່ຽວພະເຍົາ', 'ຂອງຝາກພະເຍົາ', 'ນ້ຳພິກເໜືອ', 'ຕະຫຼາດທ້ອງຖິ່ນ'],
+      highlights: [
+        'ທຣິບເໜືອສາຍກິນຄວນເຊື່ອມສະຖານທີ່ກັບລົດຊາດທ້ອງຖິ່ນ',
+        'ພະເຍົາເໝາະກັບຂອງຝາກທີ່ເລົ່າເລື່ອງຄົວລ້ານນາ',
+        'ນ້ຳພິກແລະເຄື່ອງແກງເປັນຂອງຝາກທີ່ໃຊ້ງ່າຍ ແລະເກັບງ່າຍ',
+      ],
+      content: [
+        'ການທ່ຽວພາກເໜືອຈະນ່າຈື່ຈຳຂຶ້ນເມື່ອໄດ້ຊິມລົດຊາດຂອງພື້ນທີ່ໄປພ້ອມກັນ ສຳລັບພະເຍົາ ກວ໊ານພະເຍົາ ວັດຮິມນ້ຳ ຖະໜົນຄົນເດີນ ແລະຕະຫຼາດທ້ອງຖິ່ນຊ່ວຍໃຫ້ເຫັນຄົວລ້ານນາ',
+        'ນັກທ່ອງທ່ຽວສາຍກິນມັກຊອກຫາຂອງຝາກທີ່ກິນໄດ້ຈິງ ນ້ຳພິກເໜືອ ເຄື່ອງແກງເໜືອ ແລະໝາກແຂ່ວຈຶ່ງເໝາະຫຼາຍ',
+        'ຖ້າຢາກໃຫ້ທຣິບມີລົດຊາດຄົບ ໃຫ້ແວ່ຕະຫຼາດເຊົ້າເພື່ອເບິ່ງຜັກພື້ນບ້ານ ພິກແຫ້ງ ຫອມແດງ ແລະອາຫານປຸງສົດ',
+        'ຂອງຝາກທີ່ດີຄວນໃຊ້ໄດ້ຈິງໃນຄົວ ເຊັ່ນ ກິນກັບເຂົ້າໜຽວ ເຮັດແກງ ຜັດກັບໝູຫຼືເຫັດ ຫຼືຈັດຄູ່ຜັກລວກ',
+        'ເມື່ອບົດຄວາມທ່ຽວເໜືອເຊື່ອມຄຳຄົ້ນຫາຢ່າງທ່ຽວພະເຍົາ ຂອງຝາກພະເຍົາ ນ້ຳພິກເໜືອ ແລະອາຫານລ້ານນາ ຜູ້ອ່ານຈະໄດ້ແຮງບັນດານໃຈແລະເຫດຜົນໃນການເລືອກຊື້',
+      ],
+    },
+    zh: {
+      title: '泰北美食旅行：到帕尧旅游适合买什么伴手礼',
+      excerpt:
+        '从帕尧湖、本地市场到泰北辣椒酱与咖喱酱伴手礼，规划一条有风味的泰北旅行路线。',
+      category: '泰北旅游',
+      tags: ['泰北旅游', '帕尧旅游', '帕尧伴手礼', '泰北辣椒酱', '本地市场'],
+      highlights: [
+        '有记忆点的泰北旅行会把景点与地方味道连接起来。',
+        '帕尧适合选择能表达兰纳厨房故事的伴手礼。',
+        '辣椒酱与咖喱酱实用、容易携带，也适合多种料理。',
+      ],
+      content: [
+        '泰北旅行若同时体验地点与味道，会更值得记住。在帕尧，帕尧湖、湖边寺庙、步行街与本地市场能让人看见生活方式，也看见兰纳厨房的食材来源。',
+        '喜欢美食的旅行者常寻找真正能使用、又有故事的伴手礼。泰北辣椒酱、帕尧辣椒酱、泰北咖喱酱与马告等香料都很适合，因为容易携带，也能回家做出多种餐食。',
+        '想让行程更有味道，可以早上逛市场，看本地蔬菜、干辣椒、红葱、蒜和现做熟食，再选择能代表当地烘烤香与香料层次的伴手礼。',
+        '好的伴手礼不只是包装漂亮，也应能在厨房里派上用场，例如配糯米、做乡土咖喱、与猪肉或菇类快炒，或搭配烫蔬菜完成一餐。',
+        '当泰北旅游文章把帕尧旅游、帕尧伴手礼、泰北辣椒酱与兰纳美食等搜索词自然连接起来，读者会得到旅行灵感，也更容易理解为什么要选择优质地方食品。',
+      ],
+    },
+  },
+  {
+    key: 'northern-herbs-guide',
+    th: {
+      title: 'สมุนไพรเหนือในครัวล้านนา: รู้จักมะแขว่น ผักแพว ตะไคร้ และกลิ่นหอมของอาหารพะเยา',
+      excerpt:
+        'คู่มือสมุนไพรเหนือที่ช่วยสร้างกลิ่นรสให้อาหารล้านนา พร้อมวิธีใช้กับน้ำพริก แกง และเมนูพื้นบ้านให้หอมลึกอย่างพอดี',
+      category: 'สมุนไพรเหนือ',
+      tags: ['สมุนไพรเหนือ', 'มะแขว่น', 'ผักแพว', 'อาหารพะเยา', 'ครัวล้านนา'],
+      highlights: [
+        'สมุนไพรเหนือสร้างเอกลักษณ์ผ่านกลิ่นซ่า กลิ่นคั่ว และกลิ่นสด',
+        'มะแขว่นควรใช้พอดีเพื่อเสริม ไม่ใช่กลบกลิ่นพริกคั่ว',
+        'สมุนไพรสดช่วยให้เมนูน้ำพริกและแกงเหนือมีมิติขึ้น',
+      ],
+      content: [
+        'สมุนไพรเหนือคือหัวใจที่ทำให้อาหารล้านนาแตกต่างจากอาหารภาคอื่น กลิ่นของมะแขว่น ผักแพว ตะไคร้ ข่า ใบมะกรูด หอมแดง และกระเทียม ช่วยสร้างรสที่ทั้งลึก สด และอบอุ่นในจานเดียว',
+        'มะแขว่นเป็นเครื่องเทศที่หลายคนเชื่อมโยงกับลาบเหนือและน้ำพริกลาบ กลิ่นซ่าอ่อนๆ ช่วยให้รสเผ็ดมีมิติ แต่ต้องใช้ในปริมาณพอดีเพื่อไม่ให้กลบกลิ่นพริกคั่วและกระเทียม',
+        'ผักแพวและสมุนไพรสดเหมาะกับเมนูที่ต้องการความสดปลายลิ้น เช่น ลาบ น้ำพริก หรือจานผักเคียง ส่วนตะไคร้ ข่า และใบมะกรูดช่วยเพิ่มกลิ่นฐานให้แกงและผัด',
+        'เมื่อต้องการทำอาหารเหนือให้อร่อยแบบมืออาชีพ ให้คิดเรื่องชั้นกลิ่นก่อนรสเผ็ด เริ่มจากกลิ่นคั่วของพริกและหอม ต่อด้วยกลิ่นเครื่องเทศแห้ง แล้วปิดด้วยสมุนไพรสดตามจาน',
+        'บทความสมุนไพรเหนือที่ดีควรตอบทั้งคนอยากทำอาหารและคนค้นหาวัตถุดิบ เช่น สมุนไพรเหนือมีอะไรบ้าง มะแขว่นใช้ทำอะไร และน้ำพริกเหนือควรกินกับผักอะไร คำตอบเหล่านี้ช่วยให้เนื้อหามีคุณภาพและติด SEO ได้ดีกว่าเนื้อหาสั้นทั่วไป',
+      ],
+    },
+    en: {
+      title: 'Northern Thai Herbs in a Lanna Kitchen: Ma-Khwaen, Vietnamese Coriander, Lemongrass, and Phayao Aroma',
+      excerpt:
+        'A practical guide to Northern Thai herbs and how they shape chili paste, curry, and local dishes with balanced aroma.',
+      category: 'Northern Herbs',
+      tags: ['Northern Thai herbs', 'ma-khwaen', 'Vietnamese coriander', 'Phayao food', 'Lanna kitchen'],
+      highlights: [
+        'Northern herbs create identity through tingling spice, roasted aroma, and freshness.',
+        'Ma-khwaen should support roasted chili instead of overpowering it.',
+        'Fresh herbs add dimension to chili paste and Northern curries.',
+      ],
+      content: [
+        'Northern Thai herbs are a core reason Lanna food tastes different from other regional cuisines. Ma-khwaen, Vietnamese coriander, lemongrass, galangal, kaffir lime leaf, shallots, and garlic create flavors that feel deep, fresh, and warm at the same time.',
+        'Ma-khwaen is closely associated with Northern larb and Nam Prik Larb. Its gentle tingling aroma gives chili heat more dimension, but it should be used with restraint so roasted chilies and garlic still remain clear.',
+        'Vietnamese coriander and fresh herbs suit dishes that need a bright finish, such as larb, chili paste, or vegetable plates. Lemongrass, galangal, and kaffir lime leaf build the aromatic base for curries and stir-fries.',
+        'To cook Northern food with a professional feel, think in aroma layers before thinking only about heat: roasted chilies and shallots first, dried spices next, then fresh herbs at the end.',
+        'A useful Northern herb article should answer real search questions: what herbs are used in Northern Thai food, what ma-khwaen is used for, and which vegetables pair with Northern chili paste. These answers make the content more helpful and stronger for SEO.',
+      ],
+    },
+    lo: {
+      title: 'ສະໝຸນໄພເໜືອໃນຄົວລ້ານນາ: ຮູ້ຈັກໝາກແຂ່ວ ຜັກແພວ ຕະໄຄ້ ແລະກິ່ນຫອມອາຫານພະເຍົາ',
+      excerpt:
+        'ຄູ່ມືສະໝຸນໄພເໜືອທີ່ຊ່ວຍສ້າງກິ່ນລົດໃຫ້ອາຫານລ້ານນາ ພ້ອມວິທີໃຊ້ກັບນ້ຳພິກ ແກງ ແລະເມນູພື້ນບ້ານ',
+      category: 'ສະໝຸນໄພເໜືອ',
+      tags: ['ສະໝຸນໄພເໜືອ', 'ໝາກແຂ່ວ', 'ຜັກແພວ', 'ອາຫານພະເຍົາ', 'ຄົວລ້ານນາ'],
+      highlights: [
+        'ສະໝຸນໄພເໜືອສ້າງເອກະລັກຜ່ານກິ່ນຊ່າ ກິ່ນຄົ່ວ ແລະກິ່ນສົດ',
+        'ໝາກແຂ່ວຄວນໃຊ້ພໍດີເພື່ອເສີມກິ່ນພິກຄົ່ວ',
+        'ສະໝຸນໄພສົດຊ່ວຍໃຫ້ນ້ຳພິກແລະແກງເໜືອມີມິຕິ',
+      ],
+      content: [
+        'ສະໝຸນໄພເໜືອເປັນຫົວໃຈທີ່ເຮັດໃຫ້ອາຫານລ້ານນາແຕກຕ່າງ ກິ່ນຂອງໝາກແຂ່ວ ຜັກແພວ ຕະໄຄ້ ຂ່າ ໃບມະກູດ ຫອມແດງ ແລະກະທຽມ ຊ່ວຍສ້າງລົດລຶກແລະສົດ',
+        'ໝາກແຂ່ວມັກຢູ່ໃນລາບເໜືອແລະນ້ຳພິກລາບ ກິ່ນຊ່າອ່ອນໆ ຊ່ວຍໃຫ້ຄວາມເຜັດມີມິຕິ ແຕ່ຄວນໃຊ້ພໍດີ',
+        'ຜັກແພວແລະສະໝຸນໄພສົດເໝາະກັບລາບ ນ້ຳພິກ ຫຼືຈານຜັກຄຽງ ສ່ວນຕະໄຄ້ ຂ່າ ແລະໃບມະກູດຊ່ວຍສ້າງກິ່ນຖານໃຫ້ແກງ',
+        'ຖ້າຢາກເຮັດອາຫານເໜືອໃຫ້ດີ ໃຫ້ຄິດເລື່ອງຊັ້ນກິ່ນກ່ອນຄວາມເຜັດ ເລີ່ມຈາກກິ່ນຄົ່ວ ຕາມດ້ວຍເຄື່ອງເທດແຫ້ງ ແລະປິດດ້ວຍຜັກສົດ',
+        'ບົດຄວາມສະໝຸນໄພເໜືອທີ່ດີຄວນຕອບຄຳຖາມຈິງ ເຊັ່ນ ສະໝຸນໄພເໜືອມີຫຍັງແດ່ ໝາກແຂ່ວໃຊ້ເຮັດຫຍັງ ແລະນ້ຳພິກເໜືອກິນກັບຜັກຫຍັງ',
+      ],
+    },
+    zh: {
+      title: '兰纳厨房里的泰北香草：认识马告、越南香菜、香茅与帕尧料理香气',
+      excerpt:
+        '实用介绍泰北香草如何为辣椒酱、咖喱与地方菜建立平衡而深邃的香气。',
+      category: '泰北香草',
+      tags: ['泰北香草', '马告', '越南香菜', '帕尧料理', '兰纳厨房'],
+      highlights: [
+        '泰北香草通过微麻香料、烘烤香与清新草本建立识别度。',
+        '马告应辅助烘烤辣椒，而不是压过其他香气。',
+        '新鲜香草能让辣椒酱与泰北咖喱更有层次。',
+      ],
+      content: [
+        '泰北香草是兰纳料理不同于其他地区料理的重要原因。马告、越南香菜、香茅、南姜、柠檬叶、红葱和蒜，共同创造出深邃、清新又温暖的味道。',
+        '马告常与泰北拉布和拉布辣椒酱联系在一起。它轻微的麻香能让辣味更有层次，但使用时必须克制，才能保留烘烤辣椒和蒜香的清晰度。',
+        '越南香菜和新鲜香草适合需要明亮收尾的菜，例如拉布、辣椒酱或蔬菜配盘。香茅、南姜与柠檬叶则为咖喱和热炒建立底层香气。',
+        '想把泰北菜做得更专业，先思考香气层次，再思考辣度：先是辣椒与红葱的烘烤香，再是干香料，最后以新鲜香草收尾。',
+        '有价值的泰北香草文章应回答真实搜索问题：泰北料理用哪些香草、马告用来做什么、泰北辣椒酱适合配什么蔬菜。这样的内容更有帮助，也更利于 SEO。',
+      ],
+    },
+  },
+  {
+    key: 'local-vegetables-northern-list',
+    th: {
+      title: 'ผักพื้นบ้านภาคเหนือมีอะไรบ้าง: ผักกินกับน้ำพริกเหนือที่ควรรู้จัก',
+      excerpt:
+        'รวมผักพื้นบ้านภาคเหนือที่เหมาะกับน้ำพริกพะเยา ทั้งผักสด ผักลวก และผักตามฤดูกาล พร้อมวิธีเลือกให้มื้ออาหารอร่อยและดีต่อสุขภาพ',
+      category: 'ผักพื้นบ้าน',
+      tags: ['ผักพื้นบ้านภาคเหนือ', 'ผักกินกับน้ำพริก', 'น้ำพริกเหนือ', 'อาหารเหนือเพื่อสุขภาพ', 'ผักตามฤดูกาล'],
+      highlights: [
+        'ผักพื้นบ้านช่วยบาลานซ์รสเผ็ด เค็ม และกลิ่นคั่วของน้ำพริก',
+        'ควรเลือกผักหลายรส ทั้งหวาน ขมอ่อน ฝาดนิด และหอมสด',
+        'ผักตามฤดูกาลทำให้มื้อเหนือสดขึ้นและมีคุณค่าทางพื้นที่',
+      ],
+      content: [
+        'ผักพื้นบ้านภาคเหนือมีบทบาทมากกว่าการเป็นเครื่องเคียง เพราะช่วยทำให้น้ำพริกเหนือกินอร่อยขึ้นและสมดุลขึ้น ผักที่คนมักใช้คู่กับน้ำพริกมีทั้งแตงกวา ถั่วฝักยาว กะหล่ำปลี ฟักทองลวก มะเขือเปราะ ผักกาด ผักชีลาว ผักแพว และผักตามฤดูกาลของท้องถิ่น',
+        'ถ้าอยากจัดจานให้กินง่าย ให้เลือกผักอย่างน้อยสามกลุ่ม ได้แก่ ผักรสหวานเพื่อลดความเผ็ด ผักกลิ่นสดเพื่อเพิ่มความหอม และผักรสขมหรือฝาดอ่อนเพื่อทำให้รสท้ายไม่เลี่ยน',
+        'ผักลวกควรลวกสั้นในน้ำเดือดแล้วสะเด็ดน้ำให้แห้ง การปล่อยให้น้ำเกาะมากเกินไปจะทำให้น้ำพริกจางและกลิ่นคั่วลดลง ส่วนผักสดควรล้างให้สะอาดและแช่เย็นเล็กน้อยก่อนเสิร์ฟเพื่อความกรอบ',
+        'สำหรับน้ำพริกพะเยารสเข้ม ผักพื้นบ้านจะช่วยให้กินได้ต่อเนื่อง ไม่หนักเกินไป และเหมาะกับคนที่อยากได้มื้ออาหารเหนือเพื่อสุขภาพโดยยังมีรสชาติชัด',
+        'คำค้นอย่างผักพื้นบ้านภาคเหนือ ผักกินกับน้ำพริกเหนือ และอาหารเหนือเพื่อสุขภาพควรอยู่ในบทความอย่างเป็นธรรมชาติ พร้อมคำตอบที่ใช้งานได้จริง เพราะผู้อ่านต้องการนำไปจัดมื้ออาหารได้ทันที',
+      ],
+    },
+    en: {
+      title: 'Northern Thai Local Vegetables: What to Serve with Northern Chili Paste',
+      excerpt:
+        'A practical list of local vegetables for Phayao chili paste, including fresh, blanched, and seasonal options for a balanced meal.',
+      category: 'Local Vegetables',
+      tags: ['Northern Thai local vegetables', 'vegetables with chili paste', 'Northern chili paste', 'healthy Northern Thai food', 'seasonal vegetables'],
+      highlights: [
+        'Local vegetables balance heat, salt, and roasted aroma.',
+        'Choose several flavor types: sweet, gently bitter, lightly astringent, and fresh.',
+        'Seasonal vegetables make a Northern meal fresher and more rooted in place.',
+      ],
+      content: [
+        'Northern Thai local vegetables are more than side dishes. They make Northern chili paste easier to enjoy and more balanced. Common pairings include cucumber, long beans, cabbage, blanched pumpkin, Thai eggplant, mustard greens, dill, Vietnamese coriander, and seasonal local greens.',
+        'For an easy plate, choose at least three groups: sweet vegetables to soften heat, fresh aromatic herbs for lift, and gently bitter or lightly astringent vegetables to keep the finish clean.',
+        'Blanched vegetables should be cooked briefly in boiling water and drained well. Too much surface water dilutes chili paste and weakens roasted aroma. Fresh vegetables should be clean and lightly chilled for crispness.',
+        'With bold Phayao chili paste, local vegetables help the meal feel lighter, more continuous, and suitable for people who want healthier Northern Thai food without losing strong flavor.',
+        'Search terms such as Northern Thai local vegetables, vegetables with Northern chili paste, and healthy Northern Thai food should appear naturally inside useful answers. Readers want guidance they can apply to a real meal immediately.',
+      ],
+    },
+    lo: {
+      title: 'ຜັກພື້ນບ້ານພາກເໜືອມີຫຍັງແດ່: ຜັກກິນກັບນ້ຳພິກເໜືອທີ່ຄວນຮູ້ຈັກ',
+      excerpt:
+        'ຮວບຮວມຜັກພື້ນບ້ານພາກເໜືອທີ່ເໝາະກັບນ້ຳພິກພະເຍົາ ທັງຜັກສົດ ຜັກລວກ ແລະຜັກຕາມລະດູການ',
+      category: 'ຜັກພື້ນບ້ານ',
+      tags: ['ຜັກພື້ນບ້ານພາກເໜືອ', 'ຜັກກິນກັບນ້ຳພິກ', 'ນ້ຳພິກເໜືອ', 'ອາຫານເໜືອເພື່ອສຸຂະພາບ', 'ຜັກຕາມລະດູການ'],
+      highlights: [
+        'ຜັກພື້ນບ້ານຊ່ວຍປັບລົດເຜັດ ເຄັມ ແລະກິ່ນຄົ່ວຂອງນ້ຳພິກ',
+        'ຄວນເລືອກຜັກຫຼາຍລົດ ທັງຫວານ ຂົມອ່ອນ ຝາດນ້ອຍ ແລະຫອມສົດ',
+        'ຜັກຕາມລະດູການເຮັດໃຫ້ມື້ເໜືອສົດ ແລະມີຄຸນຄ່າທ້ອງຖິ່ນ',
+      ],
+      content: [
+        'ຜັກພື້ນບ້ານພາກເໜືອບໍ່ແມ່ນແຄ່ເຄື່ອງຄຽງ ແຕ່ຊ່ວຍໃຫ້ນ້ຳພິກເໜືອກິນອົບອຸ່ນແລະສົມດຸນ ຜັກທີ່ມັກໃຊ້ມີແຕງກວາ ຖົ່ວຝັກຍາວ ກະລ່ຳປີ ຟັກທອງລວກ ໝາກເຂືອ ຜັກກາດ ຜັກຊີລາວ ຜັກແພວ ແລະຜັກຕາມລະດູ',
+        'ຖ້າຢາກຈັດຈານໃຫ້ກິນງ່າຍ ໃຫ້ເລືອກຜັກຢ່າງນ້ອຍສາມກຸ່ມ ຄື ຜັກລົດຫວານ ຜັກກິ່ນສົດ ແລະຜັກຂົມອ່ອນຫຼືຝາດນ້ອຍ',
+        'ຜັກລວກຄວນລວກສັ້ນໆ ໃນນ້ຳເດືອດ ແລະສະເດັດນ້ຳໃຫ້ແຫ້ງ ນ້ຳທີ່ເກາະຫຼາຍເກີນໄປຈະເຮັດໃຫ້ນ້ຳພິກຈາງ',
+        'ສຳລັບນ້ຳພິກພະເຍົາລົດເຂັ້ມ ຜັກພື້ນບ້ານຊ່ວຍໃຫ້ກິນໄດ້ຕໍ່ເນື່ອງ ບໍ່ໜັກເກີນໄປ ແລະເໝາະກັບມື້ອາຫານເໜືອເພື່ອສຸຂະພາບ',
+        'ຄຳຄົ້ນຫາຢ່າງຜັກພື້ນບ້ານພາກເໜືອ ຜັກກິນກັບນ້ຳພິກເໜືອ ແລະອາຫານເໜືອເພື່ອສຸຂະພາບ ຄວນຢູ່ໃນບົດຄວາມຢ່າງທຳມະຊາດ',
+      ],
+    },
+    zh: {
+      title: '泰北本地蔬菜有哪些：适合搭配泰北辣椒酱的蔬菜指南',
+      excerpt:
+        '整理适合帕尧辣椒酱的泰北本地蔬菜，包括鲜蔬、烫蔬菜与时令蔬菜，让餐桌更平衡。',
+      category: '本地蔬菜',
+      tags: ['泰北本地蔬菜', '辣椒酱配菜', '泰北辣椒酱', '健康泰北料理', '时令蔬菜'],
+      highlights: [
+        '本地蔬菜能平衡辣度、咸味与烘烤香。',
+        '应选择多种味型，包括甜、微苦、轻微涩感与清新香气。',
+        '时令蔬菜让泰北餐桌更清新，也更有地方价值。',
+      ],
+      content: [
+        '泰北本地蔬菜不只是配菜，它们能让泰北辣椒酱更好入口、更平衡。常见搭配包括黄瓜、长豆、卷心菜、烫南瓜、泰国小茄子、芥菜、莳萝、越南香菜，以及当地时令蔬菜。',
+        '想让餐盘容易入口，可以至少选择三类蔬菜：带甜味的蔬菜用来柔化辣度，带新鲜香气的草本用来提亮，微苦或轻微涩感的蔬菜则让尾韵更干净。',
+        '烫蔬菜应在沸水中短时间处理，并充分沥干。表面水分过多会稀释辣椒酱，削弱烘烤香。鲜蔬则应清洗干净并稍微冷藏，让口感更脆。',
+        '搭配味道浓郁的帕尧辣椒酱时，本地蔬菜能让整餐更轻盈、能持续吃，也适合想要健康泰北料理但仍重视味道的人。',
+        '泰北本地蔬菜、泰北辣椒酱配菜、健康泰北料理等搜索词，应自然出现在真正有用的答案里。读者需要的是可以马上拿去安排一餐的具体建议。',
       ],
     },
   },
