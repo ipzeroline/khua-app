@@ -973,10 +973,79 @@ function pickBySeed(items, seed, offset = 0) {
   return items[(seed + offset) % items.length]
 }
 
+function buildTopicImageBrief(article) {
+  const searchable = [
+    article.slug,
+    article.title,
+    article.category,
+    ...(Array.isArray(article.tags) ? article.tags : []),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+
+  if (
+    searchable.includes('local-vegetables') ||
+    searchable.includes('ผักพื้นบ้าน') ||
+    searchable.includes('ผักกินกับน้ำพริก') ||
+    searchable.includes('local vegetables')
+  ) {
+    return [
+      'Title-specific visual brief: this article is a practical list of Northern local vegetables served with Northern chili paste.',
+      'The visual hero must be a clearly varied assortment of local vegetables, not a single pile of green herbs.',
+      'Show at least six distinct vegetable types in tidy, recognizable groups: cucumber wedges, long beans, blanched pumpkin, Thai eggplant, cabbage or mustard greens, dill or Vietnamese coriander, and one seasonal leafy local green.',
+      'Include a small bowl of finished Northern chili paste as the supporting subject so the viewer understands these are vegetables to eat with nam prik. The chili paste should be visible and appetizing, but smaller than the vegetables.',
+      'Avoid making dried chilies, raw chili pods, a mortar, or plain rice the main subject. They may appear only as tiny supporting context if needed.',
+      'The image should answer the title question "what local vegetables are there?" through visual variety and clear grouping.',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('northern-herbs') ||
+    searchable.includes('สมุนไพรเหนือ') ||
+    searchable.includes('ma-khwaen') ||
+    searchable.includes('มะแขว่น')
+  ) {
+    return [
+      'Title-specific visual brief: this article is about Northern Thai herbs and spices.',
+      'The visual hero must be identifiable herbs and aromatics such as ma-khwaen, Vietnamese coriander, lemongrass, galangal, kaffir lime leaf, shallots, and garlic.',
+      'Do not turn this into a generic chili paste meal; herbs and spices must dominate the frame.',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('travel') ||
+    searchable.includes('ท่องเที่ยว') ||
+    searchable.includes('ของฝาก') ||
+    searchable.includes('souvenir')
+  ) {
+    return [
+      'Title-specific visual brief: this article is about Northern travel, Phayao, local markets, and food souvenirs.',
+      'Create a food-travel editorial story: market ingredients, travel-ready food gifts without labels, woven basket, local market atmosphere, or Phayao food-souvenir styling.',
+      'Do not make it only a close-up food plate; the image must signal travel or souvenir context.',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('menu') ||
+    searchable.includes('เมนูอาหารเหนือ') ||
+    searchable.includes('ยอดนิยม')
+  ) {
+    return [
+      'Title-specific visual brief: this article is a Northern Thai menu guide.',
+      'Show a curated spread with multiple Northern dishes or meal components, not one ingredient close-up.',
+      'The viewer should immediately understand this is a guide to what to eat in Northern Thai cuisine.',
+    ].join(' ')
+  }
+
+  return 'Title-specific visual brief: make the exact title visually obvious through the main subject and supporting props. Do not rely on generic Northern Thai food styling.'
+}
+
 export function buildImagePrompt(article, seedValue = article.slug || article.title || '') {
   const tags = Array.isArray(article.tags) ? article.tags.slice(0, 6).join(', ') : ''
   const highlights = Array.isArray(article.highlights) ? article.highlights.slice(0, 3).join(' | ') : ''
   const opening = Array.isArray(article.content) ? article.content[0] : ''
+  const topicBrief = buildTopicImageBrief(article)
   const seed = hashString(`${seedValue}-${article.title}-${article.category}`)
   const composition = pickBySeed([
     'top-down editorial flat lay with a strong diagonal arrangement and generous clean negative space in the upper third',
@@ -1020,6 +1089,7 @@ export function buildImagePrompt(article, seedValue = article.slug || article.ti
     `Create a premium professional editorial cover image for a KHUA article titled "${article.title}".`,
     `Absolute priority: the image concept must be built from the exact title "${article.title}" first. A viewer should be able to infer this article title from the image before reading any text.`,
     `Most important requirement: the image must clearly support this exact article topic, not a generic Northern Thai food scene. Category: ${article.category || 'Northern Thai food'}. Excerpt: ${article.excerpt || ''}. Tags: ${tags}. Key points: ${highlights}. Opening idea: ${opening}.`,
+    topicBrief,
     'Translate the article title into simple, instantly understandable visual storytelling: choose the main subject, supporting ingredient, prop, setting, and mood only if they directly explain the title and key points.',
     'Before composing the image, identify the title keyword and make it the visual hero. If the title is about herbs, herbs must dominate; if it is about local vegetables, vegetables must dominate; if it is about travel, show a food-travel souvenir or local-market story; if it is about a menu guide, show a curated Northern Thai menu spread; if it is about a technique, show the technique or ingredient transformation.',
     'Do not make a beautiful but unrelated Lanna table scene. Do not use chili paste, sticky rice, dried chilies, bowls, or vegetables as default filler unless they directly support the article title.',
