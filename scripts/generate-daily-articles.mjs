@@ -1018,8 +1018,11 @@ export function buildImagePrompt(article, seedValue = article.slug || article.ti
 
   return [
     `Create a premium professional editorial cover image for a KHUA article titled "${article.title}".`,
+    `Absolute priority: the image concept must be built from the exact title "${article.title}" first. A viewer should be able to infer this article title from the image before reading any text.`,
     `Most important requirement: the image must clearly support this exact article topic, not a generic Northern Thai food scene. Category: ${article.category || 'Northern Thai food'}. Excerpt: ${article.excerpt || ''}. Tags: ${tags}. Key points: ${highlights}. Opening idea: ${opening}.`,
-    'Translate the article topic into simple, instantly understandable visual storytelling: choose ingredients, props, dish style, and mood that directly match the title and key points.',
+    'Translate the article title into simple, instantly understandable visual storytelling: choose the main subject, supporting ingredient, prop, setting, and mood only if they directly explain the title and key points.',
+    'Before composing the image, identify the title keyword and make it the visual hero. If the title is about herbs, herbs must dominate; if it is about local vegetables, vegetables must dominate; if it is about travel, show a food-travel souvenir or local-market story; if it is about a menu guide, show a curated Northern Thai menu spread; if it is about a technique, show the technique or ingredient transformation.',
+    'Do not make a beautiful but unrelated Lanna table scene. Do not use chili paste, sticky rice, dried chilies, bowls, or vegetables as default filler unless they directly support the article title.',
     `Use this specific visual direction for this generation: ${composition}.`,
     `Surface and prop language: ${surface}. Avoid repeating the same default wooden-table setup unless it is essential to the selected direction.`,
     `Lighting: ${lighting}. Lens and camera language: ${lens}. Color palette: ${colorMood}.`,
