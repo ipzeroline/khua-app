@@ -43,7 +43,6 @@ interface LatestArticleRow extends RowDataPacket {
 
 interface ExistingArticleRow extends RowDataPacket {
   slug: string
-  title: string
 }
 
 export async function POST() {
@@ -64,13 +63,11 @@ export async function POST() {
     const latestSlug = latestRows[0]?.slug
     const latestDate = latestSlug?.match(/^daily-(\d{4}-\d{2}-\d{2})-/)?.[1]
     const [existingRows] = await connection.execute<ExistingArticleRow[]>(`
-      SELECT a.slug, t.title
+      SELECT a.slug
       FROM articles a
-      INNER JOIN article_translations t ON t.article_id = a.id AND t.locale = 'th'
       WHERE a.slug LIKE 'daily-%'
     `)
     const existingSlugs = new Set(existingRows.map((row) => row.slug))
-    const existingTitles = new Set(existingRows.map((row) => row.title.trim()))
 
     const today = generator.todayBangkok()
     let date = latestDate ? generator.addDays(latestDate, 1) : today
@@ -83,7 +80,7 @@ export async function POST() {
       ) as Record<string, GeneratedArticle>
       const primaryCandidate = candidate.th ?? Object.values(candidate)[0]
 
-      if (!existingSlugs.has(primaryCandidate.slug) && !existingTitles.has(primaryCandidate.title.trim())) {
+      if (!existingSlugs.has(primaryCandidate.slug)) {
         localizedArticles = candidate
         break
       }
