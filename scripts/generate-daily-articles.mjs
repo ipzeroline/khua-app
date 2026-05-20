@@ -1064,6 +1064,39 @@ function buildTopicImageBrief(article) {
     .toLowerCase()
 
   if (
+    searchable.includes('northern-cooking-methods') ||
+    searchable.includes('วิธีทำอาหารเหนือ') ||
+    searchable.includes('สูตรอาหารเหนือ') ||
+    searchable.includes('how to cook') ||
+    searchable.includes('cooking methods') ||
+    searchable.includes('泰北菜做法')
+  ) {
+    return [
+      'Title-specific visual brief: this article is a practical how-to guide for cooking different Northern Thai dishes.',
+      'The image must show cooking method and transformation, not only a finished dish: curry paste blooming in oil, aromatics beside a pan, measured herbs, vegetables, and a small finished dish or chili paste bowl as the result.',
+      'Use process cues such as a pan, spoon, mortar, prepared ingredients, and steam or glossy fried paste, but keep the scene clean, premium, and editorial.',
+      'The viewer should immediately understand this is about how to cook Northern Thai food and how to use chili paste or curry paste across menus.',
+      'Avoid a static generic Lanna table spread with no visible cooking action or method.',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('northern-food-menu-guide') ||
+    searchable.includes('เมนูอาหารเหนือ') ||
+    searchable.includes('ยอดนิยม') ||
+    searchable.includes('popular northern thai food') ||
+    searchable.includes('food menu')
+  ) {
+    return [
+      'Title-specific visual brief: this article is a Northern Thai menu guide.',
+      'Show a curated spread with multiple Northern dishes or meal components, not one ingredient close-up and not a single bowl of chili paste.',
+      'Include distinct menu variety such as a curry, a chili paste with vegetables, grilled protein, herbs, and a small rice element only as one supporting component.',
+      'Avoid making any one prop dominate unless it clearly represents the menu guide. No text, no signs, no labels, no poster composition.',
+      'The viewer should immediately understand this is a guide to what to eat in Northern Thai cuisine.',
+    ].join(' ')
+  }
+
+  if (
     searchable.includes('roasted-chili-aroma') ||
     searchable.includes('กลิ่นพริกคั่ว') ||
     searchable.includes('พริกคั่ว') ||
@@ -1075,6 +1108,20 @@ function buildTopicImageBrief(article) {
       'Show the quality inspection mood: chilies being roasted, a small amount of finished chili paste, or aromatics such as shallot and garlic only as subtle supporting context.',
       'Strictly exclude sticky rice, plain rice, cooked rice bowls, full meal plates, boiled eggs, and vegetable side dishes. This is not an eating-pairing article.',
       'Avoid making a generic serving scene. The viewer should immediately think "roasted chili aroma" and "quality of Northern chili paste," not "meal with rice."',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('seasonal-vegetables') ||
+    searchable.includes('ผักพื้นบ้านกับน้ำพริก') ||
+    searchable.includes('seasonal vegetables')
+  ) {
+    return [
+      'Title-specific visual brief: this article is about choosing local vegetables to balance Northern chili paste.',
+      'The visual hero must be a clean pairing of varied local vegetables and a small bowl of finished Northern chili paste, arranged to show balance and freshness.',
+      'Show both fresh and blanched vegetable textures, with the chili paste as a supporting anchor rather than the only subject.',
+      'Exclude plain rice bowls, sticky rice baskets, full meal plates, and unrelated roasted chilies. This is a vegetable-pairing guide, not a rice meal article.',
+      'The viewer should immediately understand "local vegetables paired with Northern chili paste."',
     ].join(' ')
   }
 
@@ -1095,10 +1142,23 @@ function buildTopicImageBrief(article) {
   }
 
   if (
+    searchable.includes('northern-curry-base') ||
+    searchable.includes('เครื่องแกงเหนือ') ||
+    searchable.includes('น้ำพริกแกงเหนือ') ||
+    searchable.includes('curry paste')
+  ) {
+    return [
+      'Title-specific visual brief: this article is about the foundation of Northern curry paste and why roasted aroma defines Lanna cooking.',
+      'The visual hero must be curry paste preparation: roasted dried chilies, shallots, garlic, coriander root, herbs, and a mortar or stone bowl with coarse red curry paste.',
+      'Show ingredient transformation from roasted aromatics into paste; use process texture, oil sheen, and spice depth.',
+      'Strictly exclude sticky rice, plain rice, cooked rice bowls, full serving plates, and unrelated meal pairings. This is a curry-paste technique article.',
+      'The viewer should immediately think "Northern curry paste base" rather than "meal ready to eat."',
+    ].join(' ')
+  }
+
+  if (
     searchable.includes('northern-herbs') ||
-    searchable.includes('สมุนไพรเหนือ') ||
-    searchable.includes('ma-khwaen') ||
-    searchable.includes('มะแขว่น')
+    searchable.includes('สมุนไพรเหนือ')
   ) {
     return [
       'Title-specific visual brief: this article is about Northern Thai herbs and spices.',
@@ -1108,19 +1168,31 @@ function buildTopicImageBrief(article) {
   }
 
   if (
-    searchable.includes('northern-cooking-methods') ||
-    searchable.includes('วิธีทำอาหารเหนือ') ||
-    searchable.includes('สูตรอาหารเหนือ') ||
-    searchable.includes('how to cook') ||
-    searchable.includes('cooking methods') ||
-    searchable.includes('泰北菜做法')
+    searchable.includes('ma-khwaen-knowledge') ||
+    searchable.includes('มะแขว่น') ||
+    searchable.includes('ma-khwaen')
   ) {
     return [
-      'Title-specific visual brief: this article is a practical how-to guide for cooking different Northern Thai dishes.',
-      'The image must show cooking method and transformation, not only a finished dish: curry paste blooming in oil, aromatics beside a pan, measured herbs, vegetables, and a small finished dish or chili paste bowl as the result.',
-      'Use process cues such as a pan, spoon, mortar, prepared ingredients, and steam or glossy fried paste, but keep the scene clean, premium, and editorial.',
-      'The viewer should immediately understand this is about how to cook Northern Thai food and how to use chili paste or curry paste across menus.',
-      'Avoid a static generic Lanna table spread with no visible cooking action or method.',
+      'Title-specific visual brief: this article is specifically about ma-khwaen as the Lanna spice that makes Northern flavor distinct.',
+      'The visual hero must be ma-khwaen pepper clusters or dried ma-khwaen spice, sharply focused and clearly identifiable, with subtle Northern spice context.',
+      'Supporting objects may include a small spice spoon, dried chili fragments, or a mortar texture, but ma-khwaen must dominate.',
+      'Strictly exclude sticky rice, plain rice, cooked rice bowls, full meal plates, vegetable side dishes, and generic chili paste bowls as the main subject.',
+      'The viewer should immediately think "ma-khwaen spice" and not a general Northern meal.',
+    ].join(' ')
+  }
+
+  if (
+    searchable.includes('quick-weeknight-northern-meal') ||
+    searchable.includes('มื้อเหนือวันทำงาน') ||
+    searchable.includes('weeknight')
+  ) {
+    return [
+      'Title-specific visual brief: this article is about using Northern chili paste to cook a fast weeknight meal with deep flavor.',
+      'The visual hero must be quick cooking action: chili paste being stirred into a pan with pork, egg, mushrooms, or vegetables, with a clean prepared-ingredients setup nearby.',
+      'Show speed and depth through process cues such as a spoon, pan, glossy paste, steam, and organized mise en place; keep it premium and not busy.',
+      'A small serving of rice may appear only as a minor background cue for a complete weeknight meal, never as a large foreground subject.',
+      'Strictly exclude title text, poster layout, big rice bowls, a static chili-paste serving tray, and generic decorative herbs that do not show quick cooking.',
+      'The viewer should immediately think "fast Northern cooking using chili paste," not "served rice and dip."',
     ].join(' ')
   }
 
@@ -1132,20 +1204,25 @@ function buildTopicImageBrief(article) {
   ) {
     return [
       'Title-specific visual brief: this article is about Northern travel, Phayao, local markets, and food souvenirs.',
-      'Create a food-travel editorial story: market ingredients, travel-ready food gifts without labels, woven basket, local market atmosphere, or Phayao food-souvenir styling.',
-      'Do not make it only a close-up food plate; the image must signal travel or souvenir context.',
+      'The visual hero must be a travel-souvenir scene, not a meal: a woven market basket or cloth travel tote filled with unbranded Northern food souvenirs, dried chilies, local herbs, small sealed ceramic crocks without labels, and market ingredients ready to take home.',
+      'Add clear travel context through non-text visual cues: soft Phayao lakeside or mountain silhouette in the far background, morning market table, woven basket handle, local craft texture, and a sense of buying gifts before returning home.',
+      'Strictly exclude sticky rice, plain rice, cooked rice bowls, eating plates, full meal spreads, and a single bowl of chili paste as the main subject. This is not a serving suggestion or dinner article.',
+      'Do not use signs, maps with writing, labels, package text, shop names, or any readable typography. Use only objects and place atmosphere to communicate travel and souvenir.',
+      'The viewer should immediately think "travel in Phayao and Northern food souvenirs" rather than "Northern chili paste meal."',
     ].join(' ')
   }
 
   if (
-    searchable.includes('menu') ||
-    searchable.includes('เมนูอาหารเหนือ') ||
-    searchable.includes('ยอดนิยม')
+    searchable.includes('sticky-rice-pairing') ||
+    searchable.includes('ข้าวเหนียว') ||
+    searchable.includes('sticky rice')
   ) {
     return [
-      'Title-specific visual brief: this article is a Northern Thai menu guide.',
-      'Show a curated spread with multiple Northern dishes or meal components, not one ingredient close-up.',
-      'The viewer should immediately understand this is a guide to what to eat in Northern Thai cuisine.',
+      'Title-specific visual brief: this article is specifically about sticky rice and Northern chili paste pairing.',
+      'The visual hero may include warm sticky rice because it is named in the title, but it must be paired clearly with Northern chili paste and a small selection of vegetables.',
+      'Show a simple premium meal pairing, not a cooking-process scene and not a generic ingredient pile.',
+      'Avoid travel souvenirs, market baskets, curry-paste technique props, and unrelated raw spice close-ups.',
+      'The viewer should immediately think "sticky rice with Northern chili paste."',
     ].join(' ')
   }
 
@@ -1190,7 +1267,7 @@ export function buildImagePrompt(article, seedValue = article.slug || article.ti
     'macro lens detail for herbs, chili texture, and roasted aromatics',
   ], seed, 11)
   const colorMood = pickBySeed([
-    'deep chili red, fresh herb green, warm rice white, and muted gold accents',
+    'deep chili red, fresh herb green, soft ivory highlights, and muted gold accents',
     'earthy charcoal, roasted red, turmeric gold, and fresh vegetable green',
     'soft ivory, dark wood, clay brown, and precise red-orange highlights',
     'premium natural palette with balanced greens, warm browns, and restrained red accents',
@@ -1203,7 +1280,7 @@ export function buildImagePrompt(article, seedValue = article.slug || article.ti
     `Most important requirement: the image must clearly support this exact article topic, not a generic Northern Thai food scene. Category: ${article.category || 'Northern Thai food'}. Excerpt: ${article.excerpt || ''}. Tags: ${tags}. Key points: ${highlights}. Opening idea: ${opening}.`,
     topicBrief,
     'Translate the article title into simple, instantly understandable visual storytelling: choose the main subject, supporting ingredient, prop, setting, and mood only if they directly explain the title and key points.',
-    'Before composing the image, identify the title keyword and make it the visual hero. If the title is about herbs, herbs must dominate; if it is about local vegetables, vegetables must dominate; if it is about travel, show a food-travel souvenir or local-market story; if it is about a menu guide, show a curated Northern Thai menu spread; if it is about a technique, show the technique or ingredient transformation.',
+    'Before composing the image, identify the title keyword and make it the visual hero. If the title is about herbs, herbs must dominate; if it is about local vegetables, vegetables must dominate; if it is about travel, show a food-travel souvenir or local-market story; if it is about a menu guide, show a curated Northern Thai menu spread; if it is about a technique, show the technique or ingredient transformation. The title-specific visual brief overrides all generic styling suggestions.',
     'Do not make a beautiful but unrelated Lanna table scene. Do not use chili paste, sticky rice, dried chilies, bowls, or vegetables as default filler unless they directly support the article title.',
     `Use this specific visual direction for this generation: ${composition}.`,
     `Surface and prop language: ${surface}. Avoid repeating the same default wooden-table setup unless it is essential to the selected direction.`,
@@ -1211,7 +1288,7 @@ export function buildImagePrompt(article, seedValue = article.slug || article.ti
     'Use one clear main subject, one supporting subject, and clean negative space. The viewer should understand the article theme within two seconds.',
     'Photorealistic commercial food photography for a high-end Northern Thai chili paste brand.',
     'Composition must look professionally art-directed and easy to read: clear focal point, balanced foreground/midground/background, refined negative space, strong depth, elegant visual hierarchy, no random clutter, no scattered props that do not serve the article.',
-    'Use a warm Lanna craft mood, but vary the food styling and camera setup for every generated image. Choose only the props that serve this article topic: roasted dried chilies, herbs, sticky rice, fresh vegetables, small ceramic bowls, mortar texture, market ingredients, or finished dish details as appropriate.',
+    'Use a warm Lanna craft mood, but vary the food styling and camera setup for every generated image. Choose only the props that serve this article topic: roasted dried chilies, herbs, fresh vegetables, small ceramic bowls, mortar texture, market ingredients, cooking tools, or finished dish details as explicitly appropriate.',
     'Sticky rice, plain rice, or cooked rice may appear only when the article title explicitly mentions rice, sticky rice, a meal pairing, or a complete meal. Otherwise exclude rice completely.',
     'Do not generate product packaging, jars, boxes, pouches, product labels, blank labels, fake labels, or any branded objects. If a product shot is needed, it will be added later from real website product assets, not generated by AI.',
     'CRITICAL: generate a pure photograph only. No poster design, no title overlay, no headline, no caption, no UI, no menu board, no sign, no label, no watermark, no written characters, no Thai text, no English text, no letters, no numbers, no glyphs anywhere in the image.',
