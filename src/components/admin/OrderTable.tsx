@@ -26,6 +26,11 @@ interface Order {
   }>
 }
 
+interface OrdersResponse {
+  orders: Order[]
+  total: number
+}
+
 const statuses = ['pending', 'confirmed', 'preparing', 'shipped', 'completed', 'cancelled']
 
 export default function OrderTable() {
@@ -33,6 +38,7 @@ export default function OrderTable() {
   const searchParams = useSearchParams()
   const lang = pathname.split('/')[1] || 'th'
   const [orders, setOrders] = useState<Order[]>([])
+  const [total, setTotal] = useState(0)
   const [search, setSearch] = useState(searchParams.get('search') || '')
   const [status, setStatus] = useState(searchParams.get('status') || '')
   const [loading, setLoading] = useState(true)
@@ -48,8 +54,9 @@ export default function OrderTable() {
       if (status) params.set('status', status)
       const query = params.toString()
       const res = await fetch(`/api/admin/orders${query ? `?${query}` : ''}`)
-      const data = await res.json()
+      const data = await res.json() as OrdersResponse
       setOrders(data.orders || [])
+      setTotal(data.total || 0)
     } finally {
       setLoading(false)
     }
@@ -83,7 +90,7 @@ export default function OrderTable() {
 
   return (
     <div className="space-y-5">
-      <div className="grid gap-3 rounded-2xl border border-border bg-surface p-4 sm:grid-cols-[1fr_180px_auto]">
+      <div className="grid gap-3 rounded-2xl border border-border bg-surface p-4 sm:grid-cols-[1fr_180px_auto_auto]">
         <input
           type="search"
           value={search}
@@ -111,6 +118,9 @@ export default function OrderTable() {
             Clear member
           </a>
         )}
+        <div className="rounded-xl bg-gold/10 px-4 py-2.5 text-center text-sm font-medium text-gold">
+          {total.toLocaleString()} orders
+        </div>
       </div>
 
       {orders.length === 0 ? (
@@ -118,16 +128,21 @@ export default function OrderTable() {
           No orders yet
         </div>
       ) : (
-        orders.map((order) => (
+        orders.map((order, index) => (
           <div
             key={order.id}
             className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm"
           >
             <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border bg-white/60 p-5">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gold">{order.order_number}</p>
-                <h2 className="mt-1 font-semibold text-text">{order.customer_name}</h2>
-                <p className="text-sm text-text-secondary">{order.customer_email}</p>
+              <div className="flex items-start gap-3">
+                <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-gold/10 text-sm font-semibold text-gold">
+                  {index + 1}
+                </span>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-gold">{order.order_number}</p>
+                  <h2 className="mt-1 font-semibold text-text">{order.customer_name}</h2>
+                  <p className="text-sm text-text-secondary">{order.customer_email}</p>
+                </div>
               </div>
               <div className="text-right">
                 <p className="apple-headline text-2xl text-text">

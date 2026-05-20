@@ -190,7 +190,7 @@ export default function MemberTable() {
 
   return (
     <div>
-      <div className="mb-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <input
           type="search"
           value={search}
@@ -198,6 +198,9 @@ export default function MemberTable() {
           placeholder="Search members..."
           className="w-full max-w-xs rounded-xl border border-border bg-white/70 px-4 py-2 text-sm outline-none transition-colors focus:border-gold/50"
         />
+        <p className="rounded-full bg-gold/10 px-4 py-2 text-sm font-medium text-gold">
+          {total.toLocaleString()} members
+        </p>
       </div>
 
       {actionError && (
@@ -208,6 +211,7 @@ export default function MemberTable() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-text-secondary">
+              <th className="w-16 px-5 py-3 font-medium">No.</th>
               <th className="px-5 py-3 font-medium">Name</th>
               <th className="px-5 py-3 font-medium">Email</th>
               <th className="px-5 py-3 font-medium">Role</th>
@@ -222,19 +226,20 @@ export default function MemberTable() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={9} className="px-5 py-8 text-center text-text-secondary">
+                <td colSpan={10} className="px-5 py-8 text-center text-text-secondary">
                   Loading...
                 </td>
               </tr>
             ) : members.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-5 py-8 text-center text-text-secondary">
+                <td colSpan={10} className="px-5 py-8 text-center text-text-secondary">
                   No members found
                 </td>
               </tr>
             ) : (
-              members.map((m) => (
+              members.map((m, index) => (
                 <tr key={m.id} className="border-b border-border/50 last:border-0 hover:bg-gold/5">
+                  <td className="px-5 py-3 text-text-secondary">{(page - 1) * 20 + index + 1}</td>
                   <td className="px-5 py-3 font-medium text-text">{m.name}</td>
                   <td className="px-5 py-3 text-text-secondary">{m.email}</td>
                   <td className="px-5 py-3">

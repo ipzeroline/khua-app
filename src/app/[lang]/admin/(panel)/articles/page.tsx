@@ -18,8 +18,16 @@ interface GenerateArticleResponse {
   error?: string
 }
 
+interface ArticlesResponse {
+  articles: Article[]
+  total: number
+  page: number
+  limit: number
+}
+
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
+  const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState('')
@@ -34,8 +42,11 @@ export default function AdminArticlesPage() {
         const params = new URLSearchParams()
         if (statusFilter) params.set('status', statusFilter)
         const res = await fetch(`/api/admin/articles?${params}`)
-        const data = await res.json()
-        if (!ignore) setArticles(data.articles)
+        const data = await res.json() as ArticlesResponse
+        if (!ignore) {
+          setArticles(data.articles || [])
+          setTotal(data.total || 0)
+        }
       } finally {
         if (!ignore) setLoading(false)
       }
@@ -50,8 +61,9 @@ export default function AdminArticlesPage() {
       const params = new URLSearchParams()
       if (statusFilter) params.set('status', statusFilter)
       const res = await fetch(`/api/admin/articles?${params}`)
-      const data = await res.json()
-      setArticles(data.articles)
+      const data = await res.json() as ArticlesResponse
+      setArticles(data.articles || [])
+      setTotal(data.total || 0)
     } finally {
       setLoading(false)
     }
@@ -82,7 +94,9 @@ export default function AdminArticlesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="apple-headline text-2xl text-text">Articles</h1>
-          <p className="mt-2 text-sm text-text-secondary">Manage articles across all languages</p>
+          <p className="mt-2 text-sm text-text-secondary">
+            Manage articles across all languages · {total.toLocaleString()} total
+          </p>
         </div>
         <div className="flex gap-2">
           <button
@@ -125,6 +139,7 @@ export default function AdminArticlesPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border text-left text-text-secondary">
+                <th className="w-16 px-5 py-3 font-medium">No.</th>
                 <th className="px-5 py-3 font-medium">Slug</th>
                 <th className="px-5 py-3 font-medium">Status</th>
                 <th className="px-5 py-3 font-medium">Author</th>
@@ -135,15 +150,16 @@ export default function AdminArticlesPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-text-secondary">Loading...</td>
+                  <td colSpan={6} className="px-5 py-8 text-center text-text-secondary">Loading...</td>
                 </tr>
               ) : articles.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-text-secondary">No articles found</td>
+                  <td colSpan={6} className="px-5 py-8 text-center text-text-secondary">No articles found</td>
                 </tr>
               ) : (
-                articles.map((a) => (
+                articles.map((a, index) => (
                   <tr key={a.id} className="border-b border-border/50 hover:bg-gold/5">
+                    <td className="px-5 py-3 text-text-secondary">{index + 1}</td>
                     <td className="px-5 py-3 font-medium text-text">{a.slug}</td>
                     <td className="px-5 py-3">
                       <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${

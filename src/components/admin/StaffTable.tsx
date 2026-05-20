@@ -75,7 +75,10 @@ export default function StaffTable() {
 
   return (
     <div>
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="rounded-full bg-gold/10 px-4 py-2 text-sm font-medium text-gold">
+          {staff.length.toLocaleString()} staff
+        </p>
         <button
           onClick={() => setShowForm(!showForm)}
           className="premium-button rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-white"
@@ -155,6 +158,7 @@ export default function StaffTable() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-text-secondary">
+              <th className="w-16 px-5 py-3 font-medium">No.</th>
               <th className="px-5 py-3 font-medium">Name</th>
               <th className="px-5 py-3 font-medium">Email</th>
               <th className="px-5 py-3 font-medium">Role</th>
@@ -166,15 +170,16 @@ export default function StaffTable() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-5 py-8 text-center text-text-secondary">Loading...</td>
+                <td colSpan={7} className="px-5 py-8 text-center text-text-secondary">Loading...</td>
               </tr>
             ) : staff.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-8 text-center text-text-secondary">No staff found</td>
+                <td colSpan={7} className="px-5 py-8 text-center text-text-secondary">No staff found</td>
               </tr>
             ) : (
-              staff.map((s) => (
+              staff.map((s, index) => (
                 <tr key={s.id} className="border-b border-border/50 hover:bg-gold/5">
+                  <td className="px-5 py-3 text-text-secondary">{index + 1}</td>
                   <td className="px-5 py-3 font-medium text-text">{s.name}</td>
                   <td className="px-5 py-3 text-text-secondary">{s.email}</td>
                   <td className="px-5 py-3">

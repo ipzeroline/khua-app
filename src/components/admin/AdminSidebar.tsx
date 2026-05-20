@@ -8,17 +8,28 @@ interface NavItem {
   href: string
   label: string
   icon: string
+  count?: number
 }
 
-export default function AdminSidebar({ lang }: { lang: string }) {
+interface AdminSidebarProps {
+  lang: string
+  counts?: {
+    members: number
+    orders: number
+    articles: number
+    staff: number
+  }
+}
+
+export default function AdminSidebar({ lang, counts }: AdminSidebarProps) {
   const pathname = usePathname()
 
   const navItems: NavItem[] = [
     { href: `/${lang}/admin`, label: 'Dashboard', icon: '◉' },
-    { href: `/${lang}/admin/members`, label: 'Members', icon: '👤' },
-    { href: `/${lang}/admin/orders`, label: 'Orders', icon: '▣' },
-    { href: `/${lang}/admin/articles`, label: 'Articles', icon: '📄' },
-    { href: `/${lang}/admin/staff`, label: 'Staff', icon: '⚙' },
+    { href: `/${lang}/admin/members`, label: 'Members', icon: '👤', count: counts?.members },
+    { href: `/${lang}/admin/orders`, label: 'Orders', icon: '▣', count: counts?.orders },
+    { href: `/${lang}/admin/articles`, label: 'Articles', icon: '📄', count: counts?.articles },
+    { href: `/${lang}/admin/staff`, label: 'Staff', icon: '⚙', count: counts?.staff },
   ]
 
   return (
@@ -42,7 +53,17 @@ export default function AdminSidebar({ lang }: { lang: string }) {
               )}
             >
               <span className="text-base">{item.icon}</span>
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {typeof item.count === 'number' ? (
+                <span
+                  className={cn(
+                    'min-w-7 rounded-full px-2 py-0.5 text-center text-[11px] font-semibold',
+                    isActive ? 'bg-gold text-white' : 'bg-border/70 text-text-secondary',
+                  )}
+                >
+                  {item.count.toLocaleString()}
+                </span>
+              ) : null}
             </Link>
           )
         })}

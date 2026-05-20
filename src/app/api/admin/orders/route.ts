@@ -45,9 +45,17 @@ export async function GET(request: NextRequest) {
        LIMIT 100`,
       params,
     )
+    const [countRows] = await connection.execute(
+      `SELECT COUNT(*) as total
+       FROM orders o
+       INNER JOIN users u ON u.id = o.user_id
+       ${where.length ? `WHERE ${where.join(' AND ')}` : ''}`,
+      params,
+    )
 
     const rows = orders as any[]
-    if (rows.length === 0) return Response.json({ orders: [] })
+    const total = Number((countRows as any[])[0]?.total || 0)
+    if (rows.length === 0) return Response.json({ orders: [], total })
 
     const ids = rows.map((order) => order.id)
     const placeholders = ids.map(() => '?').join(',')
@@ -61,6 +69,7 @@ export async function GET(request: NextRequest) {
     const itemRows = items as any[]
 
     return Response.json({
+      total,
       orders: rows.map((order) => ({
         ...order,
         items: itemRows.filter((item) => Number(item.order_id) === Number(order.id)),
