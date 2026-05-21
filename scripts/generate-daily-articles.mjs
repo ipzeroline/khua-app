@@ -1053,6 +1053,7 @@ function pickBySeed(items, seed, offset = 0) {
 }
 
 function buildTopicImageBrief(article) {
+  const category = String(article.category || '').trim().toLowerCase()
   const searchable = [
     article.slug,
     article.title,
@@ -1062,6 +1063,26 @@ function buildTopicImageBrief(article) {
     .filter(Boolean)
     .join(' ')
     .toLowerCase()
+  const categoryMatches = (...values) =>
+    values.some((value) => category === String(value).toLowerCase())
+
+  if (
+    searchable.includes('olive-shoots-local-vegetable') ||
+    searchable.includes('ยอดมะกอก') ||
+    searchable.includes('ใบมะกอก') ||
+    searchable.includes('olive shoots') ||
+    searchable.includes('hog plum shoots') ||
+    searchable.includes('spondias')
+  ) {
+    return [
+      'Title-specific visual brief: this article is specifically about yod makok, Thai olive or hog plum young shoots, as a Northern local vegetable. It is not about cooking chili paste, nam prik ong, curry paste, or a red sauce.',
+      'The visual hero must be fresh yod makok young shoots: tender light-green leaves with slightly copper young tips, arranged in a premium clean cluster. The viewer should immediately understand this is a local vegetable article.',
+      'Show how yod makok is eaten in Northern food: a refined small bowl of Northern chili paste may appear as a supporting object only, clearly smaller than the vegetable hero. Include cucumber or other local vegetables only as subtle comparison, not as the main subject.',
+      'Make it premium and editorial: clean dark ceramic or woven tray, precise leaf grouping, fresh water droplets, crisp leaf texture, warm natural side light, shallow depth of field, calm negative space.',
+      'Strictly avoid a pan, spoon stirring red paste, tomato sauce, minced meat, nam prik ong, curry paste preparation, large chili paste bowl as hero, random green beans, pea eggplants, or generic vegetable platter with no visible yod makok.',
+      'The image must answer the title and category: "ยอดมะกอก" in "ผักพื้นบ้าน" first, before any generic Northern Thai food styling.',
+    ].join(' ')
+  }
 
   if (
     searchable.includes('northern-yam-gai-nam-prik-larb-recipe') ||
@@ -1082,6 +1103,114 @@ function buildTopicImageBrief(article) {
       'The supporting paste should look like roasted Nam Prik Larb, dark red-brown and textured, not tomato sauce, not curry paste, not nam prik ong, not generic chili oil.',
       'Strictly avoid noodles, pasta-like strands, raw chicken, whole chicken pieces, tomato-heavy red sauce, rice as the main subject, packaged product jars, labels, visible text, hands, people, and a messy table.',
       'The viewer should immediately understand "วิธีทำยำไก่ทางเหนือด้วยน้ำพริกลาบ" from the finished dish and recipe mise en place alone.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('ความรู้ครัวเหนือ', 'Northern Kitchen', 'ຄວາມຮູ້ຄົວເໜືອ', '泰北厨房知识')
+  ) {
+    return [
+      'Category visual brief: Northern Kitchen knowledge. The image must teach or explain one clear Northern kitchen idea from the exact title, not show a generic meal.',
+      'Hero subject should be an educational kitchen still life: the title-specific ingredient, tool, or process arranged like a premium culinary reference. Use a mortar, roasted aromatics, herbs, local vegetables, or a small finished chili paste only when they directly explain the title.',
+      'Composition must feel like a high-end cookbook knowledge page: clean labeled-by-objects storytelling, strong focal hierarchy, tidy mise en place, warm craft lighting, and negative space. No visible text or labels.',
+      'Supporting props should be minimal and meaningful: one tool, one ingredient cluster, one small result bowl. Avoid crowded spreads, random table decoration, full meal plates, rice as main subject, and unrelated red chili paste.',
+      'Hard check: a viewer should understand the specific kitchen knowledge topic within two seconds, not just "Northern Thai food".',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('คุณภาพวัตถุดิบ', 'Ingredient Quality', 'ຄຸນນະພາບວັດຖຸດິບ', '食材品质')
+  ) {
+    return [
+      'Category visual brief: Ingredient Quality. The image must communicate freshness, selection, and inspection of the exact ingredient named by the title.',
+      'Hero subject should be premium raw ingredients with visible quality cues: clean surfaces, natural color, dry roasted texture, fresh cut surfaces, intact herbs, or carefully selected local produce. Use macro detail or a refined inspection layout.',
+      'Show quality through visual evidence: uniform size, crisp texture, clean sorting, gentle moisture on fresh produce, roasted depth on dried chilies, or careful handcraft tools without showing people or hands.',
+      'Supporting props may include a small ceramic bowl, brass spoon, woven tray, or stone surface, but the ingredient must dominate. No finished dish should take over unless the title explicitly requires it.',
+      'Strictly avoid messy market piles, random garnish, overly dark moody scenes that hide quality, fake labels, packaging, full meal plates, and generic chili paste bowls as the main subject.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('เทคนิคทำอาหาร', 'Cooking Technique', 'ເທັກນິກເຮັດອາຫານ', '料理技巧')
+  ) {
+    return [
+      'Category visual brief: Cooking Technique. The image must show a specific technique or transformation named by the title, not only ingredients or a finished dish.',
+      'Hero subject should be the active technique moment: blooming chili paste in oil, roasting dried chilies, draining blanched vegetables, pounding aromatics in a mortar, mixing seasoning into shredded meat, or arranging components in a controlled step.',
+      'Use process cues without hands or people: spoon resting in pan, steam, glossy oil separation, crushed spices, measured ingredients in small bowls, mortar texture, and a small final result as support.',
+      'Make it premium: one clear process action, uncluttered mise en place, controlled warm side light, crisp texture, visible before-and-after relationship.',
+      'Strictly avoid static generic table spreads, raw ingredients with no technique, full meal plates, text, packaging, and unrelated chili paste as default filler.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('ผักพื้นบ้าน', 'Local Vegetables', 'ຜັກພື້ນບ້ານ', '本地蔬菜')
+  ) {
+    return [
+      'Category visual brief: Local Vegetables. The vegetable or vegetables named by the title must be the visual hero. Chili paste can support the eating context but must never dominate.',
+      'Hero subject should be fresh local vegetables with identifiable shapes and textures: young shoots, leafy herbs, cucumbers, long beans, eggplants, blanched pumpkin, cabbage, mustard greens, or the exact vegetable in the title.',
+      'Show freshness and local character: tidy clusters, fresh water droplets, crisp leaf edges, natural woven tray or dark ceramic, subtle small chili paste bowl only as scale and pairing context.',
+      'Make it premium: clean negative space, precise grouping, no random mixed vegetable chaos, no cooking pan, no red paste as main subject, no meat, no rice, no generic table spread.',
+      'Hard check: if the title names one vegetable such as yod makok, that vegetable must be unmistakable and occupy the strongest focal point.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('เมนูอาหารเหนือ', 'Northern Food Menu', 'ເມນູອາຫານເໜືອ', '泰北美食菜单')
+  ) {
+    return [
+      'Category visual brief: Northern Food Menu. The image must communicate a curated Northern meal or the exact menu named in the title, not an ingredient close-up unless the title is one ingredient.',
+      'Hero subject should be the named dish or a refined multi-dish Lanna menu with clear hierarchy: one main dish in focus, two or three supporting dishes smaller, local vegetables, and chili paste only if relevant.',
+      'For menu-guide articles, show variety with restraint: curry, chili paste with vegetables, grilled or herbed protein, and a small rice cue only as support. For a specific menu, make that menu dominate.',
+      'Make it premium: restaurant-level plating, dark ceramics, warm Lanna table mood, balanced negative space, no buffet clutter, no random props, no market pile.',
+      'Strictly avoid one generic bowl of chili paste pretending to represent all Northern food, oversized rice, unreadable signage, packaging, and messy full-table spreads.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('วัตถุดิบล้านนา', 'Lanna Ingredients', 'ວັດຖຸດິບລ້ານນາ', '兰纳食材')
+  ) {
+    return [
+      'Category visual brief: Lanna Ingredients. The image must make the exact Lanna ingredient named by the title visually obvious and culturally grounded.',
+      'Hero subject should be identifiable raw or prepared Lanna ingredients: ma-khwaen, dried chilies, shallots, garlic, lemongrass, galangal, turmeric, fermented soybean, local herbs, or the title-specific ingredient.',
+      'Show ingredient identity through premium detail: macro texture, organized ingredient families, mortar or woven tray as context, clean separation between each ingredient, natural color accuracy.',
+      'Supporting finished paste or dish may appear only as a small result cue. The raw ingredient story must dominate.',
+      'Strictly avoid generic red paste close-ups, full meals, rice bowls, unlabeled jars, random herbs that do not match the title, and dark scenes that hide ingredient detail.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('วิธีทำอาหารเหนือ', 'Northern Cooking Methods', 'ວິທີເຮັດອາຫານເໜືອ', '泰北菜做法')
+  ) {
+    return [
+      'Category visual brief: Northern Cooking Methods. The image must show how the title-specific dish is made, with the named dish or method as the hero.',
+      'If the title names a specific dish, show that exact dish in process or finished-with-process context. If the title names an ingredient paste, show it being used in a clear cooking step.',
+      'Hero subject should be an active recipe scene: a refined pan or bowl with the dish being mixed, simmered, pounded, or assembled; supporting ingredients arranged neatly beside it.',
+      'Make it premium and instructional: visible transformation, clean mise en place, one spoon/tool cue, warm side light, crisp texture, restrained props, no people or hands.',
+      'Strictly avoid generic Northern table spreads, unrelated chili paste bowls, random vegetables, rice as main subject, packaged product labels, and images that could fit any article title.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('สมุนไพรเหนือ', 'Northern Herbs', 'ສະໝຸນໄພເໜືອ', '泰北香草')
+  ) {
+    return [
+      'Category visual brief: Northern Herbs. The named herb, spice, or aromatic must dominate the image with clear botanical identity.',
+      'Hero subject should be identifiable Northern herbs or spices: ma-khwaen clusters, lemongrass, galangal, kaffir lime leaf, Vietnamese coriander, sawtooth coriander, dill, shallots, garlic, or the exact herb in the title.',
+      'Use macro or premium ingredient portrait styling: crisp leaves, seed clusters, cut aromatics, small mortar texture, dark ceramic or stone, clean negative space.',
+      'Supporting chili paste or finished dish should be tiny or absent unless the title explicitly mentions using the herb in a dish.',
+      'Strictly avoid generic green herb piles, full meal plates, rice, red chili paste as hero, and any composition where the herb cannot be identified.',
+    ].join(' ')
+  }
+
+  if (
+    categoryMatches('ไอเดียจัดโต๊ะ', 'Table Ideas', 'ໄອເດຍຈັດໂຕະ', '餐桌灵感')
+  ) {
+    return [
+      'Category visual brief: Table Ideas. The image must show premium table styling, serving composition, or plating arrangement based on the exact title.',
+      'Hero subject should be the table arrangement itself: balanced placement of bowls, local vegetables, chili paste, servingware, textiles, and Lanna craft material. The layout must feel intentional and usable.',
+      'Make it premium: editorial overhead or three-quarter table composition, harmonious ceramic set, linen or woven texture, refined spacing, clear focal path, warm inviting light, and visible negative space.',
+      'Food items should support the table idea, not become a messy buffet. Use fewer dishes with better spacing and polished serving details.',
+      'Strictly avoid crowded banquet spreads, random props, package labels, fake signage, overly dark scenes, and close-ups that do not show the table-setting idea.',
     ].join(' ')
   }
 
@@ -1638,6 +1767,25 @@ function isNorthernYamGaiNamPrikLarbRecipe(brief = '', category = '') {
   return hasChickenSalad && hasLarbPaste
 }
 
+function isYodMakokLocalVegetable(brief = '', category = '') {
+  const searchable = `${brief} ${category}`.toLowerCase()
+  const hasYodMakok =
+    searchable.includes('ยอดมะกอก') ||
+    searchable.includes('ใบมะกอก') ||
+    searchable.includes('olive shoots') ||
+    searchable.includes('hog plum shoots') ||
+    searchable.includes('spondias')
+  const hasVegetableContext =
+    searchable.includes('ผักพื้นบ้าน') ||
+    searchable.includes('ผัก') ||
+    searchable.includes('local vegetable') ||
+    searchable.includes('local vegetables') ||
+    searchable.includes('seasonal vegetable') ||
+    searchable.includes('vegetable')
+
+  return hasYodMakok && hasVegetableContext
+}
+
 function localizedCookingCategory(locale, category = '') {
   const cleanedCategory = String(category || '').trim()
   const cookingCategories = [
@@ -1654,6 +1802,27 @@ function localizedCookingCategory(locale, category = '') {
       lo: 'ວິທີເຮັດອາຫານເໜືອ',
       zh: '泰北菜做法',
     }[locale] || 'Northern Cooking Methods'
+  }
+
+  return cleanedCategory
+}
+
+function localizedLocalVegetableCategory(locale, category = '') {
+  const cleanedCategory = String(category || '').trim()
+  const localVegetableCategories = [
+    'ผักพื้นบ้าน',
+    'Local Vegetables',
+    'ຜັກພື້ນບ້ານ',
+    '本地蔬菜',
+  ]
+
+  if (!cleanedCategory || localVegetableCategories.includes(cleanedCategory)) {
+    return {
+      th: 'ผักพื้นบ้าน',
+      en: 'Local Vegetables',
+      lo: 'ຜັກພື້ນບ້ານ',
+      zh: '本地蔬菜',
+    }[locale] || 'Local Vegetables'
   }
 
   return cleanedCategory
@@ -1880,6 +2049,107 @@ function buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category = '') {
   }
 }
 
+function buildYodMakokLocalVegetableArticle(date, locale, category = '') {
+  const contentByLocale = {
+    th: {
+      title: 'ยอดมะกอก ผักพื้นบ้านรสเปรี้ยวฝาดที่กินกับน้ำพริกเหนือให้อร่อยและสดชื่น',
+      excerpt:
+        'รู้จักยอดมะกอก ผักพื้นบ้านภาคเหนือที่มีรสเปรี้ยวฝาดหอมสด เหมาะกับน้ำพริกเหนือ ลาบ และอาหารรสจัด พร้อมวิธีเลือก ล้าง จัดเสิร์ฟ และแนวทางเขียน SEO ให้ตรงคำค้น',
+      tags: ['ยอดมะกอก', 'ผักพื้นบ้าน', 'ผักกินกับน้ำพริก', 'น้ำพริกเหนือ', 'อาหารเหนือเพื่อสุขภาพ', 'ผักพื้นบ้านภาคเหนือ'],
+      highlights: [
+        'ยอดมะกอกมีรสเปรี้ยวฝาดสด ช่วยตัดความเผ็ดและความมันของน้ำพริกเหนือ',
+        'เลือกยอดอ่อนใบไม่ช้ำ สีเขียวสดหรือมีปลายอ่อนอมทองแดงเล็กน้อย',
+        'ล้างให้สะอาดแล้วเด็ดเป็นช่อเล็ก เสิร์ฟสดกับน้ำพริกตาแดง น้ำพริกลาบ หรือเมนูลาบเหนือ',
+        'บทความ SEO ควรตอบให้ชัดว่ายอดมะกอกคืออะไร กินกับอะไร และต่างจากผักพื้นบ้านอื่นอย่างไร',
+      ],
+      content: [
+        'ยอดมะกอกเป็นผักพื้นบ้านที่พบได้ในหลายพื้นที่ของภาคเหนือ จุดเด่นคือรสเปรี้ยวฝาดเบา ๆ และกลิ่นเขียวสดที่ช่วยให้มื้ออาหารเหนือมีความสดชื่นขึ้น โดยเฉพาะเมนูน้ำพริกเหนือ ลาบเหนือ หรืออาหารที่มีรสเผ็ดและกลิ่นเครื่องเทศชัด',
+        'ถ้าเขียนบทความในหมวดผักพื้นบ้าน หัวข้อยอดมะกอกควรโฟกัสที่ตัวผักเป็นหลัก ไม่ใช่เปลี่ยนไปเป็นสูตรน้ำพริกหรือเมนูผัด เพราะผู้อ่านที่ค้นหา “ยอดมะกอก” ต้องการรู้ว่าผักนี้คืออะไร กินอย่างไร รสชาติเป็นแบบไหน และเหมาะกับอาหารเหนือจานใด',
+        'วิธีเลือกยอดมะกอกให้ดูที่ยอดอ่อนและใบอ่อน ใบควรสด ไม่เหี่ยว ไม่ช้ำ และไม่แก่จนเหนียว บางยอดอาจมีสีเขียวอ่อนหรือปลายใบอมแดงทองแดงเล็กน้อย ซึ่งเป็นลักษณะของยอดอ่อนที่น่ากินและมีกลิ่นสด',
+        'ก่อนเสิร์ฟให้ล้างยอดมะกอกผ่านน้ำสะอาดหลายครั้ง แช่น้ำเย็นสั้น ๆ แล้วสะเด็ดน้ำให้แห้ง จากนั้นเด็ดเป็นช่อเล็กหรือเด็ดเฉพาะใบอ่อนเพื่อให้หยิบกินง่าย ถ้ายอดมีส่วนก้านแข็งควรตัดออกเพื่อไม่ให้เสียสัมผัสตอนกิน',
+        'ยอดมะกอกเหมาะกับน้ำพริกตาแดงเหนือ น้ำพริกลาบเหนือ น้ำพริกปลาร้า หรืออาหารรสจัด เพราะรสเปรี้ยวฝาดจะช่วยตัดความเค็ม เผ็ด และมัน ทำให้กินได้ต่อเนื่องขึ้น ถ้าจัดจานกับแตงกวา ถั่วฝักยาว และกะหล่ำปลี จะได้ชุดผักที่มีทั้งกรอบ สด และรสเปรี้ยวจากธรรมชาติ',
+        'สำหรับคนที่อยากใช้สินค้า KHUA ในมื้ออาหาร ยอดมะกอกเข้ากับ KHUA น้ำพริกตาแดงเหนือและ KHUA น้ำพริกลาบเหนือได้ดี โดยใช้ยอดมะกอกเป็นผักสดคู่จาน ช่วยยกกลิ่นคั่วของพริกและเครื่องเทศให้ชัดขึ้นโดยไม่ต้องปรุงเพิ่ม',
+        'ในเชิง SEO ควรใช้คำสำคัญอย่าง ยอดมะกอก, ผักพื้นบ้าน, ผักกินกับน้ำพริก, ผักพื้นบ้านภาคเหนือ และน้ำพริกเหนืออย่างเป็นธรรมชาติ พร้อมตอบคำถามที่คนค้นหาจริง เช่น ยอดมะกอกกินกับอะไร ยอดมะกอกรสชาติเป็นอย่างไร และต้องเตรียมก่อนกินอย่างไร',
+      ],
+    },
+    en: {
+      title: 'Yod Makok: The Tangy Northern Local Vegetable for Chili Paste and Lanna Meals',
+      excerpt:
+        'A clear guide to yod makok, or Thai olive young shoots, including flavor, selection, preparation, pairing with Northern chili paste, and SEO-friendly article angles.',
+      tags: ['yod makok', 'Thai olive shoots', 'local vegetables', 'Northern Thai chili paste', 'Northern Thai food', 'vegetables with nam prik'],
+      highlights: [
+        'Yod makok has a fresh tangy-astringent flavor that balances spicy Northern chili paste.',
+        'Choose tender young shoots with fresh leaves and no bruising.',
+        'Serve fresh with Nam Prik Ta Daeng, Nam Prik Larb, larb, or other bold Northern dishes.',
+        'A useful SEO article should explain what yod makok is, how it tastes, and what to eat it with.',
+      ],
+      content: [
+        'Yod makok, often described as Thai olive or hog plum young shoots, is a Northern local vegetable valued for its fresh tangy and lightly astringent taste. It works beautifully beside spicy chili paste, larb, and dishes with roasted herbs.',
+        'An article about yod makok should keep the vegetable as the main subject. Readers searching for this ingredient want to know what it is, how it tastes, how to prepare it, and which Northern Thai dishes it supports.',
+        'Choose tender young shoots with fresh leaves, no bruising, and no dry edges. Young tips may appear light green or slightly copper-toned. Avoid older tough leaves if serving the vegetable raw.',
+        'To prepare, rinse several times, briefly soak in cold water, drain well, and trim away hard stems. Serve as small clusters so the vegetable is easy to pick up with chili paste or a bite of sticky rice.',
+        'Yod makok pairs well with Northern red chili paste, Nam Prik Larb, fermented fish chili paste, and spicy larb. Its tangy edge cuts through salt, heat, and richness, making the meal feel fresher.',
+        'For KHUA products, yod makok is a natural fresh vegetable side for KHUA Nam Prik Ta Daeng Nuea and KHUA Nam Prik Larb Nuea. The vegetable brightens the roasted chili and spice notes without needing extra seasoning.',
+        'For SEO, use terms such as yod makok, Thai olive shoots, local vegetables, vegetables with nam prik, and Northern Thai chili paste naturally while answering practical questions about taste, preparation, and pairing.',
+      ],
+    },
+    lo: {
+      title: 'ຍອດໝາກກອກ ຜັກພື້ນບ້ານລົດສົ້ມຝາດ ກິນກັບນ້ຳພິກເໜືອໃຫ້ສົດຊື່ນ',
+      excerpt:
+        'ຮູ້ຈັກຍອດໝາກກອກ ຜັກພື້ນບ້ານທີ່ມີລົດສົ້ມຝາດ ເໝາະກັບນ້ຳພິກເໜືອ ພ້ອມວິທີເລືອກ ລ້າງ ແລະຈັດເສີບ',
+      tags: ['ຍອດໝາກກອກ', 'ຜັກພື້ນບ້ານ', 'ຜັກກິນກັບນ້ຳພິກ', 'ນ້ຳພິກເໜືອ', 'ອາຫານເໜືອ'],
+      highlights: [
+        'ຍອດໝາກກອກມີລົດສົ້ມຝາດ ຊ່ວຍຕັດຄວາມເຜັດຂອງນ້ຳພິກ',
+        'ເລືອກຍອດອ່ອນ ໃບສົດ ບໍ່ຊ້ຳ ແລະບໍ່ແກ່ເກີນໄປ',
+        'ລ້າງໃຫ້ສະອາດ ເດັດເປັນຊໍ່ນ້ອຍ ແລ້ວເສີບສົດກັບນ້ຳພິກ',
+        'ບົດຄວາມຄວນຕອບວ່າຍອດໝາກກອກແມ່ນຫຍັງ ລົດແນວໃດ ແລະກິນກັບຫຍັງ',
+      ],
+      content: [
+        'ຍອດໝາກກອກເປັນຜັກພື້ນບ້ານທີ່ມີລົດສົ້ມຝາດອ່ອນໆ ແລະກິ່ນຂຽວສົດ ຊ່ວຍໃຫ້ມື້ອາຫານເໜືອທີ່ມີນ້ຳພິກ ຫຼືລາບ ກິນໄດ້ສົດຊື່ນຂຶ້ນ.',
+        'ຖ້າຂຽນບົດຄວາມໝວດຜັກພື້ນບ້ານ ຄວນໃຫ້ຍອດໝາກກອກເປັນຫົວຂໍ້ຫຼັກ ບໍ່ຄວນປ່ຽນໄປເປັນສູດນ້ຳພິກ ຫຼືອາຫານອື່ນ.',
+        'ເລືອກຍອດອ່ອນ ໃບສົດ ບໍ່ເຫຼືອງ ບໍ່ຊ້ຳ ແລະກ້ານບໍ່ແຂງເກີນໄປ. ຍອດອ່ອນບາງສ່ວນອາດມີສີຂຽວອ່ອນຫຼືປາຍໃບອອກສີນ້ຳຕານແດງ.',
+        'ກ່ອນເສີບໃຫ້ລ້າງຫຼາຍນ້ຳ ແຊ່ນ້ຳເຢັນສັ້ນໆ ແລ້ວສະເດັດນ້ຳ ເດັດເປັນຊໍ່ນ້ອຍໃຫ້ກິນງ່າຍ.',
+        'ຍອດໝາກກອກເໝາະກັບນ້ຳພິກຕາແດງ ນ້ຳພິກລາບ ແລະອາຫານເຜັດ ເພາະລົດສົ້ມຝາດຊ່ວຍຕັດຄວາມເຄັມ ເຜັດ ແລະຄວາມມັນ.',
+        'ສຳລັບສິນຄ້າ KHUA ຍອດໝາກກອກເຂົ້າກັບ KHUA ນ້ຳພິກຕາແດງເໜືອ ແລະ KHUA ນ້ຳພິກລາບເໜືອໄດ້ດີ.',
+      ],
+    },
+    zh: {
+      title: '泰北本地蔬菜 Yod Makok：带酸涩清香的嫩叶，适合搭配泰北辣椒酱',
+      excerpt:
+        '认识 Yod Makok 泰国酸橄榄嫩叶，了解它的味道、挑选、清洗、摆盘，以及如何搭配泰北辣椒酱和撰写 SEO 内容。',
+      tags: ['Yod Makok', '泰北本地蔬菜', '泰国酸橄榄嫩叶', '泰北辣椒酱', '本地蔬菜', 'Nam Prik'],
+      highlights: [
+        'Yod Makok 有清新的酸涩味，能平衡泰北辣椒酱的辣与咸。',
+        '选择嫩叶新鲜、不发黄、不压伤的嫩梢。',
+        '清洗后摘成小束，可生食搭配辣椒酱或泰北拉布。',
+        'SEO 内容应清楚回答它是什么、什么味道、适合搭配什么。',
+      ],
+      content: [
+        'Yod Makok 常被理解为泰国酸橄榄或 hog plum 的嫩叶，是泰北餐桌上的本地蔬菜之一。它带有自然酸涩和清新草本味，适合搭配辣椒酱、拉布和香料味较重的菜。',
+        '写这类本地蔬菜文章时，主题应集中在 Yod Makok 本身，而不是转成辣椒酱或其他料理。读者想知道它是什么、味道如何、怎样准备，以及配什么最好吃。',
+        '挑选时看嫩梢和嫩叶，叶子要新鲜、不发黄、不压伤。部分嫩叶可能呈浅绿色或略带铜红色，这是嫩梢常见的颜色。',
+        '食用前用清水洗数次，短暂泡冷水后沥干，摘成小束。若茎部太硬，可去掉较粗的部分，保留嫩叶口感。',
+        'Yod Makok 适合搭配泰北红辣椒酱、Nam Prik Larb、发酵鱼辣椒酱或泰北拉布。它的酸涩感能平衡咸、辣和油脂，使整餐更清爽。',
+        '如果搭配 KHUA 产品，Yod Makok 很适合作为 KHUA Nam Prik Ta Daeng Nuea 和 KHUA Nam Prik Larb Nuea 的新鲜蔬菜配菜。',
+        'SEO 文章可自然使用 Yod Makok、本地蔬菜、泰北辣椒酱、Nam Prik 配菜等关键词，并回答味道、准备方式和搭配建议。',
+      ],
+    },
+  }
+  const text = contentByLocale[locale] || contentByLocale.en
+
+  return {
+    slug: `daily-${date}-yod-makok-local-vegetable`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedLocalVegetableCategory(locale, category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  }
+}
+
 function topicSearchText(topic) {
   return locales
     .flatMap((locale) => {
@@ -1950,6 +2220,10 @@ function customizeArticleForBrief(article, brief, locale, category = '') {
 }
 
 export function buildArticle(date, locale, brief = '', category = '') {
+  if (isYodMakokLocalVegetable(brief, category)) {
+    return buildYodMakokLocalVegetableArticle(date, locale, category)
+  }
+
   if (isNorthernYamGaiNamPrikLarbRecipe(brief, category)) {
     return buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category)
   }
