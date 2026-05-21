@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { connection } from 'next/server'
 import { notFound } from 'next/navigation'
 import { getDictionary, type ArticleData, type Locale, LOCALES } from '@/i18n'
-import { getOpenGraphLocale } from '@/i18n/seo'
+import { absoluteUrl, getOpenGraphLocale } from '@/i18n/seo'
 import ArticleDetailContent from '@/components/articles/ArticleDetailContent'
 import { getPublishedArticle } from '@/lib/articles'
 
@@ -36,6 +36,17 @@ function articleIsoDate(article: ArticleData) {
   return article.slug.match(/^daily-(\d{4}-\d{2}-\d{2})-/)?.[1] || undefined
 }
 
+function serializeJsonLd(value: unknown) {
+  return JSON.stringify(value).replace(/</g, '\\u003c')
+}
+
+function articleWordCount(article: ArticleData) {
+  return article.content
+    .join(' ')
+    .split(/\s+/)
+    .filter(Boolean).length
+}
+
 export async function generateMetadata({ params }: ArticleDetailPageProps): Promise<Metadata> {
   await connection()
   const { lang, slug } = await params
@@ -64,19 +75,19 @@ export async function generateMetadata({ params }: ArticleDetailPageProps): Prom
     openGraph: {
       title,
       description,
-      url: canonical,
+      url: absoluteUrl(canonical),
       siteName: dict.site.name,
       locale: getOpenGraphLocale(locale),
       type: 'article',
       publishedTime: isoDate,
       modifiedTime: isoDate,
-      images: [{ url: image, alt: article.title }],
+      images: [{ url: absoluteUrl(image), alt: article.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [image],
+      images: [absoluteUrl(image)],
     },
   }
 }
@@ -93,21 +104,24 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
   }
   const canonical = `/${locale}/articles/${slug}`
   const isoDate = articleIsoDate(article)
+  const image = article.coverImage || '/khua-logo.png'
 
-  const jsonLd = {
+  const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': canonical,
+      '@id': absoluteUrl(canonical),
     },
     headline: articleSeoTitle(article, dict.site.name),
     description: articleSeoDescription(article),
     keywords: article.tags.join(', '),
+    articleSection: article.category,
+    wordCount: articleWordCount(article),
     datePublished: isoDate,
     dateModified: isoDate,
     inLanguage: locale,
-    image: article.coverImage,
+    image: absoluteUrl(image),
     author: {
       '@type': 'Organization',
       name: dict.site.name,
@@ -117,7 +131,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
       name: dict.site.name,
       logo: {
         '@type': 'ImageObject',
-        url: '/khua-logo.png',
+        url: absoluteUrl('/khua-logo.png'),
       },
     },
     articleBody: article.content.join('\n\n'),
@@ -130,19 +144,19 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
         '@type': 'ListItem',
         position: 1,
         name: dict.nav.home,
-        item: `/${locale}`,
+        item: absoluteUrl(`/${locale}`),
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: dict.nav.articles,
-        item: `/${locale}/articles`,
+        item: absoluteUrl(`/${locale}/articles`),
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: article.title,
-        item: canonical,
+        item: absoluteUrl(canonical),
       },
     ],
   }
@@ -151,11 +165,11 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <ArticleDetailContent article={article} dict={dict} lang={locale} />
     </>

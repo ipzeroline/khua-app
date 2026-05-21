@@ -2299,17 +2299,15 @@ function buildFocusedCategoryArticle(date, locale, brief = '', category = '') {
       thExcerpt: `พาไปรู้จัก ${subject} ในฐานะเมนูอาหารเหนือ ทั้งรสหลัก วัตถุดิบที่เกี่ยวข้อง วิธีเสิร์ฟ และการจับคู่กับผักหรือน้ำพริก`,
       thTags: [subjectTag, 'เมนูอาหารเหนือ', 'อาหารเหนือ', 'อาหารล้านนา', 'ของกินภาคเหนือ'],
       thHighlights: [
-        `${subject} ต้องเป็นเมนูหลักของบทความ`,
-        'อธิบายรสชาติ วัตถุดิบ และบริบทของเมนู',
-        'แนะนำการจัดมื้อหรือเครื่องเคียงที่เหมาะ',
-        'ภาพต้องเป็นเมนูนั้นหรือชุดเมนูที่เมนูนั้นเด่นที่สุด',
+        `${subject} เป็นหนึ่งในเมนูอาหารเหนือที่เล่าได้ทั้งรส กลิ่น และบริบทบนโต๊ะอาหาร`,
+        'รสเหนือชัดขึ้นเมื่อเข้าใจเครื่องแกง สมุนไพร และวัตถุดิบหลักของเมนู',
+        'การจัดมื้อให้อร่อยควรดูทั้งข้าว ผัก เครื่องเคียง และรสที่ช่วยตัดกัน',
       ],
       thContent: [
-        `${subject} ควรถูกนำเสนอเป็นเมนูอาหารเหนือโดยตรง บทความไม่ควรเปลี่ยนไปเป็นวิธีทำอาหารเหนือทั่วไป เพราะผู้อ่านที่ค้นหาชื่อเมนูต้องการรู้ว่าเมนูนี้คืออะไร รสชาติเป็นอย่างไร และควรกินคู่กับอะไร`,
-        `หัวใจของบทความคืออธิบายรสหลักของ ${subject} เช่น ความเผ็ด หอมเครื่องเทศ ความมัน ความเค็มนัว หรือกลิ่นสมุนไพร เพื่อให้ผู้อ่านเข้าใจเอกลักษณ์ของเมนู`,
-        `ควรเล่าวัตถุดิบสำคัญของ ${subject} และเหตุผลที่วัตถุดิบเหล่านั้นทำให้เมนูมีรสเหนือชัด ไม่ใช่เพียงใส่รายการวัตถุดิบแบบกว้าง ๆ`,
-        'ถ้าจะโยงสินค้า KHUA ให้ทำเฉพาะกรณีที่น้ำพริกหรือเครื่องแกงช่วยทำเมนูนั้นจริง เช่น ใช้เครื่องแกง น้ำพริก หรือเครื่องเทศที่เกี่ยวข้องกับรสเมนู',
-        `สำหรับ SEO ให้ใช้คำว่า ${subject}, เมนูอาหารเหนือ, อาหารเหนือ และอาหารล้านนา พร้อมตอบคำถามว่าเมนูนี้คืออะไร รสชาติเป็นอย่างไร และเหมาะกับมื้อแบบไหน`,
+        `${subject} เป็นเมนูอาหารเหนือที่ควรเริ่มทำความรู้จักจากรสหลักก่อน ไม่ว่าจะเป็นความเผ็ด หอมเครื่องเทศ ความมัน ความเค็มนัว หรือกลิ่นสมุนไพรที่ทำให้จานนั้นมีเอกลักษณ์แบบล้านนา`,
+        `วัตถุดิบสำคัญของ ${subject} มักไม่ได้ทำหน้าที่แค่เพิ่มปริมาณ แต่เป็นตัวกำหนดกลิ่น รส และสัมผัสของเมนู เครื่องแกง สมุนไพร เนื้อสัตว์ ผัก หรือของดองแต่ละอย่างจึงควรถูกเลือกให้เข้ากับรสเหนือของจานนั้น`,
+        `เวลากิน ${subject} ให้อร่อย ควรคิดถึงเครื่องเคียงและจังหวะบนโต๊ะด้วย ข้าวเหนียว ผักสด ผักลวก หรือเมนูรสอ่อนสามารถช่วยรับรสจัดและทำให้มื้ออาหารสมดุลขึ้น`,
+        'ถ้าเมนูนั้นใช้เครื่องแกงหรือน้ำพริกเป็นฐานรส การเลือกเครื่องปรุงที่มีกลิ่นคั่วและสมุนไพรชัดจะช่วยให้รสเหนือออกมาชัดกว่าเดิม แต่ควรใช้เฉพาะกับเมนูที่เข้ากันจริง',
       ],
     },
     northernCookingMethods: {
@@ -3170,13 +3168,38 @@ function topicForDate(date, brief = '') {
   return scored[0]?.score > 0 ? scored[0].topic : topics[Math.abs(date.split('-').join('')) % topics.length]
 }
 
-function stripEditorialInstructions(article) {
+export function stripEditorialInstructions(article) {
   const instructionStart = [
     'สำหรับ SEO',
     'For SEO',
     'SEO 可',
     'SEO ',
     'ในเชิง SEO',
+  ]
+  const editorialFragments = [
+    'ควรเล่าวัตถุดิบสำคัญ',
+    'ไม่ใช่เพียงใส่รายการวัตถุดิบ',
+    'ถ้าจะโยงสินค้า KHUA',
+    'โยงสินค้า KHUA เฉพาะ',
+    'อธิบายรสชาติ วัตถุดิบ และบริบทของเมนู',
+    'แนะนำการจัดมื้อหรือเครื่องเคียงที่เหมาะ',
+    'ภาพต้องเป็น',
+    'ภาพต้องเห็น',
+    'ควรถูกนำเสนอเป็น',
+    'บทความไม่ควรเปลี่ยน',
+    'หัวใจของบทความคือ',
+    'ต้องเป็นเมนูหลักของบทความ',
+    'ต้องเป็นหัวข้อหลักของบทความ',
+    'ต้องเป็นสูตรหรือวิธีทำหลัก',
+    'ต้องเป็นผักตัวเอก',
+    'ต้องเป็นสมุนไพรตัวเอก',
+    'ต้องเป็นขั้นตอนหรือเทคนิคหลักของบทความ',
+    'must be the main topic',
+    'must answer the selected category intent',
+    'Product mentions should appear only',
+    'image brief must make',
+    'should not be replaced by another',
+    'Only mention KHUA',
   ]
   const cleanVisibleText = (value) =>
     String(value || '')
@@ -3198,7 +3221,13 @@ function stripEditorialInstructions(article) {
       .trim()
   const isEditorialInstruction = (value) => {
     const text = String(value || '').trim()
-    return text.includes('SEO') || instructionStart.some((prefix) => text.startsWith(prefix))
+    if (!text) return true
+    if (text.includes('SEO') || instructionStart.some((prefix) => text.startsWith(prefix))) return true
+    if (editorialFragments.some((fragment) => text.includes(fragment))) return true
+    return (
+      /^(ควร|ไม่ควร|ถ้า|ให้)\S*/u.test(text) &&
+      /(บทความ|หัวข้อ|คำค้น|ผู้อ่าน|สินค้า KHUA|โยงสินค้า|เมนูหลัก|ภาพต้อง|Return fields)/u.test(text)
+    )
   }
 
   return {
@@ -3296,6 +3325,25 @@ function researchedArticlePassesGuardrails(articleSet, brief = '', category = ''
   return mentionsBeef && !wronglyPork && !wronglyDip
 }
 
+function articleHasProfessionalShape(article) {
+  const highlights = Array.isArray(article?.highlights) ? article.highlights : []
+  const content = Array.isArray(article?.content) ? article.content : []
+  const visibleText = [
+    article?.title,
+    article?.excerpt,
+    ...highlights,
+    ...content,
+  ].join(' ')
+  const editorialLeak = /(?:Return fields|source notes|for SEO|SEO-focused|keywords|image brief|ควรเล่าวัตถุดิบสำคัญ|บทความไม่ควรเปลี่ยน|หัวใจของบทความคือ|ภาพต้องเป็น|ภาพต้องเห็น)/i
+
+  return (
+    highlights.length >= 2 &&
+    content.length >= 4 &&
+    content.every((paragraph) => String(paragraph || '').trim().length >= 120) &&
+    !editorialLeak.test(visibleText)
+  )
+}
+
 function normalizeGeneratedArticle(article, date, locale, category, slugBase, researchImageBrief = '') {
   if (!article || typeof article !== 'object') return null
   const title = String(article.title || '').trim()
@@ -3315,7 +3363,7 @@ function normalizeGeneratedArticle(article, date, locale, category, slugBase, re
     ? localizedFocusedCategory(locale, kind, category)
     : String(article.category || category || '').trim()
 
-  return stripEditorialInstructions({
+  const normalized = stripEditorialInstructions({
     slug: `daily-${date}-${slugBase}`,
     title,
     excerpt,
@@ -3327,6 +3375,10 @@ function normalizeGeneratedArticle(article, date, locale, category, slugBase, re
     content: content.slice(0, 8),
     researchImageBrief,
   })
+
+  if (!articleHasProfessionalShape(normalized)) return null
+
+  return normalized
 }
 
 export async function generateResearchedArticleSet(date, brief = '', category = '') {
@@ -3336,16 +3388,20 @@ export async function generateResearchedArticleSet(date, brief = '', category = 
   if (!subject || !categoryKind(category)) return null
 
   const prompt = [
-    'You are a meticulous Northern Thai culinary researcher and multilingual SEO food editor for KHUA.',
+    'You are a meticulous Northern Thai culinary researcher, professional magazine food writer, and multilingual SEO food editor for KHUA.',
     'Before writing, use web search to verify the requested topic. Prefer Thai sources for Thai/Northern Thai food terms, then synthesize carefully. Do not invent facts.',
     `Selected category: ${category}`,
     `User generation detail: ${brief}`,
     researchGuardrails(brief, category),
     'The generated article must be about the exact requested subject, not a nearby dish, generic chili paste, or generic Northern Thai scene.',
+    'Write like a polished published article for real readers: natural opening, useful context, sensory detail, clear transitions, and a confident closing idea. Do not write an outline, checklist, prompt response, or internal editorial brief.',
+    'SEO requirements: title is the page H1 and must include the exact subject naturally; excerpt must work as a meta description around 120-155 characters when possible; tags must be reader-facing search tags; highlights must be H2-style section headings, not instructions; each content paragraph must support the matching heading with useful detail.',
+    'Content depth: each locale should have 4-6 substantial paragraphs, normally 80-150 words each for English and equivalent depth for Thai/Lao/Chinese. Avoid thin generic paragraphs.',
+    'Heading hierarchy: do not include literal HTML tags in JSON. The website renders title as H1, highlights as H2 section headings, and tags/category as supporting labels.',
     'If the subject is a dish, identify the real dish, main ingredient, seasoning, serving context, and visual identity. If it has raw meat or safety-sensitive preparation, describe it neutrally and professionally.',
     'If the subject is an ingredient, herb, vegetable, cooking technique, kitchen knowledge, ingredient quality, or table idea, explain that category intent directly.',
     'Mention KHUA products only when the menu genuinely uses chili paste, larb paste, or curry paste. Do not force product promotion.',
-    'Do not include visible internal writing instructions such as "for SEO", "SEO-focused", "keywords", or source notes in article fields.',
+    'Do not include visible internal writing instructions such as "for SEO", "SEO-focused", "keywords", "H1", "H2", "source notes", "the article should", or similar editorial notes in article fields.',
     'Return JSON only. The slugBase must be lowercase ASCII words separated by hyphens.',
     'Return fields: slugBase, researchImageBrief, articles.th, articles.en, articles.lo, articles.zh. Each article needs title, excerpt, tags array, highlights array, content array.',
     'The researchImageBrief must be in English and must describe exactly what the cover image should show and what to avoid.',
@@ -3394,7 +3450,7 @@ export async function generateResearchedArticleSet(date, brief = '', category = 
         model: process.env.OPENAI_RESEARCH_MODEL || process.env.OPENAI_TEXT_MODEL || 'gpt-4o-mini',
         tools: [{ type: 'web_search' }],
         tool_choice: 'auto',
-        max_output_tokens: 12000,
+        max_output_tokens: 16000,
         input: prompt,
         text: {
           format: {
