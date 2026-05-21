@@ -1053,6 +1053,15 @@ function pickBySeed(items, seed, offset = 0) {
 }
 
 function buildTopicImageBrief(article) {
+  const researchedImageBrief = String(article.researchImageBrief || article.visualBrief || '').trim()
+  if (researchedImageBrief) {
+    return [
+      'Researched title-specific visual brief: use this verified food/topic research as the highest-priority image direction.',
+      researchedImageBrief,
+      'The researched brief overrides generic category styling. Make the named dish, ingredient, herb, technique, or table idea unmistakable.',
+    ].join(' ')
+  }
+
   const category = String(article.category || '').trim().toLowerCase()
   const searchable = [
     article.slug,
@@ -1065,6 +1074,22 @@ function buildTopicImageBrief(article) {
     .toLowerCase()
   const categoryMatches = (...values) =>
     values.some((value) => category === String(value).toLowerCase())
+
+  if (
+    searchable.includes('saa-jin') ||
+    searchable.includes('ส้าจิ้น') ||
+    searchable.includes('ส้าจิ๊น') ||
+    searchable.includes('ส้าเนื้อ') ||
+    searchable.includes('northern raw beef salad')
+  ) {
+    return [
+      'Title-specific visual brief: this article is specifically about Saa Jin or Sa Nuea, a Northern Thai beef salad/raw beef dish seasoned with Northern larb spice paste. It is not nam prik ong, not red chili dip, not a curry paste bowl, and not a generic Northern menu spread.',
+      'The visual hero must be Saa Jin: very thin sliced or finely chopped fresh beef arranged in a refined dark ceramic bowl, mixed with coarse dark red-brown Northern larb spices, sliced shallots, sawtooth coriander, Vietnamese coriander, mint, fried dried chili, and subtle roasted spice texture.',
+      'Show the correct eating context: a small cluster of fresh local vegetables may support the dish, and sticky rice may appear only as a small background cue. The beef salad must dominate the strongest focal point.',
+      'Because raw meat can look unsafe if styled poorly, make it premium, clean, and intentional: jewel-toned fresh beef, dry spice coating, crisp herb edges, chilled serving feel, warm Lanna side light, precise plating, no wet tomato sauce.',
+      'Strictly avoid a mortar crushing red paste, nam prik ong, tomato-like red sauce, pea eggplant-heavy chili paste, grilled skewers as hero, curry, packaged products, hands, people, and a generic bowl of chili paste.',
+    ].join(' ')
+  }
 
   if (
     searchable.includes('phak-khao-tong-local-vegetable') ||
@@ -1948,6 +1973,9 @@ function focusedSubjectSlug(subject = '', fallback = 'custom-topic') {
     ['คั่วเครื่องแกง', 'roasted-curry-paste-technique'],
     ['เครื่องแกง', 'curry-paste'],
     ['แกงฮังเล', 'gaeng-hung-lay'],
+    ['ส้าจิ๊น', 'saa-jin'],
+    ['ส้าจิ้น', 'saa-jin'],
+    ['ส้าเนื้อ', 'saa-jin'],
     ['ข้าวซอย', 'khao-soi'],
     ['ไส้อั่ว', 'sai-ua'],
     ['น้ำพริกหนุ่ม', 'nam-prik-num'],
@@ -2024,6 +2052,12 @@ function localizedSubjectName(slug = '', fallback = '', locale = 'th') {
       en: 'Gaeng Hung Lay',
       lo: 'ແກງຮັງເລ',
       zh: '泰北杭莱咖喱',
+    },
+    'saa-jin': {
+      th: 'ส้าจิ้น',
+      en: 'Saa Jin Northern beef salad',
+      lo: 'ສ້າຊີ້ນ',
+      zh: '泰北生牛肉香料沙拉',
     },
     'khao-soi': {
       th: 'ข้าวซอย',
@@ -2410,6 +2444,110 @@ function buildFocusedCategoryArticle(date, locale, brief = '', category = '') {
     highlights: text.highlights,
     content: text.content,
   }
+}
+
+function isSaaJinMenu(brief = '', category = '') {
+  const searchable = `${brief} ${category}`.toLowerCase()
+  return (
+    categoryKind(category) === 'northernMenu' &&
+    (
+      searchable.includes('ส้าจิ้น') ||
+      searchable.includes('ส้าจิ๊น') ||
+      searchable.includes('ส้าเนื้อ') ||
+      searchable.includes('saa jin') ||
+      searchable.includes('sa jin') ||
+      searchable.includes('sa nuea')
+    )
+  )
+}
+
+function buildSaaJinMenuArticle(date, locale, category = '') {
+  const contentByLocale = {
+    th: {
+      title: 'ส้าจิ้น: เมนูอาหารเหนือจากเนื้อสด พริกลาบ และสมุนไพรล้านนา',
+      excerpt:
+        'รู้จักส้าจิ้นหรือส้าเนื้อ เมนูอาหารเหนือที่ใช้เนื้อวัวหรือเนื้อควายสด คลุกพริกลาบ เครื่องในบางส่วน และสมุนไพร กินกับผักสดเพื่อลดกลิ่นคาวและบาลานซ์รสเผ็ดขม',
+      tags: ['ส้าจิ้น', 'ส้าเนื้อ', 'เมนูอาหารเหนือ', 'พริกลาบเหนือ', 'อาหารล้านนา'],
+      highlights: [
+        'ส้าจิ้นเป็นเมนูส้าเนื้อ ไม่ใช่น้ำพริกอ่องหรือน้ำพริกแดง',
+        'วัตถุดิบหลักคือเนื้อวัวหรือเนื้อควายสด เครื่องในบางส่วนมักต้มก่อนปรุง',
+        'รสหลักคือเผ็ด หอมเครื่องลาบเหนือ และอาจมีรสขมตามสูตรท้องถิ่น',
+        'ควรจัดภาพให้เห็นเนื้อ สมุนไพร พริกลาบ และผักเคียงอย่างชัดเจน',
+      ],
+      content: [
+        'ส้าจิ้นหรือส้าเนื้อเป็นเมนูอาหารเหนือที่อยู่ในกลุ่มอาหารคลุกเครื่องลาบ จุดสำคัญคือใช้เนื้อวัวหรือเนื้อควายสดเป็นวัตถุดิบหลัก แล้วคลุกกับพริกลาบและสมุนไพรเหนือให้มีกลิ่นหอมจัด รสเผ็ด และบางสูตรมีรสขมอ่อนตามแบบพื้นบ้าน',
+        'ถ้าพูดถึงส้าจิ้น เนื้อหาต้องไม่เปลี่ยนไปเป็นน้ำพริกอ่อง น้ำพริกแดง หรือเมนูลาบคั่วทั่วไป เพราะเจตนาของคำค้นคืออยากรู้จักเมนูส้าเนื้อโดยตรง ทั้งหน้าตา รสชาติ วัตถุดิบ และวิธีกิน',
+        'ส่วนผสมที่พบได้บ่อยคือเนื้อสดหั่นบางหรือสับละเอียด พริกลาบเหนือ หอมแดง กระเทียม สมุนไพรอย่างผักแพว ผักชีฝรั่ง สะระแหน่ และเครื่องในบางอย่าง โดยเครื่องในมักนำไปต้มก่อนเพื่อให้กินง่ายและลดกลิ่นคาว',
+        'รสของส้าจิ้นควรเผ็ดหอมจากพริกลาบ มีกลิ่นเครื่องเทศเหนือ เช่น มะแขว่น ดีปลี หรือเครื่องคั่วในพริกลาบ เนื้อควรเป็นตัวเอก ไม่ควรถูกกลบด้วยซอสแดงหรือสีมะเขือเทศ',
+        'การจัดเสิร์ฟนิยมกินกับผักสด เช่น แตงกวา ถั่วฝักยาว ผักกาด กะหล่ำปลี หรือผักพื้นบ้าน เพื่อช่วยลดความคาวและทำให้รสเผ็ดขมสมดุลขึ้น ถ้าต้องการโยงสินค้า KHUA สามารถกล่าวถึง KHUA น้ำพริกลาบเหนือในฐานะเครื่องปรุงที่ช่วยให้กลิ่นลาบเหนือชัดขึ้นเมื่อใช้กับเมนูที่เหมาะสม',
+      ],
+    },
+    en: {
+      title: 'Saa Jin: Northern Thai Beef Salad with Larb Spices and Lanna Herbs',
+      excerpt:
+        'A focused guide to Saa Jin, also known as Sa Nuea, a Northern Thai beef dish seasoned with larb spice paste, fresh herbs, and local vegetables.',
+      tags: ['Saa Jin', 'Sa Nuea', 'Northern Thai beef salad', 'Northern Thai menu', 'Nam Prik Larb'],
+      highlights: [
+        'Saa Jin is a Northern beef salad-style dish, not Nam Prik Ong or a red chili dip.',
+        'The main ingredient is fresh beef or buffalo meat; some offal components may be cooked first.',
+        'The flavor is spicy, aromatic, herb-forward, and sometimes lightly bitter depending on local style.',
+        'The image should show beef, larb spices, herbs, and vegetable accompaniments clearly.',
+      ],
+      content: [
+        'Saa Jin, also called Sa Nuea, is a Northern Thai dish built around fresh beef or buffalo meat seasoned with Northern larb spices and aromatic herbs. It belongs to the family of Lanna meat salads rather than chili dips or tomato-based dishes.',
+        'An article about Saa Jin must keep the dish as the main subject. Readers searching for this name want to understand what the dish is, how it looks, what ingredients define it, and how it is served.',
+        'Typical components include thinly sliced or finely chopped fresh beef, Northern larb spice paste, shallots, garlic, Vietnamese coriander, sawtooth coriander, mint, and sometimes offal that is cooked before mixing.',
+        'The correct flavor direction is spicy, roasted-spice aromatic, herbal, and sometimes lightly bitter. It should not look like Nam Prik Ong, curry paste, or a bowl of red tomato sauce.',
+        'Serve Saa Jin with fresh local vegetables such as cucumber, long beans, cabbage, mustard greens, or other crisp greens. KHUA Nam Prik Larb Nuea can be mentioned only as a relevant seasoning base for a dish that uses Northern larb spices.',
+      ],
+    },
+    lo: {
+      title: 'ສ້າຊີ້ນ: ເມນູອາຫານເໜືອຈາກຊີ້ນສົດ ເຄື່ອງລາບ ແລະສະໝຸນໄພລ້ານນາ',
+      excerpt:
+        'ຮູ້ຈັກສ້າຊີ້ນ ເມນູອາຫານເໜືອທີ່ໃຊ້ຊີ້ນສົດ ເຄື່ອງລາບ ສະໝຸນໄພ ແລະຜັກສົດເປັນຄູ່ກິນ',
+      tags: ['ສ້າຊີ້ນ', 'ເມນູອາຫານເໜືອ', 'ເຄື່ອງລາບເໜືອ', 'ອາຫານລ້ານນາ'],
+      highlights: [
+        'ສ້າຊີ້ນແມ່ນເມນູຊີ້ນເໜືອ ບໍ່ແມ່ນນ້ຳພິກແດງ',
+        'ໃຊ້ຊີ້ນງົວ ຫຼືຊີ້ນຄວາຍ ແລະເຄື່ອງລາບ',
+        'ກິນກັບຜັກສົດເພື່ອປັບສົມດຸນກິ່ນແລະລົດ',
+      ],
+      content: [
+        'ສ້າຊີ້ນເປັນເມນູອາຫານເໜືອທີ່ໃຊ້ຊີ້ນສົດ ຄຸກກັບເຄື່ອງລາບ ແລະສະໝຸນໄພລ້ານນາ.',
+        'ບົດຄວາມຄວນໂຟກັສທີ່ສ້າຊີ້ນໂດຍກົງ ບໍ່ຄວນປ່ຽນໄປເປັນນ້ຳພິກ ຫຼືແກງ.',
+        'ຈຸດເດັ່ນຄືກິ່ນເຄື່ອງລາບ ສະໝຸນໄພສົດ ແລະຜັກຄຽງທີ່ຊ່ວຍໃຫ້ກິນງ່າຍຂຶ້ນ.',
+      ],
+    },
+    zh: {
+      title: '泰北生牛肉香料沙拉：认识 Saa Jin 的牛肉、拉布香料与兰纳香草',
+      excerpt:
+        '认识 Saa Jin 或 Sa Nuea，这是一道以牛肉、泰北拉布香料、香草和本地蔬菜构成的泰北菜。',
+      tags: ['Saa Jin', '泰北生牛肉香料沙拉', '泰北菜单', '拉布香料', '兰纳料理'],
+      highlights: [
+        'Saa Jin 是泰北牛肉香料沙拉，不是番茄辣椒酱或红色蘸酱。',
+        '主体应是牛肉、拉布香料、香草与新鲜蔬菜。',
+        '味道方向是辛香、草本、带烘烤香，部分做法会有微苦。',
+      ],
+      content: [
+        'Saa Jin 又称 Sa Nuea，是泰北以牛肉或水牛肉为主体的香料拌菜，使用泰北拉布香料和新鲜香草调味。',
+        '写这道菜时，内容应集中在 Saa Jin 本身，而不是转成 Nam Prik Ong、咖喱酱或普通红辣椒酱。',
+        '常见元素包括切薄或剁细的牛肉、泰北拉布香料、红葱头、大蒜、越南香菜、刺芫荽、薄荷，以及用于搭配的本地蔬菜。',
+        '图片方向也应清楚表现牛肉、香料与香草，而不是一碗红色辣椒酱。',
+      ],
+    },
+  }
+  const text = contentByLocale[locale] || contentByLocale.en
+
+  return stripEditorialInstructions({
+    slug: `daily-${date}-saa-jin-northern-menu`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedFocusedCategory(locale, 'northernMenu', category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  })
 }
 
 function buildLannaIngredientArticle(date, locale, brief = '', category = '') {
@@ -3105,7 +3243,208 @@ function customizeArticleForBrief(article, brief, locale, category = '') {
   }
 }
 
+function extractResponseText(response) {
+  if (typeof response?.output_text === 'string') return response.output_text
+  return (response?.output || [])
+    .flatMap((item) => item?.content || [])
+    .map((content) => content?.text || '')
+    .filter(Boolean)
+    .join('\n')
+}
+
+function parseJsonResponseText(text) {
+  const raw = String(text || '').trim()
+  if (!raw) throw new Error('Empty JSON response')
+  try {
+    return JSON.parse(raw)
+  } catch {
+    const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1]?.trim()
+    if (fenced) return JSON.parse(fenced)
+    const start = raw.indexOf('{')
+    const end = raw.lastIndexOf('}')
+    if (start >= 0 && end > start) return JSON.parse(raw.slice(start, end + 1))
+    throw new Error('Could not parse JSON response')
+  }
+}
+
+function researchGuardrails(brief = '', category = '') {
+  if (isSaaJinMenu(brief, category)) {
+    return [
+      'Known validation guardrail for this exact term:',
+      'ส้าจิ้น / ส้าจิ๊น / ส้าเนื้อ is a Northern Thai beef or buffalo dish, often described as Sa Nuea or Saa Jin.',
+      'It is not a pork dish and not Nam Prik Ong.',
+      'Main visual and content subjects must be fresh beef or buffalo meat, Northern larb spices/paste, herbs, and local vegetables.',
+      'Some offal may be included, and offal is often cooked before mixing depending on local style.',
+    ].join(' ')
+  }
+
+  return ''
+}
+
+function researchedArticlePassesGuardrails(articleSet, brief = '', category = '') {
+  if (!isSaaJinMenu(brief, category)) return true
+  const thText = [
+    articleSet?.articles?.th?.title,
+    articleSet?.articles?.th?.excerpt,
+    ...(articleSet?.articles?.th?.content || []),
+    articleSet?.researchImageBrief,
+  ].join(' ')
+  const lower = thText.toLowerCase()
+  const mentionsBeef = /เนื้อวัว|เนื้อควาย|ส้าเนื้อ|beef|buffalo/.test(lower)
+  const wronglyPork = /หมูสับดิบ|raw minced pork|เนื้อหมูดิบ/.test(lower)
+  const wronglyDip = /น้ำพริกอ่อง|nam prik ong|tomato sauce/.test(lower)
+  return mentionsBeef && !wronglyPork && !wronglyDip
+}
+
+function normalizeGeneratedArticle(article, date, locale, category, slugBase, researchImageBrief = '') {
+  if (!article || typeof article !== 'object') return null
+  const title = String(article.title || '').trim()
+  const excerpt = String(article.excerpt || '').trim()
+  const tags = Array.isArray(article.tags) ? article.tags.map((item) => String(item).trim()).filter(Boolean) : []
+  const highlights = Array.isArray(article.highlights)
+    ? article.highlights.map((item) => String(item).trim()).filter(Boolean)
+    : []
+  const content = Array.isArray(article.content)
+    ? article.content.map((item) => String(item).trim()).filter(Boolean)
+    : []
+
+  if (!title || !excerpt || tags.length < 3 || highlights.length < 2 || content.length < 3) return null
+
+  const kind = categoryKind(category)
+  const localizedCategory = kind
+    ? localizedFocusedCategory(locale, kind, category)
+    : String(article.category || category || '').trim()
+
+  return stripEditorialInstructions({
+    slug: `daily-${date}-${slugBase}`,
+    title,
+    excerpt,
+    category: localizedCategory,
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: tags.slice(0, 7),
+    highlights: highlights.slice(0, 5),
+    content: content.slice(0, 8),
+    researchImageBrief,
+  })
+}
+
+export async function generateResearchedArticleSet(date, brief = '', category = '') {
+  if (!process.env.OPENAI_API_KEY) return null
+
+  const subject = cleanBriefSubject(brief)
+  if (!subject || !categoryKind(category)) return null
+
+  const prompt = [
+    'You are a meticulous Northern Thai culinary researcher and multilingual SEO food editor for KHUA.',
+    'Before writing, use web search to verify the requested topic. Prefer Thai sources for Thai/Northern Thai food terms, then synthesize carefully. Do not invent facts.',
+    `Selected category: ${category}`,
+    `User generation detail: ${brief}`,
+    researchGuardrails(brief, category),
+    'The generated article must be about the exact requested subject, not a nearby dish, generic chili paste, or generic Northern Thai scene.',
+    'If the subject is a dish, identify the real dish, main ingredient, seasoning, serving context, and visual identity. If it has raw meat or safety-sensitive preparation, describe it neutrally and professionally.',
+    'If the subject is an ingredient, herb, vegetable, cooking technique, kitchen knowledge, ingredient quality, or table idea, explain that category intent directly.',
+    'Mention KHUA products only when the menu genuinely uses chili paste, larb paste, or curry paste. Do not force product promotion.',
+    'Do not include visible internal writing instructions such as "for SEO", "SEO-focused", "keywords", or source notes in article fields.',
+    'Return JSON only. The slugBase must be lowercase ASCII words separated by hyphens.',
+    'Return fields: slugBase, researchImageBrief, articles.th, articles.en, articles.lo, articles.zh. Each article needs title, excerpt, tags array, highlights array, content array.',
+    'The researchImageBrief must be in English and must describe exactly what the cover image should show and what to avoid.',
+  ].join('\n')
+
+  const schema = {
+    type: 'object',
+    additionalProperties: false,
+    required: ['slugBase', 'researchImageBrief', 'articles'],
+    properties: {
+      slugBase: { type: 'string' },
+      researchImageBrief: { type: 'string' },
+      articles: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['th', 'en', 'lo', 'zh'],
+        properties: Object.fromEntries(
+          locales.map((locale) => [
+            locale,
+            {
+              type: 'object',
+              additionalProperties: false,
+              required: ['title', 'excerpt', 'tags', 'highlights', 'content'],
+              properties: {
+                title: { type: 'string' },
+                excerpt: { type: 'string' },
+                tags: { type: 'array', minItems: 3, maxItems: 7, items: { type: 'string' } },
+                highlights: { type: 'array', minItems: 2, maxItems: 5, items: { type: 'string' } },
+                content: { type: 'array', minItems: 3, maxItems: 8, items: { type: 'string' } },
+              },
+            },
+          ]),
+        ),
+      },
+    },
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_RESEARCH_MODEL || process.env.OPENAI_TEXT_MODEL || 'gpt-4o-mini',
+        tools: [{ type: 'web_search' }],
+        tool_choice: 'auto',
+        max_output_tokens: 12000,
+        input: prompt,
+        text: {
+          format: {
+            type: 'json_schema',
+            name: 'khua_researched_article_set',
+            strict: true,
+            schema,
+          },
+        },
+      }),
+    })
+
+    if (!response.ok) {
+      const body = await response.text()
+      throw new Error(`OpenAI research failed: ${response.status} ${body.slice(0, 500)}`)
+    }
+
+    const json = await response.json()
+    const text = extractResponseText(json)
+    const data = parseJsonResponseText(text)
+    if (!researchedArticlePassesGuardrails(data, brief, category)) {
+      console.warn('Article research rejected by local validation guardrails.')
+      return null
+    }
+
+    const slugBase = isSaaJinMenu(brief, category)
+      ? 'saa-jin-northern-menu'
+      : briefSlug(data.slugBase) || focusedSubjectSlug(subject, 'researched-article')
+    const researchImageBrief = String(data.researchImageBrief || '').trim()
+    const articles = Object.fromEntries(
+      locales.map((locale) => [
+        locale,
+        normalizeGeneratedArticle(data.articles?.[locale], date, locale, category, slugBase, researchImageBrief),
+      ]),
+    )
+
+    if (locales.some((locale) => !articles[locale])) return null
+
+    return { articles, researchImageBrief }
+  } catch (error) {
+    console.warn('Article research generation failed:', error)
+    return null
+  }
+}
+
 export function buildArticle(date, locale, brief = '', category = '') {
+  if (isSaaJinMenu(brief, category)) {
+    return buildSaaJinMenuArticle(date, locale, category)
+  }
+
   if (isPhakKhaoTongLocalVegetable(brief, category)) {
     return stripEditorialInstructions(buildPhakKhaoTongLocalVegetableArticle(date, locale, category))
   }

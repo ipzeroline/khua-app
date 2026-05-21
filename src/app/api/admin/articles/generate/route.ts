@@ -14,11 +14,17 @@ type GeneratedArticle = {
   tags: string[]
   highlights: string[]
   content: string[]
+  researchImageBrief?: string
 }
 
 type ArticleGenerator = {
   addDays: (date: string, amount: number) => string
   buildArticle: (date: string, locale: string, brief?: string, category?: string) => GeneratedArticle
+  generateResearchedArticleSet?: (
+    date: string,
+    brief?: string,
+    category?: string,
+  ) => Promise<{ articles: Record<string, GeneratedArticle>; researchImageBrief?: string } | null>
   getGeneratedTopicCount: () => number
   generateCoverImage: (
     slug: string,
@@ -89,7 +95,8 @@ export async function POST(request: NextRequest) {
     const locales = ['th', 'en', 'lo', 'zh']
 
     for (let attempt = 0; attempt < generator.getGeneratedTopicCount(); attempt += 1) {
-      const candidate = Object.fromEntries(
+      const researched = await generator.generateResearchedArticleSet?.(date, brief, category)
+      const candidate = researched?.articles ?? Object.fromEntries(
         locales.map((locale) => [locale, generator.buildArticle(date, locale, brief, category)]),
       ) as Record<string, GeneratedArticle>
       const primaryCandidate = candidate.th ?? Object.values(candidate)[0]
