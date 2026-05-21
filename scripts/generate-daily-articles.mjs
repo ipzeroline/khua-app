@@ -1867,6 +1867,519 @@ function localizedLocalVegetableCategory(locale, category = '') {
   return cleanedCategory
 }
 
+function isLannaIngredientsCategory(category = '') {
+  const cleanedCategory = String(category || '').trim()
+  return [
+    'วัตถุดิบล้านนา',
+    'Lanna Ingredients',
+    'ວັດຖຸດິບລ້ານນາ',
+    '兰纳食材',
+  ].includes(cleanedCategory)
+}
+
+function localizedLannaIngredientCategory(locale, category = '') {
+  const cleanedCategory = String(category || '').trim()
+  if (!cleanedCategory || isLannaIngredientsCategory(cleanedCategory)) {
+    return {
+      th: 'วัตถุดิบล้านนา',
+      en: 'Lanna Ingredients',
+      lo: 'ວັດຖຸດິບລ້ານນາ',
+      zh: '兰纳食材',
+    }[locale] || 'Lanna Ingredients'
+  }
+
+  return cleanedCategory
+}
+
+function cleanBriefSubject(brief = '') {
+  return String(brief || '')
+    .replace(/อยากได้/g, '')
+    .replace(/บทความ/g, '')
+    .replace(/เกี่ยวกับ/g, '')
+    .replace(/ขอ/g, '')
+    .replace(/เน้น\s*seo/gi, '')
+    .replace(/seo/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+}
+
+function lannaIngredientSlug(subject = '') {
+  const value = String(subject || '').toLowerCase()
+  const mappings = [
+    ['มะแขว่น', 'ma-khwaen'],
+    ['มะแข่น', 'ma-khwaen'],
+    ['ถั่วเน่า', 'thua-nao'],
+    ['ดีปลี', 'long-pepper'],
+    ['ข่า', 'galangal'],
+    ['ตะไคร้', 'lemongrass'],
+    ['ขมิ้น', 'turmeric'],
+    ['พริกแห้ง', 'dried-chili'],
+    ['พริกคั่ว', 'roasted-chili'],
+    ['หอมแดง', 'shallot'],
+    ['กระเทียม', 'garlic'],
+    ['ใบมะกรูด', 'kaffir-lime-leaf'],
+    ['ผักชีฝรั่ง', 'sawtooth-coriander'],
+    ['ผักแพว', 'vietnamese-coriander'],
+    ['kaffir', 'kaffir-lime-leaf'],
+    ['galangal', 'galangal'],
+    ['lemongrass', 'lemongrass'],
+    ['turmeric', 'turmeric'],
+    ['garlic', 'garlic'],
+    ['shallot', 'shallot'],
+    ['long pepper', 'long-pepper'],
+    ['ma-khwaen', 'ma-khwaen'],
+    ['makhwaen', 'ma-khwaen'],
+    ['thua nao', 'thua-nao'],
+  ]
+  const found = mappings.find(([keyword]) => value.includes(keyword))
+  return found?.[1] || briefSlug(subject) || 'lanna-ingredient'
+}
+
+function focusedSubjectSlug(subject = '', fallback = 'custom-topic') {
+  const value = String(subject || '').toLowerCase()
+  const mappings = [
+    ['ภูมิปัญญาครัวเหนือ', 'northern-kitchen-wisdom'],
+    ['ครัวเหนือ', 'northern-kitchen'],
+    ['พริกแห้ง', 'dried-chili'],
+    ['พริกคั่ว', 'roasted-chili'],
+    ['เลือกพริก', 'chili-selection'],
+    ['คั่วพริกแกง', 'roasted-curry-paste-technique'],
+    ['คั่วเครื่องแกง', 'roasted-curry-paste-technique'],
+    ['เครื่องแกง', 'curry-paste'],
+    ['แกงฮังเล', 'gaeng-hung-lay'],
+    ['ข้าวซอย', 'khao-soi'],
+    ['ไส้อั่ว', 'sai-ua'],
+    ['น้ำพริกหนุ่ม', 'nam-prik-num'],
+    ['น้ำพริกอ่อง', 'nam-prik-ong'],
+    ['ผักชีฝรั่ง', 'sawtooth-coriander'],
+    ['ผักแพว', 'vietnamese-coriander'],
+    ['มะแขว่น', 'ma-khwaen'],
+    ['ตะไคร้', 'lemongrass'],
+    ['ข่า', 'galangal'],
+    ['ขมิ้น', 'turmeric'],
+    ['ขันโตก', 'khantoke-table'],
+    ['จัดโต๊ะ', 'table-setting'],
+    ['hung lay', 'gaeng-hung-lay'],
+    ['khao soi', 'khao-soi'],
+    ['sai ua', 'sai-ua'],
+    ['khantoke', 'khantoke-table'],
+  ]
+  const found = mappings.find(([keyword]) => value.includes(keyword))
+  return found?.[1] || briefSlug(subject) || fallback
+}
+
+function categoryKind(category = '') {
+  const value = String(category || '').trim().toLowerCase()
+  const groups = {
+    northernKitchen: ['ความรู้ครัวเหนือ', 'northern kitchen', 'ຄວາມຮູ້ຄົວເໜືອ', '泰北厨房知识'],
+    ingredientQuality: ['คุณภาพวัตถุดิบ', 'ingredient quality', 'ຄຸນນະພາບວັດຖຸດິບ', '食材品质'],
+    cookingTechnique: ['เทคนิคทำอาหาร', 'cooking technique', 'ເທັກນິກເຮັດອາຫານ', '料理技巧'],
+    localVegetables: ['ผักพื้นบ้าน', 'local vegetables', 'ຜັກພື້ນບ້ານ', '本地蔬菜'],
+    northernMenu: ['เมนูอาหารเหนือ', 'northern food menu', 'ເມນູອາຫານເໜືອ', '泰北美食菜单'],
+    lannaIngredients: ['วัตถุดิบล้านนา', 'lanna ingredients', 'ວັດຖຸດິບລ້ານນາ', '兰纳食材'],
+    northernCookingMethods: ['วิธีทำอาหารเหนือ', 'northern cooking methods', 'ວິທີເຮັດອາຫານເໜືອ', '泰北菜做法'],
+    northernHerbs: ['สมุนไพรเหนือ', 'northern herbs', 'ສະໝຸນໄພເໜືອ', '泰北香草'],
+    tableIdeas: ['ไอเดียจัดโต๊ะ', 'table ideas', 'ໄອເດຍຈັດໂຕະ', '餐桌灵感'],
+  }
+  return Object.entries(groups).find(([, values]) =>
+    values.some((item) => value === item.toLowerCase())
+  )?.[0] || ''
+}
+
+function localizedFocusedCategory(locale, kind, category = '') {
+  const cleanedCategory = String(category || '').trim()
+  const labels = {
+    northernKitchen: { th: 'ความรู้ครัวเหนือ', en: 'Northern Kitchen', lo: 'ຄວາມຮູ້ຄົວເໜືອ', zh: '泰北厨房知识' },
+    ingredientQuality: { th: 'คุณภาพวัตถุดิบ', en: 'Ingredient Quality', lo: 'ຄຸນນະພາບວັດຖຸດິບ', zh: '食材品质' },
+    cookingTechnique: { th: 'เทคนิคทำอาหาร', en: 'Cooking Technique', lo: 'ເທັກນິກເຮັດອາຫານ', zh: '料理技巧' },
+    localVegetables: { th: 'ผักพื้นบ้าน', en: 'Local Vegetables', lo: 'ຜັກພື້ນບ້ານ', zh: '本地蔬菜' },
+    northernMenu: { th: 'เมนูอาหารเหนือ', en: 'Northern Food Menu', lo: 'ເມນູອາຫານເໜືອ', zh: '泰北美食菜单' },
+    lannaIngredients: { th: 'วัตถุดิบล้านนา', en: 'Lanna Ingredients', lo: 'ວັດຖຸດິບລ້ານນາ', zh: '兰纳食材' },
+    northernCookingMethods: { th: 'วิธีทำอาหารเหนือ', en: 'Northern Cooking Methods', lo: 'ວິທີເຮັດອາຫານເໜືອ', zh: '泰北菜做法' },
+    northernHerbs: { th: 'สมุนไพรเหนือ', en: 'Northern Herbs', lo: 'ສະໝຸນໄພເໜືອ', zh: '泰北香草' },
+    tableIdeas: { th: 'ไอเดียจัดโต๊ะ', en: 'Table Ideas', lo: 'ໄອເດຍຈັດໂຕະ', zh: '餐桌灵感' },
+  }
+  return labels[kind]?.[locale] || cleanedCategory || labels[kind]?.en || 'Northern Thai Food'
+}
+
+function buildFocusedCategoryArticle(date, locale, brief = '', category = '') {
+  const subject = cleanBriefSubject(brief)
+  const kind = categoryKind(category)
+  if (!subject || !kind || kind === 'lannaIngredients') return null
+
+  const slug = focusedSubjectSlug(subject, kind.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`))
+  const categoryLabel = localizedFocusedCategory(locale, kind, category)
+  const subjectTag = subject.length > 32 ? subject.slice(0, 32).trim() : subject
+  const configs = {
+    northernKitchen: {
+      slugSuffix: 'northern-kitchen-knowledge',
+      thTitle: `${subject}: ความรู้ครัวเหนือที่ควรเล่าให้ตรงประเด็น`,
+      thExcerpt: `อธิบาย ${subject} ในมุมความรู้ครัวเหนือ ทั้งบริบทล้านนา เหตุผลการใช้จริง และคำตอบที่คนค้นหาต้องการ`,
+      thTags: [subjectTag, 'ความรู้ครัวเหนือ', 'ครัวล้านนา', 'อาหารเหนือ', 'ภูมิปัญญาอาหารเหนือ'],
+      thHighlights: [
+        `${subject} ต้องเป็นแกนหลักของบทความ ไม่เปลี่ยนไปเป็นสูตรหรือเมนูอื่น`,
+        'อธิบายบริบทครัวเหนือ เหตุผล และการใช้งานจริงให้ชัด',
+        'โยงสินค้า KHUA เฉพาะเมื่อสัมพันธ์กับหัวข้อจริง',
+        'วางคำค้น SEO แบบธรรมชาติ ไม่ยัดคำซ้ำ',
+      ],
+      thContent: [
+        `${subject} ควรถูกอธิบายในฐานะความรู้ครัวเหนือโดยตรง เพราะผู้อ่านที่ค้นหาหัวข้อนี้ต้องการเข้าใจบริบท วิธีคิด และเหตุผลของครัวล้านนา ไม่ใช่ถูกพาไปอ่านเมนูที่ไม่เกี่ยวข้อง`,
+        `บทความควรเริ่มจากการตอบว่า ${subject} คืออะไร เกี่ยวข้องกับอาหารเหนืออย่างไร และทำไมจึงสำคัญกับรส กลิ่น หรือวิธีจัดมื้อแบบเหนือ`,
+        'เนื้อหาที่ดีควรมีตัวอย่างใช้งานจริง เช่น จับคู่กับน้ำพริก เครื่องแกง ผักพื้นบ้าน หรือวิธีเตรียมวัตถุดิบ โดยให้ตัวอย่างเป็นส่วนสนับสนุน ไม่ใช่เปลี่ยนหัวข้อหลัก',
+        'ถ้าหัวข้อเกี่ยวข้องกับสินค้า KHUA ให้กล่าวถึงอย่างพอดี เช่น น้ำพริกหรือเครื่องแกงที่ช่วยให้เข้าใจรสเหนือชัดขึ้น แต่ไม่ควรเขียนเหมือนโฆษณาทั้งบทความ',
+        `สำหรับ SEO ให้ใช้คำว่า ${subject}, ความรู้ครัวเหนือ, ครัวล้านนา, อาหารเหนือ และภูมิปัญญาอาหารเหนืออย่างเป็นธรรมชาติ พร้อมตอบคำถามที่ผู้อ่านน่าจะค้นจริง`,
+      ],
+    },
+    ingredientQuality: {
+      slugSuffix: 'ingredient-quality',
+      thTitle: `${subject}: วิธีดูคุณภาพวัตถุดิบให้เหมาะกับอาหารเหนือ`,
+      thExcerpt: `คู่มือดูคุณภาพ ${subject} สำหรับอาหารเหนือ ทั้งสี กลิ่น ผิวสัมผัส ความสด และข้อควรระวังก่อนนำไปปรุง`,
+      thTags: [subjectTag, 'คุณภาพวัตถุดิบ', 'วัตถุดิบอาหารเหนือ', 'วิธีเลือกวัตถุดิบ', 'ครัวล้านนา'],
+      thHighlights: [
+        `โฟกัสคุณภาพของ ${subject} เป็นหลัก`,
+        'บอกสัญญาณของวัตถุดิบที่ดีและวัตถุดิบที่ควรเลี่ยง',
+        'เชื่อมผลของคุณภาพกับรส กลิ่น และเนื้อสัมผัสของอาหารเหนือ',
+        'ภาพต้องเป็นวัตถุดิบคุณภาพ ไม่ใช่จานอาหารทั่วไป',
+      ],
+      thContent: [
+        `การเลือก ${subject} ให้ดีเป็นจุดเริ่มต้นของอาหารเหนือที่มีรสชัดและกลิ่นสะอาด บทความหมวดคุณภาพวัตถุดิบจึงต้องพูดถึงตัววัตถุดิบโดยตรง ไม่ควรเปลี่ยนไปเป็นบทความเมนูอื่น`,
+        `ให้ดูสี กลิ่น ผิวสัมผัส และความสะอาดของ ${subject} เป็นหลัก วัตถุดิบที่ดีควรมีลักษณะตรงตามธรรมชาติ ไม่ชื้น ไม่ช้ำ ไม่มีกลิ่นอับ และไม่ถูกเก็บจนเสียกลิ่น`,
+        `ถ้า ${subject} เป็นของแห้ง ควรดูความแห้งสนิทและกลิ่นที่ยังชัด ถ้าเป็นของสดควรดูความกรอบ สด และสีที่ไม่หม่น เพราะคุณภาพเหล่านี้ส่งผลต่อกลิ่นและรสของอาหารเหนือทันที`,
+        'การใช้สินค้า KHUA ในบทความควรโยงเฉพาะเมื่อช่วยอธิบายคุณภาพ เช่น เครื่องแกงหรือน้ำพริกที่ต้องพึ่งวัตถุดิบคั่ว หอมแดง กระเทียม หรือพริกแห้งคุณภาพดี',
+        `สำหรับ SEO ให้ตอบคำถามว่า ${subject} ที่ดีดูอย่างไร เก็บอย่างไร และมีผลต่อรสอาหารเหนืออย่างไร พร้อมใช้คำว่า คุณภาพวัตถุดิบ และวัตถุดิบอาหารเหนืออย่างเป็นธรรมชาติ`,
+      ],
+    },
+    cookingTechnique: {
+      slugSuffix: 'cooking-technique',
+      thTitle: `${subject}: เทคนิคทำอาหารเหนือให้กลิ่นหอมและรสชัดขึ้น`,
+      thExcerpt: `อธิบายเทคนิค ${subject} แบบใช้งานจริง ตั้งแต่จังหวะไฟ กลิ่นคั่ว การเตรียมวัตถุดิบ และข้อผิดพลาดที่ควรเลี่ยง`,
+      thTags: [subjectTag, 'เทคนิคทำอาหาร', 'เทคนิคอาหารเหนือ', 'ครัวล้านนา', 'เครื่องแกงเหนือ'],
+      thHighlights: [
+        `${subject} ต้องเป็นขั้นตอนหรือเทคนิคหลักของบทความ`,
+        'อธิบายก่อนทำ ระหว่างทำ และสัญญาณว่าสำเร็จ',
+        'บอกข้อผิดพลาดที่ทำให้กลิ่นหรือรสเพี้ยน',
+        'ภาพต้องเห็น action หรือ process ของเทคนิค',
+      ],
+      thContent: [
+        `${subject} เป็นหัวข้อที่ควรเขียนแบบลงมือทำได้จริง บทความหมวดเทคนิคทำอาหารต้องเห็นขั้นตอน จังหวะ และสัญญาณสำเร็จ ไม่ใช่เล่าเป็นบทความอาหารเหนือทั่วไป`,
+        `ก่อนเริ่ม ${subject} ควรเตรียมวัตถุดิบให้พร้อมและควบคุมไฟให้เหมาะ เพราะอาหารเหนือหลายเมนูพึ่งกลิ่นคั่ว กลิ่นสมุนไพร และความพอดีของน้ำมันหรือความร้อน`,
+        `ระหว่างทำให้สังเกตกลิ่น สี และผิวสัมผัส ถ้ากลิ่นเริ่มหอมลึกแต่ยังไม่ไหม้ แปลว่าเทคนิคกำลังไปถูกทาง ถ้ากลิ่นฉุนไหม้หรือสีดำเกินไปควรลดไฟทันที`,
+        'สินค้า KHUA สามารถถูกกล่าวถึงเมื่อเกี่ยวข้องกับเทคนิค เช่น การผัดน้ำพริกหรือเครื่องแกงให้หอมก่อนนำไปต่อยอดเป็นเมนู ไม่ควรแทรกถ้าไม่เกี่ยวกับขั้นตอน',
+        `สำหรับ SEO ให้ใช้คำว่า ${subject}, เทคนิคทำอาหาร, เทคนิคอาหารเหนือ และครัวล้านนา พร้อมเขียนเป็นขั้นตอนที่ผู้อ่านทำตามได้จริง`,
+      ],
+    },
+    localVegetables: {
+      slugSuffix: 'local-vegetable',
+      thTitle: `${subject}: ผักพื้นบ้านที่ควรรู้จัก วิธีเลือก ล้าง และกินกับอาหารเหนือ`,
+      thExcerpt: `รู้จัก ${subject} ในฐานะผักพื้นบ้าน ทั้งรสชาติ วิธีเลือก วิธีล้าง และการจับคู่กับน้ำพริกหรือเมนูอาหารเหนือ`,
+      thTags: [subjectTag, 'ผักพื้นบ้าน', 'ผักกินกับน้ำพริก', 'อาหารเหนือเพื่อสุขภาพ', 'น้ำพริกเหนือ'],
+      thHighlights: [
+        `${subject} ต้องเป็นผักตัวเอก ไม่ใช่น้ำพริกหรือเมนูอื่น`,
+        'บอกลักษณะ รสชาติ และวิธีเลือกให้ชัด',
+        'แนะนำวิธีล้างและจัดเสิร์ฟอย่างปลอดภัย',
+        'ภาพต้องเห็นผักชนิดนั้นเป็น focal point',
+      ],
+      thContent: [
+        `${subject} ควรถูกเขียนเป็นผักพื้นบ้านตัวเอกของบทความ เพราะคนที่พิมพ์ชื่อนี้ต้องการรู้จักผัก วิธีเลือก วิธีล้าง รสชาติ และกินกับอะไร ไม่ใช่ต้องการสูตรน้ำพริกที่ไม่เกี่ยวข้อง`,
+        `ให้เริ่มจากอธิบายลักษณะของ ${subject} เช่น ใบ ก้าน สี กลิ่น รส และสัมผัสเวลากิน เพื่อให้ผู้อ่านแยกออกจากผักพื้นบ้านชนิดอื่นได้`,
+        `วิธีเลือก ${subject} ควรดูความสด ไม่เหี่ยว ไม่ช้ำ ไม่มีกลิ่นเสีย และเลือกส่วนที่เหมาะกับการกินสดหรือลวกตามลักษณะของผัก`,
+        'ก่อนเสิร์ฟควรล้างหลายครั้ง แช่น้ำเย็นสั้น ๆ แล้วสะเด็ดน้ำให้แห้ง ถ้าเป็นผักที่มีก้านแข็งควรตัดส่วนแข็งออกเพื่อให้กินง่าย',
+        `ถ้าเกี่ยวกับสินค้า KHUA ให้จับคู่ ${subject} กับน้ำพริกเหนือที่เหมาะ เช่น น้ำพริกตาแดงหรือน้ำพริกลาบ เมื่อรสของผักช่วยตัดเผ็ด เค็ม หรือกลิ่นคั่วได้จริง`,
+      ],
+    },
+    northernMenu: {
+      slugSuffix: 'northern-menu',
+      thTitle: `${subject}: เมนูอาหารเหนือที่ควรรู้จัก พร้อมรสชาติและวิธีจัดมื้อให้น่ากิน`,
+      thExcerpt: `พาไปรู้จัก ${subject} ในฐานะเมนูอาหารเหนือ ทั้งรสหลัก วัตถุดิบที่เกี่ยวข้อง วิธีเสิร์ฟ และการจับคู่กับผักหรือน้ำพริก`,
+      thTags: [subjectTag, 'เมนูอาหารเหนือ', 'อาหารเหนือ', 'อาหารล้านนา', 'ของกินภาคเหนือ'],
+      thHighlights: [
+        `${subject} ต้องเป็นเมนูหลักของบทความ`,
+        'อธิบายรสชาติ วัตถุดิบ และบริบทของเมนู',
+        'แนะนำการจัดมื้อหรือเครื่องเคียงที่เหมาะ',
+        'ภาพต้องเป็นเมนูนั้นหรือชุดเมนูที่เมนูนั้นเด่นที่สุด',
+      ],
+      thContent: [
+        `${subject} ควรถูกนำเสนอเป็นเมนูอาหารเหนือโดยตรง บทความไม่ควรเปลี่ยนไปเป็นวิธีทำอาหารเหนือทั่วไป เพราะผู้อ่านที่ค้นหาชื่อเมนูต้องการรู้ว่าเมนูนี้คืออะไร รสชาติเป็นอย่างไร และควรกินคู่กับอะไร`,
+        `หัวใจของบทความคืออธิบายรสหลักของ ${subject} เช่น ความเผ็ด หอมเครื่องเทศ ความมัน ความเค็มนัว หรือกลิ่นสมุนไพร เพื่อให้ผู้อ่านเข้าใจเอกลักษณ์ของเมนู`,
+        `ควรเล่าวัตถุดิบสำคัญของ ${subject} และเหตุผลที่วัตถุดิบเหล่านั้นทำให้เมนูมีรสเหนือชัด ไม่ใช่เพียงใส่รายการวัตถุดิบแบบกว้าง ๆ`,
+        'ถ้าจะโยงสินค้า KHUA ให้ทำเฉพาะกรณีที่น้ำพริกหรือเครื่องแกงช่วยทำเมนูนั้นจริง เช่น ใช้เครื่องแกง น้ำพริก หรือเครื่องเทศที่เกี่ยวข้องกับรสเมนู',
+        `สำหรับ SEO ให้ใช้คำว่า ${subject}, เมนูอาหารเหนือ, อาหารเหนือ และอาหารล้านนา พร้อมตอบคำถามว่าเมนูนี้คืออะไร รสชาติเป็นอย่างไร และเหมาะกับมื้อแบบไหน`,
+      ],
+    },
+    northernCookingMethods: {
+      slugSuffix: 'northern-recipe',
+      thTitle: `${subject}: วิธีทำอาหารเหนือแบบเป็นขั้นตอนให้รสตรงและหอมเครื่อง`,
+      thExcerpt: `คู่มือทำ ${subject} แบบจับต้องได้ ตั้งแต่เตรียมวัตถุดิบ จังหวะปรุง เทคนิคกลิ่นหอม และการชิมรสให้สมดุล`,
+      thTags: [subjectTag, 'วิธีทำอาหารเหนือ', 'สูตรอาหารเหนือ', 'เทคนิคอาหารเหนือ', 'ครัวล้านนา'],
+      thHighlights: [
+        `${subject} ต้องเป็นสูตรหรือวิธีทำหลัก`,
+        'มีวัตถุดิบ ขั้นตอน และจังหวะชิมรสครบ',
+        'บอกเทคนิคกลิ่นคั่วหรือสมุนไพรที่เกี่ยวข้อง',
+        'โยงสินค้า KHUA เฉพาะเมื่อใช้จริงในเมนู',
+      ],
+      thContent: [
+        `${subject} ควรถูกเขียนเป็นวิธีทำที่ทำตามได้จริง โดยเริ่มจากวัตถุดิบหลัก เครื่องปรุง เครื่องสมุนไพร และจังหวะการปรุง ไม่ควรออกนอกเรื่องไปเป็นบทความความรู้ทั่วไป`,
+        `เตรียมวัตถุดิบของ ${subject} ให้ครบก่อนเริ่ม โดยแยกของที่ต้องคั่ว ตำ ผัด ลวก หรือคลุก เพื่อให้ขั้นตอนอ่านง่ายและทำตามได้จริง`,
+        'เริ่มทำจากขั้นตอนที่สร้างกลิ่น เช่น คั่วพริก ผัดเครื่องแกง หรือตำสมุนไพร จากนั้นค่อยใส่วัตถุดิบหลักและปรับรสตามลำดับ',
+        'ระหว่างปรุงควรชิมรสให้สมดุลระหว่างเผ็ด เค็ม หอม และมันเล็กน้อย ถ้าใช้ผลิตภัณฑ์ KHUA ที่ตรงกับเมนู ให้ระบุว่าช่วยลดขั้นตอนใดและใช้ในจังหวะไหน',
+        `สำหรับ SEO ให้มีคำว่า ${subject}, วิธีทำอาหารเหนือ, สูตรอาหารเหนือ และเครื่องแกงเหนือ พร้อมแบ่งหัวข้อวัตถุดิบ วิธีทำ เคล็ดลับ และการเสิร์ฟให้ชัดเจน`,
+      ],
+    },
+    northernHerbs: {
+      slugSuffix: 'northern-herb',
+      thTitle: `${subject}: สมุนไพรเหนือที่ให้กลิ่นรสเฉพาะตัวและใช้กับอาหารล้านนา`,
+      thExcerpt: `รู้จัก ${subject} ในฐานะสมุนไพรเหนือ ทั้งกลิ่น รส วิธีเลือก วิธีเตรียม และการใช้กับน้ำพริก ลาบ หรือเมนูอาหารเหนือ`,
+      thTags: [subjectTag, 'สมุนไพรเหนือ', 'สมุนไพรอาหารเหนือ', 'ครัวล้านนา', 'วัตถุดิบล้านนา'],
+      thHighlights: [
+        `${subject} ต้องเป็นสมุนไพรตัวเอก`,
+        'อธิบายกลิ่น รส รูปทรง และวิธีเลือก',
+        'บอกวิธีใช้กับอาหารเหนือแบบไม่กลบรส',
+        'ภาพต้องเป็น herb portrait ที่ระบุชนิดได้',
+      ],
+      thContent: [
+        `${subject} ควรถูกอธิบายในฐานะสมุนไพรเหนือโดยตรง เพราะผู้อ่านต้องการรู้ว่ามีกลิ่นอย่างไร ใช้กับเมนูไหน และต่างจากสมุนไพรทั่วไปอย่างไร`,
+        `ให้เริ่มจากลักษณะของ ${subject} ทั้งรูปทรง สี กลิ่น และรสสัมผัส เพื่อให้ผู้อ่านจำแนกได้ชัดและไม่สับสนกับผักหรือสมุนไพรชนิดอื่น`,
+        `วิธีเลือก ${subject} ให้ดูความสด สีธรรมชาติ ไม่มีรอยช้ำหรือกลิ่นเสีย ถ้าเป็นสมุนไพรแห้งต้องแห้งสนิทและยังมีกลิ่นหอมชัด`,
+        `การใช้ ${subject} ในอาหารเหนือควรใส่ในปริมาณพอดีและเลือกจังหวะที่รักษากลิ่น เช่น ใส่ตอนท้าย ตำกับเครื่องแกง หรือโรยก่อนเสิร์ฟตามลักษณะของสมุนไพร`,
+        'ถ้าโยงสินค้า KHUA ให้เชื่อมเฉพาะเมนูที่สมุนไพรนั้นช่วยจริง เช่น น้ำพริกลาบ ลาบเหนือ หรือเครื่องแกงที่ใช้สมุนไพรกลิ่นชัด',
+      ],
+    },
+    tableIdeas: {
+      slugSuffix: 'table-idea',
+      thTitle: `${subject}: ไอเดียจัดโต๊ะอาหารเหนือให้ดูพรีเมียมและกินง่าย`,
+      thExcerpt: `แนวทางจัดโต๊ะตามหัวข้อ ${subject} ให้สวย มีลำดับสายตา ใช้งานจริง และเข้ากับอาหารเหนือ น้ำพริก ผัก และภาชนะล้านนา`,
+      thTags: [subjectTag, 'ไอเดียจัดโต๊ะ', 'จัดโต๊ะอาหารเหนือ', 'ขันโตก', 'โต๊ะอาหารล้านนา'],
+      thHighlights: [
+        `${subject} ต้องเป็นแนวคิดการจัดโต๊ะหลัก`,
+        'อธิบาย layout ภาชนะ สี วัสดุ และลำดับสายตา',
+        'เน้นใช้งานจริง ไม่ใช่แค่ภาพสวย',
+        'ภาพต้องเห็นการจัดโต๊ะ ไม่ใช่ close-up อาหารอย่างเดียว',
+      ],
+      thContent: [
+        `${subject} ควรถูกเขียนเป็นไอเดียจัดโต๊ะโดยตรง โดยโฟกัสการวางจาน ชาม ผัก น้ำพริก เครื่องเคียง และพื้นที่ว่างบนโต๊ะ ไม่ควรเปลี่ยนไปเป็นบทความสูตรอาหาร`,
+        'เริ่มจากเลือกจุดเด่นหนึ่งจุด เช่น ถาดขันโตก ชามน้ำพริก หรือเมนูหลัก จากนั้นจัดของรองให้เล็กลงเพื่อให้สายตาอ่านโต๊ะได้ง่าย',
+        'ใช้ภาชนะที่เข้ากับอาหารเหนือ เช่น เซรามิกสีเข้ม ไม้ ผ้าทอ หรือถาดสาน แต่ควรใช้เท่าที่จำเป็นเพื่อไม่ให้โต๊ะรก',
+        'การจัดผักพื้นบ้าน น้ำพริก และข้าวเหนียวควรมีระยะห่างพอดี หยิบง่าย และเห็นความสดของวัตถุดิบ ไม่ควรซ้อนของจนภาพอ่านยาก',
+        `สำหรับ SEO ให้ใช้คำว่า ${subject}, ไอเดียจัดโต๊ะ, จัดโต๊ะอาหารเหนือ, ขันโตก และโต๊ะอาหารล้านนา พร้อมให้คำแนะนำที่ทำตามได้จริง`,
+      ],
+    },
+  }
+  const config = configs[kind]
+  if (!config) return null
+
+  const genericByLocale = {
+    en: {
+      title: `${subject}: A Focused ${categoryLabel} Guide for Northern Thai Food`,
+      excerpt: `A focused guide to ${subject} in the ${categoryLabel} category, keeping the article, SEO angle, and image direction aligned with the requested topic.`,
+      tags: [subjectTag, categoryLabel, 'Northern Thai food', 'Lanna cooking', 'KHUA'],
+      highlights: [
+        `${subject} is the main topic and should not be replaced by another dish or generic article.`,
+        'The article must answer the selected category intent directly.',
+        'Product mentions should appear only when they genuinely support the topic.',
+        'The image brief must make the exact topic visually obvious.',
+      ],
+      content: [
+        `${subject} should remain the main subject of this ${categoryLabel} article. The content should answer the reader's exact intent instead of drifting into a generic Northern Thai food article.`,
+        `A useful structure explains what ${subject} is, why it matters in Northern Thai cooking, how to select or use it, and what practical detail the reader can apply.`,
+        'Mention KHUA products only when the topic naturally connects to chili paste, curry paste, herbs, vegetables, or a real cooking use case.',
+        `For SEO, use ${subject}, ${categoryLabel}, Northern Thai food, and Lanna cooking naturally while keeping the title, content, and image direction aligned.`,
+      ],
+    },
+    lo: {
+      title: `${subject}: ບົດຄວາມ${categoryLabel}ທີ່ໂຟກັສຫົວຂໍ້ໂດຍກົງ`,
+      excerpt: `ບົດຄວາມກ່ຽວກັບ ${subject} ໃນໝວດ ${categoryLabel} ໃຫ້ຫົວຂໍ້ ເນື້ອຫາ ແລະຮູບພາບໄປທາງດຽວກັນ`,
+      tags: [subjectTag, categoryLabel, 'ອາຫານເໜືອ', 'ຄົວລ້ານນາ'],
+      highlights: [
+        `${subject} ຕ້ອງເປັນຫົວຂໍ້ຫຼັກ`,
+        'ເນື້ອຫາຕ້ອງຕອບເຈດຕະນາຂອງໝວດໝູ່',
+        'ກ່າວເຖິງສິນຄ້າເມື່ອກ່ຽວຂ້ອງແທ້',
+      ],
+      content: [
+        `${subject} ຄວນເປັນແກນຫຼັກຂອງບົດຄວາມໝວດ ${categoryLabel} ໂດຍບໍ່ປ່ຽນໄປເປັນຫົວຂໍ້ອື່ນ.`,
+        `ເນື້ອຫາຄວນອະທິບາຍວ່າ ${subject} ແມ່ນຫຍັງ ໃຊ້ຢ່າງໃດ ແລະກ່ຽວກັບອາຫານເໜືອແນວໃດ.`,
+        'ຖ້າກ່າວເຖິງ KHUA ຄວນເຊື່ອມກັບການໃຊ້ງານຈິງເທົ່ານັ້ນ.',
+      ],
+    },
+    zh: {
+      title: `${subject}：聚焦${categoryLabel}的泰北料理文章`,
+      excerpt: `围绕 ${subject} 撰写 ${categoryLabel} 内容，让标题、正文、SEO 与图片方向保持一致。`,
+      tags: [subjectTag, categoryLabel, '泰北料理', '兰纳料理'],
+      highlights: [
+        `${subject} 必须是文章主角。`,
+        '内容必须回应所选分类的搜索意图。',
+        '只有在真正相关时才提到 KHUA 产品。',
+      ],
+      content: [
+        `${subject} 应是这篇 ${categoryLabel} 文章的核心，不应转成无关菜色或泛泛的泰北料理介绍。`,
+        `内容应说明 ${subject} 是什么、为什么重要、如何挑选或使用，以及它与泰北料理的关系。`,
+        '如提到 KHUA 产品，应只在与辣椒酱、咖喱酱、香草、蔬菜或实际烹饪场景相关时出现。',
+      ],
+    },
+  }
+
+  const text = locale === 'th'
+    ? {
+        title: config.thTitle,
+        excerpt: config.thExcerpt,
+        tags: config.thTags,
+        highlights: config.thHighlights,
+        content: config.thContent,
+      }
+    : genericByLocale[locale] || genericByLocale.en
+
+  return {
+    slug: `daily-${date}-${slug}-${config.slugSuffix}`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: categoryLabel,
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  }
+}
+
+function buildLannaIngredientArticle(date, locale, brief = '', category = '') {
+  const subject = cleanBriefSubject(brief) || {
+    th: 'วัตถุดิบล้านนา',
+    en: 'Lanna ingredient',
+    lo: 'ວັດຖຸດິບລ້ານນາ',
+    zh: '兰纳食材',
+  }[locale] || 'Lanna ingredient'
+  const slug = lannaIngredientSlug(subject)
+  const profiles = {
+    'ma-khwaen': {
+      flavor: 'กลิ่นหอมซ่าแบบเปลือกส้มปนพริกไทย มีความเผ็ดชาเบา ๆ และเป็นกลิ่นจำของลาบเหนือกับน้ำพริกลาบ',
+      selection: 'เลือกเม็ดแห้งที่สีเข้มสม่ำเสมอ เปลือกไม่ชื้น ไม่มีกลิ่นอับ และเมื่อบี้เบา ๆ ต้องมีกลิ่นหอมซ่าชัด',
+      usage: 'เหมาะกับลาบเหนือ น้ำพริกลาบ เครื่องเทศคั่ว และเมนูที่ต้องการกลิ่นเหนือชัด ควรคั่วหรือบดก่อนใช้เพื่อเปิดกลิ่น',
+    },
+    'thua-nao': {
+      flavor: 'กลิ่นหมักถั่วเหลืองเข้ม เค็มนัว และให้รสอูมามิแบบพื้นบ้านล้านนา',
+      selection: 'เลือกแผ่นที่แห้งสนิท สีสม่ำเสมอ ไม่ชื้น ไม่ขึ้นรา และมีกลิ่นหมักสะอาดไม่ฉุนเสีย',
+      usage: 'ใช้เพิ่มความนัวในน้ำพริก แกง หรือเมนูผัดแบบเหนือ ควรย่างหรือคั่วให้หอมก่อนตำหรือบด',
+    },
+    turmeric: {
+      flavor: 'กลิ่นดินอุ่น ๆ สีเหลืองทอง และรสขมนวลที่ช่วยให้เครื่องแกงเหนือมีสีและมิติ',
+      selection: 'เลือกเหง้าสดเนื้อแน่น ผิวไม่เหี่ยว ไม่ช้ำ และสีเหลืองเข้มตามธรรมชาติ',
+      usage: 'เหมาะกับเครื่องแกงเหนือ แกงปลา แกงไก่ และเมนูที่ต้องการสีเหลืองธรรมชาติ ใช้พอดีเพื่อไม่ให้ขมนำ',
+    },
+    galangal: {
+      flavor: 'กลิ่นหอมคม สด และเผ็ดอ่อน ช่วยยกฐานเครื่องแกงให้ชัด',
+      selection: 'เลือกแง่งสด เนื้อแน่น ผิวไม่แห้งเกินไป และมีกลิ่นหอมเมื่อหั่น',
+      usage: 'เหมาะกับเครื่องแกงเหนือ แกงสมุนไพร และเมนูต้ม ใช้หั่นบางหรือโขลกกับเครื่องแกง',
+    },
+    lemongrass: {
+      flavor: 'กลิ่นหอมสดแบบตะไคร้ ช่วยลดกลิ่นคาวและทำให้เครื่องแกงมีความโปร่ง',
+      selection: 'เลือกต้นอวบ โคนแน่น ไม่แห้ง ใบไม่เหลือง และมีกลิ่นหอมเมื่อทุบ',
+      usage: 'ใช้ในเครื่องแกง แกงเหนือ และเมนูต้ม ควรซอยบางก่อนโขลกเพื่อให้ละเอียดง่าย',
+    },
+    'dried-chili': {
+      flavor: 'กลิ่นพริกแห้งคั่วให้ความเผ็ดลึก สีแดงเข้ม และกลิ่นควันอ่อนของครัวเหนือ',
+      selection: 'เลือกพริกแห้งสีแดงเข้ม ผิวไม่ดำไหม้ ไม่ชื้น และไม่มีกลิ่นรา',
+      usage: 'เหมาะกับน้ำพริกตาแดง น้ำพริกลาบ และเครื่องแกงเหนือ คั่วไฟอ่อนก่อนใช้เพื่อเปิดกลิ่น',
+    },
+  }
+  const profile = profiles[slug] || {
+    flavor: `กลิ่นและรสของ ${subject} คือจุดที่ทำให้บทความต้องโฟกัสตัววัตถุดิบ ไม่ใช่พาไปเป็นเมนูอื่น`,
+    selection: `เลือก ${subject} ที่สะอาด สีเป็นธรรมชาติ ไม่ชื้น ไม่ช้ำ และมีกลิ่นตรงตามชนิดของวัตถุดิบ`,
+    usage: `${subject} ควรถูกอธิบายว่าช่วยอาหารเหนือในด้านใด เช่น เพิ่มกลิ่น เพิ่มรส หรือช่วยให้เครื่องแกงและน้ำพริกมีมิติขึ้น`,
+  }
+
+  const contentByLocale = {
+    th: {
+      title: `${subject}: วัตถุดิบล้านนาที่ช่วยสร้างกลิ่นและรสอาหารเหนือให้ชัดขึ้น`,
+      excerpt:
+        `รู้จัก ${subject} ในฐานะวัตถุดิบล้านนา ทั้งเอกลักษณ์กลิ่นรส วิธีเลือก คุณภาพที่ควรมองหา และการนำไปใช้กับน้ำพริก เครื่องแกง หรือเมนูอาหารเหนือให้เหมาะสม`,
+      tags: [subject, 'วัตถุดิบล้านนา', 'วัตถุดิบอาหารเหนือ', 'เครื่องเทศเหนือ', 'อาหารเหนือ', 'ครัวล้านนา'],
+      highlights: [
+        `${subject} ควรถูกอธิบายเป็นวัตถุดิบหลัก ไม่ใช่เปลี่ยนไปเป็นเมนูอื่น`,
+        'ภาพและเนื้อหาต้องทำให้เห็นเอกลักษณ์ กลิ่น สี ผิวสัมผัส หรือรูปทรงของวัตถุดิบชัดเจน',
+        'ควรบอกวิธีเลือกวัตถุดิบที่ดีและข้อควรระวังในการใช้',
+        'เชื่อมโยงการใช้งานกับน้ำพริก เครื่องแกง หรืออาหารเหนืออย่างเป็นธรรมชาติ',
+      ],
+      content: [
+        `${subject} เป็นวัตถุดิบล้านนาที่ควรถูกเล่าในฐานะตัวเอกของบทความ เพราะคนที่ค้นหาชื่อนี้ต้องการรู้ว่าวัตถุดิบคืออะไร มีกลิ่นรสแบบไหน ใช้อย่างไร และเกี่ยวข้องกับอาหารเหนืออย่างไร ไม่ควรพาเนื้อหาออกไปเป็นสูตรอาหารอื่นที่ไม่ตรงกับคำค้น`,
+        `เอกลักษณ์ของ ${subject} คือ ${profile.flavor} รายละเอียดนี้ควรอยู่ในเนื้อหาเพื่อให้บทความวัตถุดิบล้านนาแตกต่างจากบทความเมนูอาหารทั่วไป`,
+        `วิธีเลือก ${subject}: ${profile.selection} เพราะคุณภาพของวัตถุดิบมีผลโดยตรงต่อกลิ่นและรสของอาหารเหนือ`,
+        `การใช้ ${subject} ในอาหารเหนือควรเริ่มจากปริมาณพอดี เพราะวัตถุดิบล้านนาหลายชนิดมีกลิ่นชัด ถ้าใช้มากเกินไปอาจกลบรสหลักของจานอาหารได้ ควรค่อย ๆ เพิ่มและชิมระหว่างปรุง`,
+        `การนำ ${subject} ไปใช้: ${profile.usage} ถ้าบทความเกี่ยวกับสินค้า KHUA ควรกล่าวถึงเฉพาะเมื่อวัตถุดิบนั้นสัมพันธ์กับน้ำพริกหรือเครื่องแกงจริง ไม่ควรแทรกแบบขายของเกินจำเป็น`,
+        `สำหรับ SEO ให้ใช้คำว่า ${subject}, วัตถุดิบล้านนา, วัตถุดิบอาหารเหนือ, เครื่องเทศเหนือ และครัวล้านนาอย่างเป็นธรรมชาติ พร้อมตอบคำถามหลักว่า ${subject} คืออะไร ใช้ทำอะไร เลือกอย่างไร และทำไมจึงสำคัญกับรสอาหารเหนือ`,
+      ],
+    },
+    en: {
+      title: `${subject}: A Lanna Ingredient That Builds Northern Thai Aroma and Flavor`,
+      excerpt:
+        `A focused guide to ${subject} as a Lanna ingredient, including flavor identity, quality cues, selection, and how it supports Northern Thai chili paste, curry paste, and cooking.`,
+      tags: [subject, 'Lanna ingredients', 'Northern Thai ingredients', 'Northern Thai spices', 'Lanna cooking'],
+      highlights: [
+        `${subject} should be treated as the main ingredient, not replaced by an unrelated dish.`,
+        'The article and image should make its aroma, color, texture, or shape clear.',
+        'Quality cues and selection tips are essential for ingredient-focused content.',
+        'Usage should connect naturally to chili paste, curry paste, or Northern Thai cooking.',
+      ],
+      content: [
+        `${subject} should be the hero of a Lanna ingredient article. Readers searching for this term want to know what it is, how it tastes or smells, how to choose it, and why it matters in Northern Thai cooking.`,
+        `Explain ${subject} through sensory details such as aroma, color, texture, and culinary role. A strong ingredient article should help the reader recognize the ingredient before showing how it is used.`,
+        `For quality, look for clean appearance, natural color, and a clear fresh or roasted aroma. Dried ingredients should be fully dry with no musty smell; fresh ingredients should not be bruised or wilted.`,
+        `Use ${subject} with restraint because many Lanna ingredients are aromatic and can dominate a dish. Add gradually and balance with salt, chili, herbs, or fat depending on the recipe.`,
+        `${subject} can support Northern chili paste, curry paste, larb, or herb-forward dishes when it fits the flavor goal. Mention KHUA products only when the ingredient genuinely connects to a chili paste or curry paste use case.`,
+        `For SEO, use terms such as ${subject}, Lanna ingredients, Northern Thai ingredients, Northern Thai spices, and Lanna cooking while answering what it is, how to select it, and how to use it.`,
+      ],
+    },
+    lo: {
+      title: `${subject}: ວັດຖຸດິບລ້ານນາທີ່ຊ່ວຍສ້າງກິ່ນແລະລົດອາຫານເໜືອ`,
+      excerpt:
+        `ຮູ້ຈັກ ${subject} ໃນຖານະວັດຖຸດິບລ້ານນາ ທັງກິ່ນລົດ ວິທີເລືອກ ແລະການນຳໄປໃຊ້ກັບອາຫານເໜືອ`,
+      tags: [subject, 'ວັດຖຸດິບລ້ານນາ', 'ອາຫານເໜືອ', 'ເຄື່ອງເທດເໜືອ'],
+      highlights: [
+        `${subject} ຄວນເປັນຫົວຂໍ້ຫຼັກຂອງບົດຄວາມ`,
+        'ຕ້ອງອະທິບາຍກິ່ນ ສີ ແລະລັກສະນະໃຫ້ຊັດ',
+        'ຄວນບອກວິທີເລືອກວັດຖຸດິບທີ່ດີ',
+        'ເຊື່ອມກັບນ້ຳພິກ ເຄື່ອງແກງ ຫຼືອາຫານເໜືອຢ່າງເໝາະສົມ',
+      ],
+      content: [
+        `${subject} ເປັນວັດຖຸດິບລ້ານນາທີ່ຄວນໂຟກັສໂດຍກົງ ເພາະຜູ້ອ່ານຕ້ອງການຮູ້ວ່າແມ່ນຫຍັງ ມີກິ່ນລົດແນວໃດ ແລະໃຊ້ກັບອາຫານເໜືອແນວໃດ.`,
+        `ການເລືອກ ${subject} ຄວນເບິ່ງຄວາມສົດ ສີທຳມະຊາດ ແລະກິ່ນທີ່ຊັດແຕ່ບໍ່ອັບ.`,
+        `${subject} ສາມາດໃຊ້ກັບນ້ຳພິກ ເຄື່ອງແກງ ຫຼືອາຫານເໜືອທີ່ຕ້ອງການກິ່ນເຄື່ອງເທດ.`,
+      ],
+    },
+    zh: {
+      title: `${subject}：塑造泰北香气与味道的兰纳食材`,
+      excerpt:
+        `认识 ${subject} 这种兰纳食材，包括香气、风味、品质判断、挑选方式，以及它如何用于泰北辣椒酱、咖喱酱和料理。`,
+      tags: [subject, '兰纳食材', '泰北食材', '泰北香料', '兰纳料理'],
+      highlights: [
+        `${subject} 必须是文章主角，而不是被替换成无关菜色。`,
+        '内容和图片应清楚呈现它的香气、颜色、质地或形态。',
+        '应说明如何判断品质与挑选。',
+        '用法应自然连接到泰北辣椒酱、咖喱酱或兰纳料理。',
+      ],
+      content: [
+        `${subject} 应作为兰纳食材文章的核心。搜索这个词的读者通常想知道它是什么、什么味道、如何挑选，以及为什么它对泰北料理重要。`,
+        `描述 ${subject} 时应聚焦香气、颜色、质地和料理作用，让读者先认识食材，再理解如何使用。`,
+        `挑选 ${subject} 时要看外观是否干净、颜色是否自然、香气是否清楚。干货不应潮湿或有霉味，鲜品不应萎蔫或压伤。`,
+        `${subject} 可用于泰北辣椒酱、咖喱酱、拉布或香草风味菜色，但用量要适中，避免盖过主味。`,
+        `SEO 可自然使用 ${subject}、兰纳食材、泰北食材、泰北香料、兰纳料理等关键词，并回答它是什么、怎么选、怎么用。`,
+      ],
+    },
+  }
+
+  const text = contentByLocale[locale] || contentByLocale.en
+  return {
+    slug: `daily-${date}-${slug}-lanna-ingredient`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedLannaIngredientCategory(locale, category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  }
+}
+
 function buildNamPrikOngRecipe(date, locale, category = '') {
   const contentByLocale = {
     th: {
@@ -2372,6 +2885,15 @@ export function buildArticle(date, locale, brief = '', category = '') {
 
   if (isNamPrikOngRecipe(brief, category)) {
     return buildNamPrikOngRecipe(date, locale, category)
+  }
+
+  if (isLannaIngredientsCategory(category) && cleanBriefSubject(brief)) {
+    return buildLannaIngredientArticle(date, locale, brief, category)
+  }
+
+  const focusedArticle = buildFocusedCategoryArticle(date, locale, brief, category)
+  if (focusedArticle) {
+    return focusedArticle
   }
 
   const topic = topicForDate(date, [category, brief].filter(Boolean).join(' '))
