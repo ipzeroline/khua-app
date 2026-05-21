@@ -228,6 +228,8 @@ const dict: Dictionary = {
     searchPlaceholder: '搜索文章，例如 帕尧、兰纳、马告',
     searchButton: '搜索',
     clearSearch: '清除搜索',
+    categoryFilterLabel: '按分类筛选文章',
+    allCategories: '所有分类',
     noResults: '没有找到符合搜索的文章。',
     pageLabel: '页',
     previousPage: '上一页',

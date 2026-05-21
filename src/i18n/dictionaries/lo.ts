@@ -227,6 +227,8 @@ const dict: Dictionary = {
     searchPlaceholder: 'ຄົ້ນຫາບົດຄວາມ ເຊັ່ນ ພະເຍົາ ລ້ານນາ ໝາກແຂ່ວ',
     searchButton: 'ຄົ້ນຫາ',
     clearSearch: 'ລ້າງການຄົ້ນຫາ',
+    categoryFilterLabel: 'ເລືອກໝວດໝູ່ບົດຄວາມ',
+    allCategories: 'ທຸກໝວດໝູ່',
     noResults: 'ບໍ່ພົບບົດຄວາມທີ່ກົງກັບຄຳຄົ້ນຫາ',
     pageLabel: 'ໜ້າ',
     previousPage: 'ກ່ອນໜ້າ',

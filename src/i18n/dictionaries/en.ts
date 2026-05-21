@@ -227,6 +227,8 @@ const dict: Dictionary = {
     searchPlaceholder: 'Search articles, e.g. Phayao, Lanna, ma-khwaen',
     searchButton: 'Search',
     clearSearch: 'Clear Search',
+    categoryFilterLabel: 'Filter articles by category',
+    allCategories: 'All categories',
     noResults: 'No articles matched your search.',
     pageLabel: 'Page',
     previousPage: 'Previous',

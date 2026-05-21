@@ -11,6 +11,8 @@ interface ArticlesContentProps {
   lang: Locale
   articles: ArticleData[]
   query: string
+  category: string
+  categories: string[]
   page: number
   totalPages: number
 }
@@ -20,6 +22,8 @@ export default function ArticlesContent({
   lang,
   articles,
   query,
+  category,
+  categories,
   page,
   totalPages,
 }: ArticlesContentProps) {
@@ -29,7 +33,23 @@ export default function ArticlesContent({
   const hrefForPage = (targetPage: number) => {
     const params = new URLSearchParams()
     if (query) params.set('q', query)
+    if (category) params.set('category', category)
     if (targetPage > 1) params.set('page', String(targetPage))
+    const suffix = params.toString()
+    return `/${lang}/articles${suffix ? `?${suffix}` : ''}`
+  }
+
+  const hrefForCategory = (targetCategory: string) => {
+    const params = new URLSearchParams()
+    if (query) params.set('q', query)
+    if (targetCategory) params.set('category', targetCategory)
+    const suffix = params.toString()
+    return `/${lang}/articles${suffix ? `?${suffix}` : ''}`
+  }
+
+  const hrefForClearSearch = () => {
+    const params = new URLSearchParams()
+    if (category) params.set('category', category)
     const suffix = params.toString()
     return `/${lang}/articles${suffix ? `?${suffix}` : ''}`
   }
@@ -89,6 +109,7 @@ export default function ArticlesContent({
             placeholder={dict.articles.searchPlaceholder}
             className="min-h-12 flex-1 rounded-xl border border-border bg-white/92 px-4 text-sm text-text outline-none transition focus:border-gold"
           />
+          {category ? <input type="hidden" name="category" value={category} /> : null}
           <button
             type="submit"
             className="min-h-12 rounded-full bg-text px-6 text-sm font-medium text-white transition hover:bg-gold"
@@ -97,13 +118,47 @@ export default function ArticlesContent({
           </button>
           {query ? (
             <Link
-              href={`/${lang}/articles`}
+              href={hrefForClearSearch()}
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-border px-5 text-sm font-medium text-text-secondary transition hover:border-gold hover:text-text"
             >
               {dict.articles.clearSearch}
             </Link>
           ) : null}
         </motion.form>
+
+        {categories.length > 0 ? (
+          <motion.nav
+            aria-label={dict.articles.categoryFilterLabel}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.14 }}
+            className="mt-8 flex flex-wrap justify-center gap-2"
+          >
+            <Link
+              href={hrefForCategory('')}
+              className={`inline-flex min-h-10 items-center rounded-full border px-4 text-sm font-medium transition ${
+                !category
+                  ? 'border-gold bg-gold text-white'
+                  : 'border-border bg-white text-text-secondary hover:border-gold/50 hover:text-text'
+              }`}
+            >
+              {dict.articles.allCategories}
+            </Link>
+            {categories.map((item) => (
+              <Link
+                key={item}
+                href={hrefForCategory(item)}
+                className={`inline-flex min-h-10 items-center rounded-full border px-4 text-sm font-medium transition ${
+                  category === item
+                    ? 'border-gold bg-gold text-white'
+                    : 'border-border bg-white text-text-secondary hover:border-gold/50 hover:text-text'
+                }`}
+              >
+                {item}
+              </Link>
+            ))}
+          </motion.nav>
+        ) : null}
 
         {articles.length > 0 ? (
           <div className="mt-14 grid grid-cols-1 gap-3 md:grid-cols-2">

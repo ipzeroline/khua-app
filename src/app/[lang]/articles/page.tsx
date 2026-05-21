@@ -7,7 +7,7 @@ import { getPublishedArticles } from '@/lib/articles'
 
 interface ArticlesPageProps {
   params: Promise<{ lang: string }>
-  searchParams: Promise<{ q?: string; page?: string }>
+  searchParams: Promise<{ q?: string; page?: string; category?: string }>
 }
 
 const ARTICLES_PER_PAGE = 6
@@ -80,8 +80,14 @@ export default async function ArticlesPage({ params, searchParams }: ArticlesPag
   const dict = await getDictionary(locale)
   const search = await searchParams
   const query = typeof search.q === 'string' ? search.q.trim() : ''
+  const category = typeof search.category === 'string' ? search.category.trim() : ''
   const allArticles = await getPublishedArticles(locale, dict)
-  const filteredArticles = allArticles.filter((article) => matchesArticle(article, query))
+  const categories = Array.from(
+    new Set(allArticles.map((article) => article.category).filter(Boolean)),
+  ).sort((a, b) => a.localeCompare(b, locale))
+  const filteredArticles = allArticles.filter((article) =>
+    matchesArticle(article, query) && (!category || article.category === category),
+  )
   const totalPages = Math.max(1, Math.ceil(filteredArticles.length / ARTICLES_PER_PAGE))
   const requestedPage = Number.parseInt(search.page ?? '1', 10)
   const page = Number.isFinite(requestedPage)
@@ -135,6 +141,8 @@ export default async function ArticlesPage({ params, searchParams }: ArticlesPag
         lang={locale}
         articles={articles}
         query={query}
+        category={category}
+        categories={categories}
         page={page}
         totalPages={totalPages}
       />

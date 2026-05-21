@@ -221,6 +221,8 @@ export interface Dictionary {
     searchPlaceholder: string
     searchButton: string
     clearSearch: string
+    categoryFilterLabel: string
+    allCategories: string
     noResults: string
     pageLabel: string
     previousPage: string

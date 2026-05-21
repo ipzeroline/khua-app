@@ -1,7 +1,18 @@
+import type { ResultSetHeader, RowDataPacket } from 'mysql2'
 import { NextRequest } from 'next/server'
 import pool from '@/lib/db'
 import { requirePermission, AuthContext } from '@/lib/api-auth'
 import { PERMISSIONS } from '@/lib/permissions'
+
+type DbParam = string | number | null
+
+interface CountRow extends RowDataPacket {
+  total: number
+}
+
+interface CategoryRow extends RowDataPacket {
+  category: string
+}
 
 export async function GET(request: NextRequest) {
   const auth = await requirePermission(PERMISSIONS.MANAGE_ARTICLES)
@@ -12,21 +23,30 @@ export async function GET(request: NextRequest) {
   const limit = 20
   const offset = (page - 1) * limit
   const status = url.searchParams.get('status') || ''
+  const category = url.searchParams.get('category') || ''
+  const locale = url.searchParams.get('locale') || 'th'
 
   const connection = await pool.getConnection()
   try {
     let query = `
       SELECT a.id, a.slug, a.status, a.cover_image_url, a.published_at, a.author_id,
              a.created_at, a.updated_at,
-             u.name as author_name
+             u.name as author_name,
+             t.category
       FROM articles a
       LEFT JOIN users u ON u.id = a.author_id
+      LEFT JOIN article_translations t ON t.article_id = a.id AND t.locale = ?
       WHERE 1=1`
-    const params: any[] = []
+    const params: DbParam[] = [locale]
 
     if (status) {
       query += ' AND a.status = ?'
       params.push(status)
+    }
+
+    if (category) {
+      query += ' AND t.category = ?'
+      params.push(category)
     }
 
     query += ' ORDER BY a.updated_at DESC LIMIT ? OFFSET ?'
@@ -34,16 +54,45 @@ export async function GET(request: NextRequest) {
 
     const [rows] = await connection.execute(query, params)
 
-    const [countResult] = await connection.execute(
-      'SELECT COUNT(*) as total FROM articles' + (status ? ' WHERE status = ?' : ''),
-      status ? [status] : [],
+    let countQuery = `
+      SELECT COUNT(*) as total
+      FROM articles a
+      LEFT JOIN article_translations t ON t.article_id = a.id AND t.locale = ?
+      WHERE 1=1`
+    const countParams: DbParam[] = [locale]
+
+    if (status) {
+      countQuery += ' AND a.status = ?'
+      countParams.push(status)
+    }
+
+    if (category) {
+      countQuery += ' AND t.category = ?'
+      countParams.push(category)
+    }
+
+    const [countResult] = await connection.execute<CountRow[]>(
+      countQuery,
+      countParams,
+    )
+
+    const [categoryRows] = await connection.execute<CategoryRow[]>(
+      `
+        SELECT DISTINCT t.category
+        FROM article_translations t
+        INNER JOIN articles a ON a.id = t.article_id
+        WHERE t.locale = ? AND t.category <> ''
+        ORDER BY t.category ASC
+      `,
+      [locale],
     )
 
     return Response.json({
       articles: rows,
-      total: (countResult as any[])[0].total,
+      total: countResult[0]?.total ?? 0,
       page,
       limit,
+      categories: categoryRows.map((row) => row.category),
     })
   } finally {
     connection.release()
@@ -66,7 +115,7 @@ export async function POST(request: NextRequest) {
   try {
     await connection.beginTransaction()
 
-    const [result] = await connection.execute(
+    const [result] = await connection.execute<ResultSetHeader>(
       `INSERT INTO articles
        (slug, status, cover_image_url, image_prompt, published_at, author_id, meta_title, meta_description)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -82,7 +131,7 @@ export async function POST(request: NextRequest) {
       ],
     )
 
-    const articleId = (result as any).insertId
+    const articleId = result.insertId
 
     if (translations && Array.isArray(translations)) {
       for (const t of translations) {

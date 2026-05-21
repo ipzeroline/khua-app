@@ -1,4 +1,5 @@
 import type { ResultSetHeader, RowDataPacket } from 'mysql2'
+import type { NextRequest } from 'next/server'
 import pool from '@/lib/db'
 import { requirePermission, AuthContext } from '@/lib/api-auth'
 import { PERMISSIONS } from '@/lib/permissions'
@@ -17,7 +18,7 @@ type GeneratedArticle = {
 
 type ArticleGenerator = {
   addDays: (date: string, amount: number) => string
-  buildArticle: (date: string, locale: string) => GeneratedArticle
+  buildArticle: (date: string, locale: string, brief?: string, category?: string) => GeneratedArticle
   getGeneratedTopicCount: () => number
   generateCoverImage: (
     slug: string,
@@ -45,11 +46,24 @@ interface ExistingArticleRow extends RowDataPacket {
   slug: string
 }
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   const auth = await requirePermission(PERMISSIONS.MANAGE_ARTICLES)
   if (auth instanceof Response) return auth
 
   const ctx = auth as AuthContext
+  const body = await request.json().catch(() => ({})) as { brief?: unknown; category?: unknown }
+  const brief = typeof body.brief === 'string' ? body.brief.trim() : ''
+  const category = typeof body.category === 'string' ? body.category.trim() : ''
+  if (brief.length > 800) {
+    return Response.json({ error: 'Generation detail must be 800 characters or fewer' }, { status: 400 })
+  }
+  if (!category) {
+    return Response.json({ error: 'Category is required' }, { status: 400 })
+  }
+  if (category.length > 100) {
+    return Response.json({ error: 'Category must be 100 characters or fewer' }, { status: 400 })
+  }
+
   const generator = await loadGenerator()
   const connection = await pool.getConnection()
 
@@ -76,7 +90,7 @@ export async function POST() {
 
     for (let attempt = 0; attempt < generator.getGeneratedTopicCount(); attempt += 1) {
       const candidate = Object.fromEntries(
-        locales.map((locale) => [locale, generator.buildArticle(date, locale)]),
+        locales.map((locale) => [locale, generator.buildArticle(date, locale, brief, category)]),
       ) as Record<string, GeneratedArticle>
       const primaryCandidate = candidate.th ?? Object.values(candidate)[0]
 

@@ -227,6 +227,8 @@ const dict: Dictionary = {
     searchPlaceholder: 'ค้นหาบทความ เช่น น้ำพริกเหนือ พะเยา มะแขว่น',
     searchButton: 'ค้นหา',
     clearSearch: 'ล้างการค้นหา',
+    categoryFilterLabel: 'เลือกหมวดหมู่บทความ',
+    allCategories: 'ทุกหมวดหมู่',
     noResults: 'ไม่พบบทความที่ตรงกับคำค้นหา',
     pageLabel: 'หน้า',
     previousPage: 'ก่อนหน้า',

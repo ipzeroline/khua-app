@@ -1576,12 +1576,227 @@ function latestGeneratedDate(data) {
   return dates.sort().at(-1)
 }
 
-export function buildArticle(date, locale) {
-  const index = Math.abs(date.split('-').join('')) % topics.length
-  const topic = topics[index]
-  const text = topic[locale]
+function briefSlug(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48)
+}
+
+function isNamPrikOngRecipe(brief = '', category = '') {
+  const searchable = `${brief} ${category}`.toLowerCase()
+  return (
+    searchable.includes('น้ำพริกอ่อง') ||
+    searchable.includes('น้ําพริกอ่อง') ||
+    searchable.includes('nam prik ong') ||
+    searchable.includes('nam phrik ong')
+  )
+}
+
+function localizedCookingCategory(locale, category = '') {
+  const cleanedCategory = String(category || '').trim()
+  const cookingCategories = [
+    'วิธีทำอาหารเหนือ',
+    'Northern Cooking Methods',
+    'ວິທີເຮັດອາຫານເໜືອ',
+    '泰北菜做法',
+  ]
+
+  if (!cleanedCategory || cookingCategories.includes(cleanedCategory)) {
+    return {
+      th: 'วิธีทำอาหารเหนือ',
+      en: 'Northern Cooking Methods',
+      lo: 'ວິທີເຮັດອາຫານເໜືອ',
+      zh: '泰北菜做法',
+    }[locale] || 'Northern Cooking Methods'
+  }
+
+  return cleanedCategory
+}
+
+function buildNamPrikOngRecipe(date, locale, category = '') {
+  const contentByLocale = {
+    th: {
+      title: 'วิธีทำน้ำพริกอ่องให้อร่อยแบบเหนือ: เตรียมวัตถุดิบ ผัดเครื่อง และเคี่ยวให้รสกลมกล่อม',
+      excerpt:
+        'สูตรน้ำพริกอ่องแบบเข้าใจง่าย ตั้งแต่เตรียมหมูสับ มะเขือเทศ เครื่องแกง ไปจนถึงเทคนิคผัดและเคี่ยวให้หอมเครื่อง รสเปรี้ยวหวานพอดี',
+      tags: ['วิธีทำน้ำพริกอ่อง', 'น้ำพริกอ่อง', 'อาหารเหนือ', 'สูตรอาหารเหนือ', 'เครื่องแกงเหนือ'],
+      highlights: [
+        'เลือกมะเขือเทศสุกฉ่ำและหมูสับติดมันเล็กน้อยเพื่อให้รสนุ่ม',
+        'ผัดเครื่องแกงกับน้ำมันจนหอมก่อนใส่หมู เพื่อเปิดกลิ่นพริกแห้ง หอมแดง และกระเทียม',
+        'เคี่ยวไฟกลางค่อนอ่อนจนมะเขือเทศแตกตัวและน้ำพริกงวด ไม่แฉะเกินไป',
+        'ชิมให้ได้รสเปรี้ยวหวานเค็มพอดี แล้วเสิร์ฟกับผักสด ผักลวก และแคบหมู',
+      ],
+      content: [
+        'น้ำพริกอ่องเป็นอาหารเหนือที่เด่นจากรสมะเขือเทศสุก หมูสับ และเครื่องแกงหอม ๆ เนื้อสัมผัสควรฉ่ำแต่ไม่แฉะ มีรสเปรี้ยวหวานธรรมชาติ เค็มพอดี และมีกลิ่นพริกแห้งคั่วกับหอมแดงกระเทียมชัดเจน',
+        'วัตถุดิบหลักสำหรับ 3-4 ที่ ได้แก่ หมูสับ 250 กรัม มะเขือเทศสีดาหรือมะเขือเทศลูกเล็ก 300 กรัม พริกแห้งเม็ดใหญ่แช่น้ำ 5-7 เม็ด หอมแดง 5 หัว กระเทียมไทย 8-10 กลีบ กะปิเล็กน้อยหรือถั่วเน่าแผ่นตามชอบ เกลือ น้ำปลา และน้ำมันสำหรับผัด',
+        'เตรียมเครื่องแกงโดยแกะเมล็ดพริกแห้งออกบางส่วนแล้วแช่น้ำให้นิ่ม จากนั้นโขลกพริกแห้งกับเกลือ หอมแดง กระเทียม และกะปิให้ละเอียดพอประมาณ ส่วนมะเขือเทศให้หั่นชิ้นเล็กเพื่อให้แตกตัวง่ายตอนเคี่ยว',
+        'ตั้งกระทะไฟกลาง ใส่น้ำมันเล็กน้อยแล้วผัดเครื่องแกงจนกลิ่นหอมและสีเข้มขึ้น ใส่หมูสับลงไปยีให้กระจาย ผัดจนหมูเริ่มสุกและเคลือบเครื่องแกงทั่วถึง ขั้นตอนนี้เป็นจุดสำคัญที่ทำให้น้ำพริกไม่มีกลิ่นดิบ',
+        'ใส่มะเขือเทศลงไปผัดให้เข้ากัน เติมน้ำเล็กน้อยถ้ากระทะแห้งเกินไป แล้วเคี่ยวไฟกลางค่อนอ่อน 10-15 นาที จนมะเขือเทศนิ่ม แตกตัว และน้ำพริกข้นขึ้น ระหว่างเคี่ยวให้คนเป็นระยะเพื่อไม่ให้ติดก้นกระทะ',
+        'ปรุงรสด้วยน้ำปลาและเกลือทีละน้อย ถ้ามะเขือเทศเปรี้ยวน้อยสามารถเติมน้ำตาลเล็กน้อยได้ แต่ไม่ควรให้หวานนำ น้ำพริกอ่องที่ดีควรมีรสเปรี้ยวหวานจากมะเขือเทศ ตามด้วยเค็มกลมกล่อมและกลิ่นเครื่องแกง',
+        'เมื่อได้ความข้นที่ต้องการ ปิดไฟแล้วพักให้น้ำพริกเซ็ตตัวสักครู่ เสิร์ฟกับแตงกวา ถั่วฝักยาว กะหล่ำปลี ผักลวก แคบหมู หรือข้าวเหนียวร้อน ๆ ถ้าทำขายหรือทำเป็นของฝาก ควรรอให้เย็นก่อนบรรจุและเก็บในตู้เย็น',
+      ],
+    },
+    en: {
+      title: 'How to Make Nam Prik Ong: Ingredients, Curry Paste, and Northern Thai Cooking Steps',
+      excerpt:
+        'A practical Nam Prik Ong recipe with minced pork, tomatoes, curry paste, and step-by-step simmering tips for balanced Northern Thai flavor.',
+      tags: ['Nam Prik Ong recipe', 'Northern Thai chili dip', 'Northern Thai food', 'curry paste', 'Thai cooking'],
+      highlights: [
+        'Use ripe tomatoes and slightly fatty minced pork for a soft, rounded texture.',
+        'Fry the curry paste first to release dried chili, shallot, and garlic aroma.',
+        'Simmer until the tomatoes break down and the relish becomes thick, not watery.',
+        'Serve with fresh vegetables, blanched greens, pork crackling, or sticky rice.',
+      ],
+      content: [
+        'Nam Prik Ong is a Northern Thai tomato and minced pork chili relish. A good version should taste naturally sweet and tangy from ripe tomatoes, savory from pork, and aromatic from dried chilies, shallots, garlic, and fermented seasoning.',
+        'For 3-4 servings, prepare 250 g minced pork, 300 g small ripe tomatoes, 5-7 soaked dried chilies, 5 shallots, 8-10 cloves Thai garlic, a little shrimp paste or fermented soybean sheet, salt, fish sauce, and a small amount of oil.',
+        'Make the curry paste by pounding soaked dried chilies with salt, shallots, garlic, and shrimp paste until fairly fine. Cut the tomatoes into small pieces so they soften and release their juice quickly while cooking.',
+        'Heat a pan over medium heat, add a little oil, and fry the paste until fragrant and deeper in color. Add minced pork and break it up as it cooks so every piece is coated with the paste.',
+        'Add tomatoes and stir well. If the pan is too dry, add a small splash of water. Simmer over medium-low heat for 10-15 minutes until the tomatoes collapse and the relish thickens.',
+        'Season gradually with fish sauce and salt. If the tomatoes are not sweet enough, add a tiny amount of sugar, but the flavor should stay tomato-led rather than sweet.',
+        'Rest briefly before serving. Pair with cucumber, long beans, cabbage, blanched greens, pork crackling, or warm sticky rice. For storage, cool completely before chilling.',
+      ],
+    },
+    lo: {
+      title: 'ວິທີເຮັດນ້ຳພິກອ່ອງ: ກຽມວັດຖຸດິບ ຜັດເຄື່ອງ ແລະຕົ້ມໃຫ້ລົດກົມກ່ອມ',
+      excerpt:
+        'ສູດນ້ຳພິກອ່ອງແບບເຂົ້າໃຈງ່າຍ ມີໝູສັບ ໝາກເລັ່ນ ເຄື່ອງແກງ ແລະຂັ້ນຕອນຕົ້ມໃຫ້ຫອມ',
+      tags: ['ວິທີເຮັດນ້ຳພິກອ່ອງ', 'ນ້ຳພິກອ່ອງ', 'ອາຫານເໜືອ', 'ສູດອາຫານເໜືອ', 'ເຄື່ອງແກງເໜືອ'],
+      highlights: [
+        'ໃຊ້ໝາກເລັ່ນສຸກ ແລະໝູສັບມີມັນນ້ອຍໜຶ່ງໃຫ້ເນື້ອນຸ່ມ',
+        'ຜັດເຄື່ອງແກງກ່ອນໃຫ້ຫອມ ແລ້ວຈຶ່ງໃສ່ໝູ',
+        'ຕົ້ມໄຟອ່ອນໃຫ້ໝາກເລັ່ນແຕກຕົວ ແລະນ້ຳພິກຂົ້ນ',
+        'ກິນຄູ່ກັບຜັກສົດ ຜັກລວກ ແລະເຂົ້າໜຽວ',
+      ],
+      content: [
+        'ນ້ຳພິກອ່ອງເປັນອາຫານເໜືອທີ່ມີລົດເປັ້ນຫວານຈາກໝາກເລັ່ນ ມີໝູສັບ ແລະກິ່ນເຄື່ອງແກງຫອມ.',
+        'ກຽມໝູສັບ 250 ກຣາມ ໝາກເລັ່ນ 300 ກຣາມ ພິກແຫ້ງແຊ່ນ້ຳ 5-7 ເມັດ ຫອມແດງ 5 ຫົວ ກະທຽມ 8-10 ກີບ ກະປິນ້ອຍໜຶ່ງ ເກືອ ນ້ຳປາ ແລະນ້ຳມັນ.',
+        'ໂຂລກພິກແຫ້ງກັບເກືອ ຫອມແດງ ກະທຽມ ແລະກະປິໃຫ້ລະອຽດພໍດີ ຫັ່ນໝາກເລັ່ນເປັນຊິ້ນນ້ອຍ.',
+        'ຕັ້ງກະທະໄຟກາງ ໃສ່ນ້ຳມັນ ຜັດເຄື່ອງແກງຈົນຫອມ ແລ້ວໃສ່ໝູສັບ ຜັດໃຫ້ໝູແຕກຕົວແລະເຄືອບເຄື່ອງ.',
+        'ໃສ່ໝາກເລັ່ນ ຜັດໃຫ້ເຂົ້າກັນ ແລ້ວຕົ້ມ 10-15 ນາທີ ຈົນໝາກເລັ່ນນຸ່ມ ແລະນ້ຳພິກຂົ້ນ.',
+        'ປຸງດ້ວຍນ້ຳປາ ແລະເກືອທີລະນ້ອຍ ຖ້າໝາກເລັ່ນບໍ່ຫວານ ເພີ່ມນ້ຳຕານໄດ້ນ້ອຍໜຶ່ງ.',
+        'ພັກໃຫ້ເຢັນລົງນ້ອຍໜຶ່ງ ແລ້ວເສີບກັບຜັກສົດ ຜັກລວກ ແລະເຂົ້າໜຽວຮ້ອນ.',
+      ],
+    },
+    zh: {
+      title: '泰北番茄猪肉辣酱 Nam Prik Ong 做法：食材准备、炒酱与慢煮步骤',
+      excerpt:
+        '一篇实用的 Nam Prik Ong 做法，从猪肉末、番茄、咖喱酱准备到慢煮收浓，做出平衡的泰北风味。',
+      tags: ['Nam Prik Ong 做法', '泰北辣椒酱', '泰北料理', '泰国食谱', '咖喱酱'],
+      highlights: [
+        '使用成熟番茄与带少许脂肪的猪肉末，口感更柔和。',
+        '先炒香辣椒酱，释放干辣椒、红葱和蒜的香气。',
+        '小火慢煮到番茄软化、酱汁浓稠但不水。',
+        '可搭配鲜蔬、烫蔬菜、猪皮脆片或糯米。',
+      ],
+      content: [
+        'Nam Prik Ong 是泰北番茄猪肉辣酱，特色是番茄的自然酸甜、猪肉末的鲜味，以及干辣椒、红葱、蒜和发酵调味带来的香气。',
+        '准备 3-4 人份：猪肉末 250 克、小番茄 300 克、泡软干辣椒 5-7 条、红葱 5 个、泰国蒜 8-10 瓣、少量虾酱或发酵黄豆片、盐、鱼露和少量油。',
+        '先把泡软干辣椒、盐、红葱、蒜和虾酱捣成较细的酱。番茄切小块，方便烹煮时快速软化出汁。',
+        '锅中用中火加少量油，先炒香辣椒酱，颜色变深后加入猪肉末，边炒边压散，让肉末均匀裹上酱料。',
+        '加入番茄翻炒，如果锅太干可加少量水。转中小火煮 10-15 分钟，直到番茄软烂、酱汁变浓。',
+        '用鱼露和盐少量多次调味。若番茄甜度不足，可加一点糖，但整体仍应以番茄酸甜和香辣味为主。',
+        '关火后稍微静置，再搭配黄瓜、长豆、卷心菜、烫青菜、猪皮脆片或热糯米食用。',
+      ],
+    },
+  }
+  const text = contentByLocale[locale] || contentByLocale.en
 
   return {
+    slug: `daily-${date}-nam-prik-ong-recipe`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedCookingCategory(locale, category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '7 min read' : locale === 'zh' ? '7 分钟阅读' : locale === 'lo' ? '7 ນາທີ' : '7 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  }
+}
+
+function topicSearchText(topic) {
+  return locales
+    .flatMap((locale) => {
+      const text = topic[locale]
+      return [
+        topic.key,
+        text.title,
+        text.excerpt,
+        text.category,
+        ...text.tags,
+        ...text.highlights,
+        ...text.content,
+      ]
+    })
+    .join(' ')
+    .toLowerCase()
+}
+
+function topicForDate(date, brief = '') {
+  const cleanedBrief = String(brief || '').trim().toLowerCase()
+  if (!cleanedBrief) {
+    const index = Math.abs(date.split('-').join('')) % topics.length
+    return topics[index]
+  }
+
+  const terms = cleanedBrief
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((term) => term.length >= 2)
+
+  const scored = topics.map((topic, index) => {
+    const haystack = topicSearchText(topic)
+    const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0)
+    return { topic, score, index }
+  })
+
+  scored.sort((a, b) => b.score - a.score || a.index - b.index)
+  return scored[0]?.score > 0 ? scored[0].topic : topics[Math.abs(date.split('-').join('')) % topics.length]
+}
+
+function customizeArticleForBrief(article, brief, locale, category = '') {
+  const cleanedBrief = String(brief || '').trim().replace(/\s+/g, ' ')
+  const cleanedCategory = String(category || '').trim().replace(/\s+/g, ' ')
+  const articleWithCategory = cleanedCategory ? { ...article, category: cleanedCategory } : article
+  if (!cleanedBrief) return articleWithCategory
+
+  const briefLabel = cleanedBrief.length > 140 ? `${cleanedBrief.slice(0, 137)}...` : cleanedBrief
+  const leadByLocale = {
+    th: `บทความฉบับนี้โฟกัสตามรายละเอียดที่ต้องการสร้าง: ${briefLabel}`,
+    en: `This draft focuses on the requested brief: ${briefLabel}`,
+    lo: `ຮ່າງບົດຄວາມນີ້ໂຟກັສຕາມລາຍລະອຽດທີ່ຕ້ອງການສ້າງ: ${briefLabel}`,
+    zh: `这篇草稿会聚焦于生成需求：${briefLabel}`,
+  }
+  const tagByLocale = {
+    th: 'หัวข้อที่กำหนดเอง',
+    en: 'custom brief',
+    lo: 'ຫົວຂໍ້ກຳນົດເອງ',
+    zh: '自定义主题',
+  }
+
+  return {
+    ...articleWithCategory,
+    slug: `${article.slug}-${briefSlug(cleanedBrief) || 'custom'}`,
+    excerpt: `${article.excerpt} ${leadByLocale[locale] || leadByLocale.en}`,
+    tags: Array.from(new Set([tagByLocale[locale] || tagByLocale.en, ...article.tags])).slice(0, 7),
+    highlights: [leadByLocale[locale] || leadByLocale.en, ...article.highlights].slice(0, 5),
+    content: [leadByLocale[locale] || leadByLocale.en, ...article.content],
+  }
+}
+
+export function buildArticle(date, locale, brief = '', category = '') {
+  if (isNamPrikOngRecipe(brief, category)) {
+    return buildNamPrikOngRecipe(date, locale, category)
+  }
+
+  const topic = topicForDate(date, [category, brief].filter(Boolean).join(' '))
+  const text = topic[locale]
+
+  return customizeArticleForBrief({
     slug: `daily-${date}-${topic.key}`,
     title: text.title,
     excerpt: text.excerpt,
@@ -1591,7 +1806,7 @@ export function buildArticle(date, locale) {
     tags: text.tags,
     highlights: text.highlights,
     content: text.content,
-  }
+  }, brief, locale, category)
 }
 
 async function run() {
