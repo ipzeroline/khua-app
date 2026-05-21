@@ -27,6 +27,21 @@ interface ArticlesResponse {
   categories: string[]
 }
 
+async function parseJsonResponse<T>(res: Response): Promise<T> {
+  const contentType = res.headers.get('content-type') || ''
+  const text = await res.text()
+
+  if (contentType.includes('application/json')) {
+    return JSON.parse(text) as T
+  }
+
+  const fallback = text.includes('<!DOCTYPE')
+    ? 'Server returned an HTML error page. Please check the server logs and try again.'
+    : text.slice(0, 300) || 'Empty response from server'
+
+  return { error: fallback } as T
+}
+
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [total, setTotal] = useState(0)
@@ -113,7 +128,7 @@ export default function AdminArticlesPage() {
           category: generateCategory.trim(),
         }),
       })
-      const data = await res.json() as GenerateArticleResponse
+      const data = await parseJsonResponse<GenerateArticleResponse>(res)
       if (!res.ok) throw new Error(data.error || 'Generate failed')
       window.location.href = `/${lang}/admin/articles/${data.id}/edit`
     } catch (err: unknown) {

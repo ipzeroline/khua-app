@@ -70,10 +70,12 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: 'Category must be 100 characters or fewer' }, { status: 400 })
   }
 
-  const generator = await loadGenerator()
-  const connection = await pool.getConnection()
+  let connection: Awaited<ReturnType<typeof pool.getConnection>> | null = null
 
   try {
+    const generator = await loadGenerator()
+    connection = await pool.getConnection()
+
     const [latestRows] = await connection.execute<LatestArticleRow[]>(`
       SELECT slug FROM articles
       WHERE slug LIKE 'daily-%'
@@ -171,10 +173,17 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     )
   } catch (error) {
-    await connection.rollback()
+    if (connection) await connection.rollback().catch(() => {})
     console.error('Generate article error:', error)
-    return Response.json({ error: 'Failed to generate article' }, { status: 500 })
+    return Response.json(
+      {
+        error: error instanceof Error
+          ? `Failed to generate article: ${error.message}`
+          : 'Failed to generate article',
+      },
+      { status: 500 },
+    )
   } finally {
-    connection.release()
+    connection?.release()
   }
 }
