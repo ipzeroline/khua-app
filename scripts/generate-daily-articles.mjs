@@ -1064,6 +1064,28 @@ function buildTopicImageBrief(article) {
     .toLowerCase()
 
   if (
+    searchable.includes('northern-yam-gai-nam-prik-larb-recipe') ||
+    searchable.includes('ยำไก่ทางเหนือ') ||
+    searchable.includes('ยำไก่เหนือ') ||
+    searchable.includes('น้ําพริกลาบ') ||
+    searchable.includes('น้ำพริกลาบ') ||
+    searchable.includes('northern thai yam gai') ||
+    searchable.includes('northern chicken salad') ||
+    searchable.includes('nam prik larb') ||
+    searchable.includes('nam phrik larb')
+  ) {
+    return [
+      'Title-specific visual brief: this article is exactly about making premium Northern Thai Yam Gai with Nam Prik Larb, not a generic chicken salad, not larb meat, and not a general Northern cooking scene.',
+      'The visual hero must be the finished or actively mixed Yam Gai Nuea: tender shredded chicken clearly coated with reddish-brown roasted Nam Prik Larb seasoning, glossy but not wet, in a refined dark ceramic bowl.',
+      'Show the title story in one glance: shredded chicken, a small ceramic bowl of coarse dark red roasted larb chili paste, sliced shallots, cilantro, sawtooth coriander, mint, fried dried chilies, and a small spoon or mixing gesture cue. These props must directly support the recipe title.',
+      'Make it premium and editorial: one hero bowl placed in the strongest focal position, clean negative space, restrained Lanna craft props, precise herb placement, warm side light, crisp chicken texture, visible red-brown spice coating, no clutter.',
+      'The supporting paste should look like roasted Nam Prik Larb, dark red-brown and textured, not tomato sauce, not curry paste, not nam prik ong, not generic chili oil.',
+      'Strictly avoid noodles, pasta-like strands, raw chicken, whole chicken pieces, tomato-heavy red sauce, rice as the main subject, packaged product jars, labels, visible text, hands, people, and a messy table.',
+      'The viewer should immediately understand "วิธีทำยำไก่ทางเหนือด้วยน้ำพริกลาบ" from the finished dish and recipe mise en place alone.',
+    ].join(' ')
+  }
+
+  if (
     searchable.includes('northern-cooking-methods') ||
     searchable.includes('วิธีทำอาหารเหนือ') ||
     searchable.includes('สูตรอาหารเหนือ') ||
@@ -1279,12 +1301,13 @@ export function buildImagePrompt(article, seedValue = article.slug || article.ti
   return [
     'Create a premium professional text-free editorial food photograph for a Northern Thai culinary article.',
     `Internal semantic reference only, never render as text: article title is "${article.title}".`,
-    `Absolute priority: the image concept must be built from the exact article title idea first, but the title must never appear as visible text. A viewer should be able to infer the article topic from the food, ingredients, cooking action, and composition only.`,
+    `Absolute priority: the image concept must be built from the exact article title idea first, before category, mood, or generic Northern Thai styling. The title must never appear as visible text. A viewer should be able to infer the article topic from the food, ingredients, cooking action, and composition only.`,
     `Most important requirement: the image must clearly support this exact article topic, not a generic Northern Thai food scene. Category: ${article.category || 'Northern Thai food'}. Excerpt: ${article.excerpt || ''}. Tags: ${tags}. Key points: ${highlights}. Opening idea: ${opening}.`,
     topicBrief,
     'Translate the article title into simple, instantly understandable visual storytelling: choose the main subject, supporting ingredient, prop, setting, and mood only if they directly explain the title and key points.',
-    'Before composing the image, identify the title keyword and make it the visual hero. If the title is about herbs, herbs must dominate; if it is about local vegetables, vegetables must dominate; if it is about travel, show a food-travel souvenir or local-market story; if it is about a menu guide, show a curated Northern Thai menu spread; if it is about a technique, show the technique or ingredient transformation. The title-specific visual brief overrides all generic styling suggestions.',
+    'Before composing the image, identify the exact title keyword and make it the visual hero. If the title names a specific dish, that exact dish must dominate the image. If the title names a cooking method, show that method and the transformation. If the title is about herbs, herbs must dominate; if it is about local vegetables, vegetables must dominate; if it is about travel, show a food-travel souvenir or local-market story; if it is about a menu guide, show a curated Northern Thai menu spread. The title-specific visual brief overrides all generic styling suggestions.',
     'Do not make a beautiful but unrelated Lanna table scene. Do not use chili paste, sticky rice, dried chilies, bowls, or vegetables as default filler unless they directly support the article title.',
+    'Premium requirement for every category: no crowded table, no random garnish scatter, no unclear main subject. Use fewer objects, stronger focal hierarchy, cleaner negative space, refined ceramic or natural material props, and commercial cookbook-level lighting.',
     `Use this specific visual direction for this generation: ${composition}.`,
     `Surface and prop language: ${surface}. Avoid repeating the same default wooden-table setup unless it is essential to the selected direction.`,
     `Lighting: ${lighting}. Lens and camera language: ${lens}. Color palette: ${colorMood}.`,
