@@ -1596,6 +1596,25 @@ function isNamPrikOngRecipe(brief = '', category = '') {
   )
 }
 
+function isNorthernYamGaiNamPrikLarbRecipe(brief = '', category = '') {
+  const searchable = `${brief} ${category}`.toLowerCase()
+  const hasChickenSalad =
+    searchable.includes('ยำไก่') ||
+    searchable.includes('ยําไก่') ||
+    searchable.includes('yam gai') ||
+    searchable.includes('yum gai') ||
+    searchable.includes('northern chicken salad')
+  const hasLarbPaste =
+    searchable.includes('น้ำพริกลาบ') ||
+    searchable.includes('น้ําพริกลาบ') ||
+    searchable.includes('nam prik larb') ||
+    searchable.includes('nam phrik larb') ||
+    searchable.includes('larb paste') ||
+    searchable.includes('laab paste')
+
+  return hasChickenSalad && hasLarbPaste
+}
+
 function localizedCookingCategory(locale, category = '') {
   const cleanedCategory = String(category || '').trim()
   const cookingCategories = [
@@ -1719,6 +1738,125 @@ function buildNamPrikOngRecipe(date, locale, category = '') {
   }
 }
 
+function buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category = '') {
+  const contentByLocale = {
+    th: {
+      title: 'วิธีทำยำไก่ทางเหนือด้วยน้ำพริกลาบ: เตรียมไก่ เครื่องสมุนไพร และคลุกให้หอมแบบล้านนา',
+      excerpt:
+        'สูตรยำไก่ของทางเหนือแบบละเอียด ใช้น้ำพริกลาบเป็นฐานรส อธิบายตั้งแต่วิธีต้มไก่ เตรียมสมุนไพร คั่วเครื่อง และคลุกยำให้หอมจัดจ้าน เหมาะสำหรับบทความ SEO อาหารเหนือ',
+      tags: [
+        'วิธีทำยำไก่ทางเหนือ',
+        'ยำไก่เหนือ',
+        'น้ำพริกลาบ',
+        'สูตรอาหารเหนือ',
+        'อาหารเหนือ',
+        'เมนูไก่',
+        'ครัวล้านนา',
+      ],
+      highlights: [
+        'ต้มไก่ให้สุกนุ่มแล้วฉีกเป็นชิ้นพอดีคำ เพื่อให้คลุกน้ำพริกลาบได้ทั่ว',
+        'ใช้ KHUA น้ำพริกลาบเหนือเป็นหัวใจของรส ช่วยให้ยำไก่มีกลิ่นมะแขว่น พริกแห้ง และเครื่องเทศคั่ว',
+        'เตรียมหอมแดง ต้นหอม ผักชี ผักชีฝรั่ง ใบสะระแหน่ และพริกทอด เพื่อเพิ่มกลิ่นสดและเนื้อสัมผัส',
+        'คลุกตอนเครื่องยังอุ่นเล็กน้อย รสจะซึมเข้าเนื้อไก่และหอมกว่ายำแบบเย็น',
+      ],
+      content: [
+        'ยำไก่ทางเหนือเป็นเมนูอาหารเหนือที่ใช้ไก่ต้มฉีกหรือสับ คลุกกับน้ำพริกลาบและสมุนไพรสด รสชาติควรเผ็ดหอม เค็มพอดี มีกลิ่นมะแขว่น พริกแห้งคั่ว และสมุนไพรล้านนาชัดเจน เมนูนี้เหมาะกับ KHUA น้ำพริกลาบเหนือ เพราะเป็นสินค้าที่มีเครื่องเทศลาบเหนือพร้อมใช้ ช่วยให้ทำยำไก่เหนือได้ตรงรสขึ้นโดยไม่ต้องคั่วและโขลกเครื่องเองทั้งหมด',
+        'วัตถุดิบสำหรับ 3-4 ที่ ได้แก่ อกไก่หรือสะโพกไก่ต้มสุก 400 กรัม KHUA น้ำพริกลาบเหนือ 2-3 ช้อนโต๊ะ น้ำต้มไก่ 3-4 ช้อนโต๊ะ หอมแดงซอย 5 หัว ต้นหอมซอย 3 ต้น ผักชีซอย 2 ต้น ผักชีฝรั่งซอย 2 ใบ ใบสะระแหน่หนึ่งกำมือ พริกแห้งทอดตามชอบ น้ำปลา น้ำมะนาวเล็กน้อย และข้าวคั่วหรือถั่วเน่าป่นถ้าต้องการกลิ่นเหนือเข้มขึ้น',
+        'เริ่มจากต้มไก่ในน้ำเดือดอ่อน ๆ ใส่เกลือเล็กน้อยและรากผักชีถ้ามี ต้มจนไก่สุกแต่นุ่ม ไม่แห้ง จากนั้นพักให้พออุ่นแล้วฉีกเป็นเส้นหรือสับหยาบ ชิ้นไก่ควรไม่เล็กเกินไป เพราะต้องรับรสน้ำพริกลาบและยังมีเนื้อสัมผัสเมื่อคลุกยำ',
+        'เตรียมน้ำปรุงโดยผสม KHUA น้ำพริกลาบเหนือกับน้ำต้มไก่อุ่น ๆ คนให้ละลายเป็นซอสข้น ชิมก่อนเติมน้ำปลาเพราะน้ำพริกมีรสและกลิ่นเครื่องเทศอยู่แล้ว ถ้าต้องการมิติสดขึ้นให้เติมน้ำมะนาวเล็กน้อย แต่ไม่ควรให้เปรี้ยวนำ เพราะยำไก่เหนือควรเด่นที่กลิ่นเครื่องเทศและความหอมคั่ว',
+        'ใส่ไก่ฉีกลงในชามผสม เทน้ำพริกลาบที่ละลายไว้ลงไป คลุกให้เคลือบทุกชิ้น ถ้าส่วนผสมแห้งเกินไปเติมน้ำต้มไก่ทีละช้อน เนื้อยำควรชุ่มแต่ไม่แฉะ เพื่อให้รสน้ำพริกลาบเกาะไก่และไม่ไหลลงก้นชาม',
+        'ใส่หอมแดง ต้นหอม ผักชี ผักชีฝรั่ง ใบสะระแหน่ และพริกทอด คลุกเบา ๆ ในช่วงท้ายเพื่อไม่ให้ผักช้ำ ชิมรสอีกครั้งให้ได้เผ็ดหอม เค็มกลมกล่อม และมีเปรี้ยวบาง ๆ เท่านั้น ถ้าต้องการความหอมแบบเหนือชัดขึ้นให้โรยมะแขว่นคั่วป่นหรือข้าวคั่วเล็กน้อย',
+        'เคล็ดลับคือคลุกตอนเนื้อไก่ยังอุ่นเล็กน้อย เพราะน้ำพริกลาบจะซึมเข้าเนื้อและกลิ่นเครื่องเทศจะเปิดตัวดีกว่า ถ้าทำล่วงหน้าให้แยกสมุนไพรสดไว้ แล้วคลุกก่อนเสิร์ฟเพื่อให้ใบผักยังหอมและสีสวย',
+        'เสิร์ฟยำไก่เหนือคู่กับผักสด แตงกวา กะหล่ำปลี ถั่วฝักยาว ข้าวเหนียวร้อน ๆ หรือแคบหมู เมนูนี้เหมาะสำหรับคนที่อยากทำอาหารเหนือจาก KHUA น้ำพริกลาบเหนือให้เป็นจานหลัก และเหมาะกับบทความ SEO ที่ต้องตอบคำถามว่า ยำไก่เหนือทำอย่างไร น้ำพริกลาบทำเมนูอะไรได้บ้าง และอาหารเหนือเมนูไก่มีอะไรน่าทำ',
+      ],
+    },
+    en: {
+      title: 'How to Make Northern Thai Yam Gai with Nam Prik Larb: Chicken, Herbs, and Lanna Spice Steps',
+      excerpt:
+        'A clear Northern Thai chicken salad recipe using Nam Prik Larb as the seasoning base, with boiled chicken, herbs, roasted spices, and SEO-focused cooking guidance.',
+      tags: [
+        'Northern Thai Yam Gai recipe',
+        'Northern chicken salad',
+        'Nam Prik Larb',
+        'Northern Thai food',
+        'Lanna cooking',
+        'Thai chicken recipe',
+      ],
+      highlights: [
+        'Boil chicken until tender, then shred it so the larb paste coats every piece.',
+        'KHUA Nam Prik Larb Nuea gives the dish roasted chili, ma-khwaen, and Northern spice aroma.',
+        'Fresh shallots, herbs, mint, and fried chilies add lift and texture.',
+        'Mix while the chicken is slightly warm so the seasoning absorbs better.',
+      ],
+      content: [
+        'Northern Thai Yam Gai is a warm chicken salad seasoned with Nam Prik Larb and fresh herbs. KHUA Nam Prik Larb Nuea fits this recipe because it already carries the roasted dried chili, ma-khwaen, and Lanna spice base needed for a clear Northern flavor.',
+        'For 3-4 servings, prepare 400 g boiled chicken breast or thigh, 2-3 tablespoons KHUA Nam Prik Larb Nuea, 3-4 tablespoons warm chicken broth, 5 sliced shallots, sliced spring onion, cilantro, sawtooth coriander, mint leaves, fried dried chilies, fish sauce, a little lime juice, and optional toasted rice powder.',
+        'Simmer the chicken gently with a little salt until just cooked and tender. Rest until warm, then shred or roughly chop. The pieces should be large enough to hold texture after mixing.',
+        'Make the seasoning by loosening KHUA Nam Prik Larb Nuea with warm chicken broth until thick and spoonable. Taste before adding fish sauce because the paste already has seasoning and spice depth. Add a small amount of lime only for brightness.',
+        'Add shredded chicken to a mixing bowl, pour in the larb paste seasoning, and toss until every piece is coated. Add more broth one spoon at a time if it feels too dry; the salad should be moist, not watery.',
+        'Fold in shallots, spring onion, cilantro, sawtooth coriander, mint, and fried chilies at the end. Taste for a balance of spice, salt, roasted aroma, and light freshness.',
+        'The professional trick is to season the chicken while it is still slightly warm. The paste absorbs more deeply and the spice aroma opens better than in a cold salad.',
+        'Serve with cucumber, cabbage, long beans, sticky rice, or pork crackling. This dish is ideal for searches such as how to make Northern Thai Yam Gai, what to cook with KHUA Nam Prik Larb Nuea, and Northern Thai chicken recipes.',
+      ],
+    },
+    lo: {
+      title: 'ວິທີເຮັດຍຳໄກ່ເໜືອດ້ວຍນ້ຳພິກລາບ: ກຽມໄກ່ ສະໝຸນໄພ ແລະຄຸກໃຫ້ຫອມ',
+      excerpt:
+        'ສູດຍຳໄກ່ເໜືອທີ່ໃຊ້ນ້ຳພິກລາບເປັນຖານລົດ ອະທິບາຍການຕົ້ມໄກ່ ກຽມຜັກຫອມ ແລະຄຸກໃຫ້ຫອມແບບລ້ານນາ',
+      tags: ['ວິທີເຮັດຍຳໄກ່ເໜືອ', 'ຍຳໄກ່ເໜືອ', 'ນ້ຳພິກລາບ', 'ອາຫານເໜືອ', 'ຄົວລ້ານນາ'],
+      highlights: [
+        'ຕົ້ມໄກ່ໃຫ້ນຸ່ມ ແລ້ວສີກເປັນຊິ້ນພໍດີ',
+        'KHUA ນ້ຳພິກລາບເໜືອເປັນຫົວໃຈຂອງກິ່ນພິກຄົ່ວ ໝາກແຂ່ວ ແລະເຄື່ອງເທດ',
+        'ໃສ່ຫອມແດງ ຕົ້ນຫອມ ຜັກຊີ ສະລະແໜ່ ແລະພິກທອດໃຫ້ຫອມ',
+        'ຄຸກຕອນໄກ່ຍັງອຸ່ນເລັກນ້ອຍ ເພື່ອໃຫ້ລົດຊຶມເຂົ້າເນື້ອ',
+      ],
+      content: [
+        'ຍຳໄກ່ເໜືອເປັນເມນູທີ່ໃຊ້ໄກ່ຕົ້ມສີກ ຄຸກກັບນ້ຳພິກລາບ ແລະສະໝຸນໄພສົດ KHUA ນ້ຳພິກລາບເໜືອເໝາະກັບເມນູນີ້ ເພາະມີກິ່ນພິກຄົ່ວ ໝາກແຂ່ວ ແລະເຄື່ອງເທດເໜືອພ້ອມໃຊ້.',
+        'ກຽມໄກ່ຕົ້ມ 400 ກຣາມ KHUA ນ້ຳພິກລາບເໜືອ 2-3 ບ່ວງໂຕະ ນ້ຳຕົ້ມໄກ່ 3-4 ບ່ວງໂຕະ ຫອມແດງ ຕົ້ນຫອມ ຜັກຊີ ຜັກຊີຝຣັ່ງ ສະລະແໜ່ ພິກແຫ້ງທອດ ນ້ຳປາ ແລະນ້ຳໝາກນາວນ້ອຍໜຶ່ງ.',
+        'ຕົ້ມໄກ່ດ້ວຍໄຟອ່ອນໃຫ້ສຸກນຸ່ມ ພັກໃຫ້ອຸ່ນ ແລ້ວສີກຫຼືສັບຫຍາບ.',
+        'ຜສົມ KHUA ນ້ຳພິກລາບເໜືອກັບນ້ຳຕົ້ມໄກ່ອຸ່ນໃຫ້ເປັນຊອດຂົ້ນ ຊິມກ່ອນປຸງເພາະນ້ຳພິກມີລົດແລະກິ່ນເຄື່ອງເທດຢູ່ແລ້ວ.',
+        'ໃສ່ໄກ່ລົງຊາມ ລາດນ້ຳພິກລາບ ແລ້ວຄຸກໃຫ້ທົ່ວ ຖ້າແຫ້ງເກີນໄປເຕີມນ້ຳຕົ້ມໄກ່ທີລະນ້ອຍ.',
+        'ໃສ່ຫອມແດງ ຕົ້ນຫອມ ຜັກຊີ ສະລະແໜ່ ແລະພິກທອດ ຄຸກເບົາໆ ໃຫ້ຜັກຍັງຫອມສົດ.',
+        'ເສີບກັບຜັກສົດ ເຂົ້າໜຽວ ຫຼືແຄບໝູ ເປັນເມນູໄກ່ອາຫານເໜືອທີ່ເຮັດໄດ້ຈາກ KHUA ນ້ຳພິກລາບເໜືອ.',
+      ],
+    },
+    zh: {
+      title: '泰北香料鸡肉凉拌 Yam Gai 做法：用 Nam Prik Larb 调味的清晰步骤',
+      excerpt:
+        '一篇清楚的泰北鸡肉凉拌做法，以 Nam Prik Larb 为调味基础，说明煮鸡、准备香草、拌入香料与 SEO 关键词方向。',
+      tags: ['泰北鸡肉凉拌做法', 'Yam Gai', 'Nam Prik Larb', '泰北料理', '兰纳料理', '鸡肉食谱'],
+      highlights: [
+        '鸡肉煮到软嫩后撕成适口大小，方便吸附辣拌酱。',
+        'KHUA Nam Prik Larb Nuea 带来干辣椒、马告与泰北香料香气。',
+        '红葱、香草、薄荷与炸干辣椒增加清香和口感。',
+        '鸡肉微温时拌入调味，味道更容易进入肉里。',
+      ],
+      content: [
+        '泰北 Yam Gai 是用煮熟鸡肉、Nam Prik Larb 和新鲜香草拌成的鸡肉料理。KHUA Nam Prik Larb Nuea 很适合这个食谱，因为它已经带有干辣椒、马告与兰纳香料的基础香气。',
+        '准备 3-4 人份：熟鸡胸或鸡腿肉 400 克、KHUA Nam Prik Larb Nuea 2-3 汤匙、温鸡汤 3-4 汤匙、红葱、青葱、香菜、锯齿香菜、薄荷叶、炸干辣椒、鱼露和少量青柠汁。',
+        '先用小火把鸡肉煮到刚熟且软嫩，稍微放凉至温热后撕成条或粗切。鸡肉不要切得太碎，拌好后才有口感。',
+        '把 KHUA Nam Prik Larb Nuea 与温鸡汤调开成浓稠酱汁。因为辣拌酱本身已有调味与香料深度，调鱼露前要先试味。青柠汁只需少量，用来提亮香气。',
+        '把鸡肉放入大碗，倒入调好的 Nam Prik Larb 酱汁，轻轻拌到每块鸡肉都裹上调味。如果太干，可一匙一匙加入鸡汤。',
+        '最后加入红葱、青葱、香菜、锯齿香菜、薄荷和炸干辣椒，轻轻拌匀，保持香草的清新和颜色。',
+        '这道菜适合搭配黄瓜、卷心菜、长豆、糯米或猪皮脆片，也适合 SEO 搜索主题：泰北 Yam Gai 怎么做、KHUA Nam Prik Larb Nuea 能做什么、泰北鸡肉料理。',
+      ],
+    },
+  }
+  const text = contentByLocale[locale] || contentByLocale.en
+
+  return {
+    slug: `daily-${date}-northern-yam-gai-nam-prik-larb-recipe`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedCookingCategory(locale, category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '8 min read' : locale === 'zh' ? '8 分钟阅读' : locale === 'lo' ? '8 ນາທີ' : '8 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  }
+}
+
 function topicSearchText(topic) {
   return locales
     .flatMap((locale) => {
@@ -1789,6 +1927,10 @@ function customizeArticleForBrief(article, brief, locale, category = '') {
 }
 
 export function buildArticle(date, locale, brief = '', category = '') {
+  if (isNorthernYamGaiNamPrikLarbRecipe(brief, category)) {
+    return buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category)
+  }
+
   if (isNamPrikOngRecipe(brief, category)) {
     return buildNamPrikOngRecipe(date, locale, category)
   }
