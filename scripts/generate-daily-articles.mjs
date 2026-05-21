@@ -1952,12 +1952,18 @@ function focusedSubjectSlug(subject = '', fallback = 'custom-topic') {
     ['ไส้อั่ว', 'sai-ua'],
     ['น้ำพริกหนุ่ม', 'nam-prik-num'],
     ['น้ำพริกอ่อง', 'nam-prik-ong'],
+    ['หัวปลี', 'banana-blossom'],
     ['ผักชีฝรั่ง', 'sawtooth-coriander'],
     ['ผักแพว', 'vietnamese-coriander'],
     ['มะแขว่น', 'ma-khwaen'],
     ['ตะไคร้', 'lemongrass'],
     ['ข่า', 'galangal'],
     ['ขมิ้น', 'turmeric'],
+    ['ดีปลี', 'long-pepper'],
+    ['ถั่วเน่า', 'thua-nao'],
+    ['หอมแดง', 'shallot'],
+    ['กระเทียม', 'garlic'],
+    ['ใบมะกรูด', 'kaffir-lime-leaf'],
     ['ขันโตก', 'khantoke-table'],
     ['จัดโต๊ะ', 'table-setting'],
     ['hung lay', 'gaeng-hung-lay'],
@@ -2042,6 +2048,12 @@ function localizedSubjectName(slug = '', fallback = '', locale = 'th') {
       en: 'Nam Prik Ong',
       lo: 'ນ້ຳພິກອ່ອງ',
       zh: '泰北番茄肉末辣椒酱',
+    },
+    'banana-blossom': {
+      th: 'หัวปลี',
+      en: 'Banana blossom',
+      lo: 'ຫົວປີ',
+      zh: '香蕉花',
     },
     'sawtooth-coriander': {
       th: 'ผักชีฝรั่ง',
@@ -2439,6 +2451,26 @@ function buildLannaIngredientArticle(date, locale, brief = '', category = '') {
       flavor: 'กลิ่นพริกแห้งคั่วให้ความเผ็ดลึก สีแดงเข้ม และกลิ่นควันอ่อนของครัวเหนือ',
       selection: 'เลือกพริกแห้งสีแดงเข้ม ผิวไม่ดำไหม้ ไม่ชื้น และไม่มีกลิ่นรา',
       usage: 'เหมาะกับน้ำพริกตาแดง น้ำพริกลาบ และเครื่องแกงเหนือ คั่วไฟอ่อนก่อนใช้เพื่อเปิดกลิ่น',
+    },
+    'long-pepper': {
+      flavor: 'กลิ่นเผ็ดร้อนลึก คล้ายพริกไทยแต่มีความหวานเครื่องเทศและกลิ่นสมุนไพรชัด',
+      selection: 'เลือกฝักแห้งที่สีเข้มสม่ำเสมอ ผิวไม่ชื้น ไม่มีกลิ่นอับ และยังมีกลิ่นเผ็ดหอมเมื่อบี้เบา ๆ',
+      usage: 'เหมาะกับเครื่องแกง น้ำพริก เมนูต้มสมุนไพร หรือเมนูที่ต้องการความเผ็ดร้อนแบบเครื่องเทศ ใช้แต่น้อยเพื่อไม่ให้กลบรสหลัก',
+    },
+    shallot: {
+      flavor: 'กลิ่นหวานฉุนอ่อน ๆ เมื่อสด และหอมลึกขึ้นเมื่อคั่วหรือเจียว เป็นฐานกลิ่นสำคัญของน้ำพริกและเครื่องแกงเหนือ',
+      selection: 'เลือกหัวแน่น เปลือกแห้ง สีสม่ำเสมอ ไม่มีรากงอก ไม่มีเชื้อรา และไม่มีกลิ่นชื้น',
+      usage: 'เหมาะกับน้ำพริก เครื่องแกง ลาบ และเมนูผัดเครื่อง ควรคั่วหรือผัดให้หอมเพื่อสร้างฐานรสที่นุ่มขึ้น',
+    },
+    garlic: {
+      flavor: 'กลิ่นฉุนหอมและความหวานเมื่อผ่านความร้อน ช่วยยกกลิ่นคั่วของอาหารเหนือ',
+      selection: 'เลือกกลีบแน่น เปลือกแห้ง ไม่ฝ่อ ไม่ขึ้นรา และไม่มีกลิ่นอับ',
+      usage: 'ใช้เป็นฐานน้ำพริก เครื่องแกง และเมนูคั่ว ควรคั่วหรือผัดจนหอมก่อนโขลกหรือปรุงต่อ',
+    },
+    'kaffir-lime-leaf': {
+      flavor: 'กลิ่นซิตรัสสดชัด ช่วยตัดความมันและเพิ่มความหอมสดให้เมนูสมุนไพร',
+      selection: 'เลือกใบสีเขียวเข้ม ผิวใบเงา ไม่เหลือง ไม่ช้ำ และมีกลิ่นหอมเมื่อฉีก',
+      usage: 'เหมาะกับเมนูต้ม แกง และอาหารสมุนไพร ใช้ฉีกหรือซอยฝอยตามลักษณะเมนูเพื่อเปิดกลิ่น',
     },
   }
   const profile = profiles[slug] || {
@@ -3000,6 +3032,49 @@ function topicForDate(date, brief = '') {
   return scored[0]?.score > 0 ? scored[0].topic : topics[Math.abs(date.split('-').join('')) % topics.length]
 }
 
+function stripEditorialInstructions(article) {
+  const instructionStart = [
+    'สำหรับ SEO',
+    'For SEO',
+    'SEO 可',
+    'SEO ',
+    'ในเชิง SEO',
+  ]
+  const cleanVisibleText = (value) =>
+    String(value || '')
+      .replace(/,\s*SEO angle/gi, '')
+      .replace(/\s*SEO angle,?\s*/gi, ' ')
+      .replace(/SEO-focused cooking guidance/gi, 'practical cooking guidance')
+      .replace(/SEO-friendly content angles/gi, 'practical content angles')
+      .replace(/SEO-friendly article angles/gi, 'practical article angles')
+      .replace(/เหมาะสำหรับบทความ SEO อาหารเหนือ/g, 'เหมาะสำหรับคนที่อยากทำอาหารเหนืออย่างละเอียด')
+      .replace(/แนวทางเขียน SEO ให้ตรงคำค้น/g, 'แนวทางเขียนให้ตรงคำค้น')
+      .replace(/แนวทาง SEO/g, 'แนวทางการเขียนให้ตรงคำค้น')
+      .replace(/SEO 关键词方向/g, '实用关键词方向')
+      .replace(/撰写 SEO 内容/g, '撰写实用内容')
+      .replace(/SEO 写作方向/g, '实用写作方向')
+      .replace(/、SEO/g, '')
+      .replace(/SEO\s*与/g, '')
+      .replace(/article,\s+and/gi, 'article and')
+      .replace(/\s{2,}/g, ' ')
+      .trim()
+  const isEditorialInstruction = (value) => {
+    const text = String(value || '').trim()
+    return text.includes('SEO') || instructionStart.some((prefix) => text.startsWith(prefix))
+  }
+
+  return {
+    ...article,
+    excerpt: cleanVisibleText(article.excerpt),
+    highlights: Array.isArray(article.highlights)
+      ? article.highlights.filter((highlight) => !isEditorialInstruction(highlight)).map(cleanVisibleText)
+      : article.highlights,
+    content: Array.isArray(article.content)
+      ? article.content.filter((paragraph) => !isEditorialInstruction(paragraph)).map(cleanVisibleText)
+      : article.content,
+  }
+}
+
 function customizeArticleForBrief(article, brief, locale, category = '') {
   const cleanedBrief = String(brief || '').trim().replace(/\s+/g, ' ')
   const cleanedCategory = String(category || '').trim().replace(/\s+/g, ' ')
@@ -3032,34 +3107,34 @@ function customizeArticleForBrief(article, brief, locale, category = '') {
 
 export function buildArticle(date, locale, brief = '', category = '') {
   if (isPhakKhaoTongLocalVegetable(brief, category)) {
-    return buildPhakKhaoTongLocalVegetableArticle(date, locale, category)
+    return stripEditorialInstructions(buildPhakKhaoTongLocalVegetableArticle(date, locale, category))
   }
 
   if (isYodMakokLocalVegetable(brief, category)) {
-    return buildYodMakokLocalVegetableArticle(date, locale, category)
+    return stripEditorialInstructions(buildYodMakokLocalVegetableArticle(date, locale, category))
   }
 
   if (isNorthernYamGaiNamPrikLarbRecipe(brief, category)) {
-    return buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category)
+    return stripEditorialInstructions(buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category))
   }
 
   if (isNamPrikOngRecipe(brief, category)) {
-    return buildNamPrikOngRecipe(date, locale, category)
+    return stripEditorialInstructions(buildNamPrikOngRecipe(date, locale, category))
   }
 
   if (isLannaIngredientsCategory(category) && cleanBriefSubject(brief)) {
-    return buildLannaIngredientArticle(date, locale, brief, category)
+    return stripEditorialInstructions(buildLannaIngredientArticle(date, locale, brief, category))
   }
 
   const focusedArticle = buildFocusedCategoryArticle(date, locale, brief, category)
   if (focusedArticle) {
-    return focusedArticle
+    return stripEditorialInstructions(focusedArticle)
   }
 
   const topic = topicForDate(date, [category, brief].filter(Boolean).join(' '))
   const text = topic[locale]
 
-  return customizeArticleForBrief({
+  return stripEditorialInstructions(customizeArticleForBrief({
     slug: `daily-${date}-${topic.key}`,
     title: text.title,
     excerpt: text.excerpt,
@@ -3069,7 +3144,7 @@ export function buildArticle(date, locale, brief = '', category = '') {
     tags: text.tags,
     highlights: text.highlights,
     content: text.content,
-  }, brief, locale, category)
+  }, brief, locale, category))
 }
 
 async function run() {
