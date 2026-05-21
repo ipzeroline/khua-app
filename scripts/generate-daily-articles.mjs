@@ -1067,6 +1067,24 @@ function buildTopicImageBrief(article) {
     values.some((value) => category === String(value).toLowerCase())
 
   if (
+    searchable.includes('phak-khao-tong-local-vegetable') ||
+    searchable.includes('ผักคาวตอง') ||
+    searchable.includes('ผักคาวทอง') ||
+    searchable.includes('พลูคาว') ||
+    searchable.includes('fish mint') ||
+    searchable.includes('houttuynia')
+  ) {
+    return [
+      'Title-specific visual brief: this article is specifically about phak khao tong, also known as fish mint or Houttuynia cordata, as a Northern local vegetable. It is not about cooking chili paste, curry paste, nam prik ong, or a red sauce.',
+      'The visual hero must be fresh phak khao tong leaves: heart-shaped green leaves with visible veins, tender stems, and a clean aromatic herb character, arranged in a premium identifiable cluster.',
+      'Show how phak khao tong is eaten with Northern food: a very small bowl of Northern chili paste may appear as a supporting pairing cue only, clearly smaller than the herb hero. The herb must dominate the strongest focal point.',
+      'Make it premium and editorial: crisp leaf texture, fresh water droplets, neat bunches, dark ceramic or woven tray, warm natural side light, shallow depth of field, calm negative space.',
+      'Strictly avoid a pan, spoon stirring red paste, tomato sauce, minced meat, nam prik ong, curry paste preparation, large chili paste bowl as hero, generic mixed vegetable platter, or random herbs that do not show heart-shaped fish mint leaves.',
+      'The image must answer the title and category: "ผักคาวตอง" in "ผักพื้นบ้าน" first, before any generic Northern Thai food styling.',
+    ].join(' ')
+  }
+
+  if (
     searchable.includes('olive-shoots-local-vegetable') ||
     searchable.includes('ยอดมะกอก') ||
     searchable.includes('ใบมะกอก') ||
@@ -1786,6 +1804,27 @@ function isYodMakokLocalVegetable(brief = '', category = '') {
   return hasYodMakok && hasVegetableContext
 }
 
+function isPhakKhaoTongLocalVegetable(brief = '', category = '') {
+  const searchable = `${brief} ${category}`.toLowerCase()
+  const hasPhakKhaoTong =
+    searchable.includes('ผักคาวตอง') ||
+    searchable.includes('ผักคาวทอง') ||
+    searchable.includes('พลูคาว') ||
+    searchable.includes('fish mint') ||
+    searchable.includes('houttuynia') ||
+    searchable.includes('heartleaf')
+  const hasVegetableContext =
+    searchable.includes('ผักพื้นบ้าน') ||
+    searchable.includes('ผัก') ||
+    searchable.includes('สมุนไพร') ||
+    searchable.includes('local vegetable') ||
+    searchable.includes('local vegetables') ||
+    searchable.includes('herb') ||
+    searchable.includes('vegetable')
+
+  return hasPhakKhaoTong && hasVegetableContext
+}
+
 function localizedCookingCategory(locale, category = '') {
   const cleanedCategory = String(category || '').trim()
   const cookingCategories = [
@@ -2049,6 +2088,105 @@ function buildNorthernYamGaiNamPrikLarbRecipe(date, locale, category = '') {
   }
 }
 
+function buildPhakKhaoTongLocalVegetableArticle(date, locale, category = '') {
+  const contentByLocale = {
+    th: {
+      title: 'ผักคาวตอง ผักพื้นบ้านกลิ่นชัดที่กินกับน้ำพริกเหนือและอาหารรสจัดได้ลงตัว',
+      excerpt:
+        'รู้จักผักคาวตองหรือพลูคาว ผักพื้นบ้านใบรูปหัวใจ กลิ่นเฉพาะ รสสดซ่า เหมาะกับน้ำพริกเหนือ ลาบ และอาหารรสจัด พร้อมวิธีเลือก ล้าง จัดเสิร์ฟ และแนวทาง SEO',
+      tags: ['ผักคาวตอง', 'พลูคาว', 'ผักพื้นบ้าน', 'ผักกินกับน้ำพริก', 'สมุนไพรพื้นบ้าน', 'น้ำพริกเหนือ'],
+      highlights: [
+        'ผักคาวตองมีใบรูปหัวใจ กลิ่นชัด และรสสดซ่าที่ช่วยตัดความเผ็ดมันของน้ำพริก',
+        'เลือกใบอ่อนสด ไม่ช้ำ ไม่เหลือง และก้านยังกรอบ',
+        'ล้างให้สะอาด แช่น้ำเย็นสั้น ๆ แล้วเสิร์ฟสดเป็นผักแนม',
+        'เหมาะกับน้ำพริกตาแดง น้ำพริกลาบ ลาบเหนือ และอาหารรสจัด',
+      ],
+      content: [
+        'ผักคาวตองหรือพลูคาวเป็นผักพื้นบ้านที่มีเอกลักษณ์ชัด ใบมักเป็นรูปหัวใจ สีเขียวสด มีกลิ่นเฉพาะตัวและรสสดซ่า จึงเหมาะกับอาหารเหนือที่มีรสเผ็ด เค็ม หอมเครื่องเทศ หรือมีความมันจากน้ำพริกและลาบ',
+        'ถ้าผู้ใช้เลือกหมวดผักพื้นบ้านและพิมพ์ว่า “ผักคาวตอง” บทความควรโฟกัสที่ตัวผักเป็นหลัก ไม่ควรเปลี่ยนไปเป็นสูตรน้ำพริกหรือภาพน้ำพริกแดง เพราะเจตนาของคำค้นคืออยากรู้จักผักชนิดนี้ วิธีเลือก วิธีเตรียม และกินกับอะไร',
+        'วิธีเลือกผักคาวตองให้ดูที่ใบอ่อนและยอดสด ใบควรไม่ช้ำ ไม่เหลือง ไม่มีรอยดำ และก้านยังกรอบ ถ้ากลิ่นแรงเกินไปสำหรับบางคน ให้เลือกใบอ่อนมากกว่าส่วนใบแก่ เพราะกลิ่นจะนุ่มกว่าและกินง่ายกว่า',
+        'ก่อนกินให้ล้างผ่านน้ำสะอาดหลายครั้ง โดยเฉพาะซอกใบและก้าน จากนั้นแช่น้ำเย็น 3-5 นาทีแล้วสะเด็ดน้ำให้แห้ง เด็ดเป็นช่อเล็กหรือแยกใบเพื่อจัดเสิร์ฟ คู่กับแตงกวา ถั่วฝักยาว หรือผักพื้นบ้านอื่นได้',
+        'ผักคาวตองเข้ากับน้ำพริกตาแดงเหนือ น้ำพริกลาบเหนือ และลาบเหนือ เพราะกลิ่นสดของใบช่วยตัดความเผ็ด ความเค็ม และกลิ่นคั่วของพริกกับเครื่องเทศ ทำให้มื้ออาหารไม่หนักจนเกินไป',
+        'ถ้าใช้สินค้า KHUA สามารถจัดผักคาวตองเป็นผักสดคู่กับ KHUA น้ำพริกตาแดงเหนือหรือ KHUA น้ำพริกลาบเหนือได้ดี โดยให้ผักเป็นตัวเพิ่มความสดและช่วยบาลานซ์รสจัดของน้ำพริก ไม่จำเป็นต้องปรุงผักเพิ่มเติม',
+        'สำหรับ SEO ควรใช้คำว่า ผักคาวตอง, พลูคาว, ผักพื้นบ้าน, ผักกินกับน้ำพริก, สมุนไพรพื้นบ้าน และน้ำพริกเหนืออย่างเป็นธรรมชาติ พร้อมตอบคำถามหลักว่า ผักคาวตองคืออะไร รสชาติเป็นอย่างไร กินกับอะไร และเตรียมก่อนกินอย่างไร',
+      ],
+    },
+    en: {
+      title: 'Phak Khao Tong: Fish Mint, the Aromatic Local Vegetable for Northern Chili Paste',
+      excerpt:
+        'A practical guide to phak khao tong, or fish mint, including its heart-shaped leaves, bold aroma, preparation, pairing with Northern chili paste, and SEO-friendly content angles.',
+      tags: ['phak khao tong', 'fish mint', 'Houttuynia cordata', 'local vegetables', 'Northern Thai chili paste', 'vegetables with nam prik'],
+      highlights: [
+        'Fish mint has heart-shaped leaves, a bold aroma, and a fresh bite that balances spicy chili paste.',
+        'Choose young fresh leaves with no yellowing or bruising.',
+        'Rinse carefully, chill briefly, drain well, and serve fresh.',
+        'Pair with Nam Prik Ta Daeng, Nam Prik Larb, larb, and bold Northern dishes.',
+      ],
+      content: [
+        'Phak khao tong, also known as fish mint or Houttuynia cordata, is a local vegetable with heart-shaped green leaves and a distinctive aroma. Its fresh, sharp character helps balance spicy and savory Northern Thai food.',
+        'When the article brief names phak khao tong, the content should focus on the vegetable itself: what it is, how it tastes, how to choose it, how to prepare it, and what Northern dishes it works with.',
+        'Choose young leaves with a fresh green color, crisp stems, no yellowing, and no bruising. Younger leaves are usually easier to eat because their aroma is gentler than older leaves.',
+        'To prepare, rinse thoroughly, especially around stems and leaf folds. Soak briefly in cold water, drain well, then serve as small clusters or individual leaves with chili paste.',
+        'Fish mint pairs well with Nam Prik Ta Daeng, Nam Prik Larb, Northern larb, and other spicy dishes. Its fresh aroma cuts through heat, salt, and richness.',
+        'For KHUA products, serve phak khao tong as a fresh side vegetable with KHUA Nam Prik Ta Daeng Nuea or KHUA Nam Prik Larb Nuea. The vegetable brings brightness while the chili paste carries roasted depth.',
+        'For SEO, use terms such as phak khao tong, fish mint, Houttuynia cordata, local vegetables, vegetables with nam prik, and Northern Thai chili paste while answering practical questions about flavor and preparation.',
+      ],
+    },
+    lo: {
+      title: 'ຜັກຄາວຕອງ ຜັກພື້ນບ້ານກິ່ນຊັດ ກິນກັບນ້ຳພິກເໜືອໄດ້ສົດຊື່ນ',
+      excerpt:
+        'ຮູ້ຈັກຜັກຄາວຕອງ ຜັກໃບຮູບຫົວໃຈ ກິ່ນຊັດ ເໝາະກັບນ້ຳພິກເໜືອ ພ້ອມວິທີເລືອກ ລ້າງ ແລະຈັດເສີບ',
+      tags: ['ຜັກຄາວຕອງ', 'ຜັກພື້ນບ້ານ', 'ຜັກກິນກັບນ້ຳພິກ', 'ນ້ຳພິກເໜືອ', 'ສະໝຸນໄພພື້ນບ້ານ'],
+      highlights: [
+        'ຜັກຄາວຕອງມີໃບຮູບຫົວໃຈ ແລະກິ່ນສົດຊັດ',
+        'ເລືອກໃບອ່ອນສົດ ບໍ່ເຫຼືອງ ບໍ່ຊ້ຳ',
+        'ລ້າງໃຫ້ສະອາດ ແຊ່ນ້ຳເຢັນສັ້ນໆ ແລ້ວເສີບສົດ',
+        'ເໝາະກັບນ້ຳພິກຕາແດງ ນ້ຳພິກລາບ ແລະລາບເໜືອ',
+      ],
+      content: [
+        'ຜັກຄາວຕອງເປັນຜັກພື້ນບ້ານໃບຮູບຫົວໃຈ ມີກິ່ນຊັດ ແລະລົດສົດ ຊ່ວຍຕັດຄວາມເຜັດແລະຄວາມມັນຂອງອາຫານເໜືອ.',
+        'ຖ້າຜູ້ອ່ານຄົ້ນຫາຜັກຄາວຕອງ ບົດຄວາມຄວນໂຟກັສທີ່ຜັກນີ້ໂດຍກົງ ບໍ່ແມ່ນສູດນ້ຳພິກ ຫຼືອາຫານອື່ນ.',
+        'ເລືອກໃບອ່ອນສົດ ບໍ່ເຫຼືອງ ບໍ່ຊ້ຳ ແລະກ້ານຍັງກອບ. ໃບອ່ອນຈະກິນງ່າຍກວ່າໃບແກ່.',
+        'ລ້າງຜັກຫຼາຍນ້ຳ ແຊ່ນ້ຳເຢັນ 3-5 ນາທີ ແລ້ວສະເດັດນ້ຳ ຈັດເປັນຊໍ່ນ້ອຍກິນກັບນ້ຳພິກ.',
+        'ຜັກຄາວຕອງເໝາະກັບນ້ຳພິກຕາແດງ ນ້ຳພິກລາບ ແລະອາຫານເຜັດ ເພາະຊ່ວຍໃຫ້ມື້ອາຫານສົດຂຶ້ນ.',
+      ],
+    },
+    zh: {
+      title: '鱼腥草 Phak Khao Tong：适合搭配泰北辣椒酱的本地香草蔬菜',
+      excerpt:
+        '认识 Phak Khao Tong 鱼腥草，了解心形叶、特殊香气、挑选清洗方法，以及如何搭配泰北辣椒酱与 SEO 写作方向。',
+      tags: ['Phak Khao Tong', '鱼腥草', 'Houttuynia cordata', '泰北本地蔬菜', '泰北辣椒酱', 'Nam Prik'],
+      highlights: [
+        '鱼腥草有心形绿叶和鲜明香气，能平衡辣椒酱的厚重味。',
+        '选择嫩叶新鲜、不发黄、不压伤的叶束。',
+        '充分清洗、短暂冰镇、沥干后作为鲜蔬搭配。',
+        '适合搭配泰北红辣椒酱、Nam Prik Larb 与拉布。',
+      ],
+      content: [
+        'Phak Khao Tong，也就是鱼腥草，是一种带有特殊香气的本地蔬菜。它的心形叶和清爽味道适合搭配泰北辣椒酱、拉布和重香料菜。',
+        '当主题写的是鱼腥草，内容应集中回答它是什么、什么味道、如何挑选、如何清洗，以及适合搭配什么，而不是转成辣椒酱食谱。',
+        '挑选时看嫩叶是否鲜绿、无发黄、无压伤，茎部是否仍然脆。嫩叶通常比老叶更容易入口。',
+        '食用前用清水充分冲洗，短暂泡冷水后沥干，再摘成小束或单片叶摆盘。',
+        '鱼腥草适合搭配泰北红辣椒酱、Nam Prik Larb 和泰北拉布，能用清新香气平衡辣、咸和油脂感。',
+        '搭配 KHUA 产品时，可作为 KHUA Nam Prik Ta Daeng Nuea 或 KHUA Nam Prik Larb Nuea 的鲜蔬配菜。',
+      ],
+    },
+  }
+  const text = contentByLocale[locale] || contentByLocale.en
+
+  return {
+    slug: `daily-${date}-phak-khao-tong-local-vegetable`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedLocalVegetableCategory(locale, category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  }
+}
+
 function buildYodMakokLocalVegetableArticle(date, locale, category = '') {
   const contentByLocale = {
     th: {
@@ -2220,6 +2358,10 @@ function customizeArticleForBrief(article, brief, locale, category = '') {
 }
 
 export function buildArticle(date, locale, brief = '', category = '') {
+  if (isPhakKhaoTongLocalVegetable(brief, category)) {
+    return buildPhakKhaoTongLocalVegetableArticle(date, locale, category)
+  }
+
   if (isYodMakokLocalVegetable(brief, category)) {
     return buildYodMakokLocalVegetableArticle(date, locale, category)
   }
