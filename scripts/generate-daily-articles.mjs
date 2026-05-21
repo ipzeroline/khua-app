@@ -1214,6 +1214,22 @@ function buildTopicImageBrief(article) {
   }
 
   if (
+    searchable.includes('แกงหน่อไม้') ||
+    searchable.includes('แกงหน่อ') ||
+    searchable.includes('bamboo shoot curry') ||
+    searchable.includes('bamboo shoot soup')
+  ) {
+    return [
+      'Title-specific visual brief: this article is about Northern Thai bamboo shoot curry, known as gaeng nor mai.',
+      'The hero subject must be a bowl of bamboo shoot curry where pale bamboo shoot strips or chunks are clearly visible as the main ingredient.',
+      'Show dark green yanang-leaf broth or herbal Northern curry broth, with bamboo shoots rising above the surface so the viewer immediately recognizes bamboo shoots.',
+      'Supporting ingredients may include cha-om, mushrooms, basil-like herbs, dried chili, shallot, garlic, lemongrass, or a small mortar, but they must never hide the bamboo shoots.',
+      'Avoid generic green leafy soup, pork curry, nam prik bowls as the main subject, cucumber side dishes as focal points, and any composition where bamboo shoots are missing or unclear.',
+      'The viewer should immediately think "Northern Thai bamboo shoot curry" and not a generic Northern Thai meal.',
+    ].join(' ')
+  }
+
+  if (
     categoryMatches('เมนูอาหารเหนือ', 'Northern Food Menu', 'ເມນູອາຫານເໜືອ', '泰北美食菜单')
   ) {
     return [
@@ -1998,6 +2014,8 @@ function focusedSubjectSlug(subject = '', fallback = 'custom-topic') {
     ['คั่วพริกแกง', 'roasted-curry-paste-technique'],
     ['คั่วเครื่องแกง', 'roasted-curry-paste-technique'],
     ['เครื่องแกง', 'curry-paste'],
+    ['แกงหน่อไม้', 'gaeng-nor-mai'],
+    ['แกงหน่อ', 'gaeng-nor-mai'],
     ['แกงฮังเล', 'gaeng-hung-lay'],
     ['ส้าจิ๊น', 'saa-jin'],
     ['ส้าจิ้น', 'saa-jin'],
@@ -2021,6 +2039,8 @@ function focusedSubjectSlug(subject = '', fallback = 'custom-topic') {
     ['ขันโตก', 'khantoke-table'],
     ['จัดโต๊ะ', 'table-setting'],
     ['hung lay', 'gaeng-hung-lay'],
+    ['bamboo shoot curry', 'gaeng-nor-mai'],
+    ['bamboo shoot soup', 'gaeng-nor-mai'],
     ['khao soi', 'khao-soi'],
     ['sai ua', 'sai-ua'],
     ['khantoke', 'khantoke-table'],
@@ -2078,6 +2098,12 @@ function localizedSubjectName(slug = '', fallback = '', locale = 'th') {
       en: 'Gaeng Hung Lay',
       lo: 'ແກງຮັງເລ',
       zh: '泰北杭莱咖喱',
+    },
+    'gaeng-nor-mai': {
+      th: 'แกงหน่อไม้',
+      en: 'Northern Thai bamboo shoot curry',
+      lo: 'ແກງໜໍ່ໄມ້',
+      zh: '泰北竹笋咖喱',
     },
     'saa-jin': {
       th: 'ส้าจิ้น',
@@ -2563,6 +2589,106 @@ function buildSaaJinMenuArticle(date, locale, category = '') {
 
   return stripEditorialInstructions({
     slug: `daily-${date}-saa-jin-northern-menu`,
+    title: text.title,
+    excerpt: text.excerpt,
+    category: localizedFocusedCategory(locale, 'northernMenu', category),
+    date: formatDate(date, locale),
+    readTime: locale === 'en' ? '6 min read' : locale === 'zh' ? '6 分钟阅读' : locale === 'lo' ? '6 ນາທີ' : '6 นาที',
+    tags: text.tags,
+    highlights: text.highlights,
+    content: text.content,
+  })
+}
+
+function isGaengNorMaiMenu(brief = '', category = '') {
+  const searchable = `${brief} ${category}`.toLowerCase()
+  return (
+    categoryKind(category) === 'northernMenu' &&
+    (
+      searchable.includes('แกงหน่อไม้') ||
+      searchable.includes('แกงหน่อ') ||
+      searchable.includes('หน่อไม้') ||
+      searchable.includes('bamboo shoot curry') ||
+      searchable.includes('bamboo shoot soup')
+    )
+  )
+}
+
+function buildGaengNorMaiMenuArticle(date, locale, category = '') {
+  const contentByLocale = {
+    th: {
+      title: 'แกงหน่อไม้: เมนูอาหารเหนือจากหน่อไม้ ใบย่านาง และเครื่องแกงหอมลึก',
+      excerpt:
+        'รู้จักแกงหน่อไม้แบบเหนือ เมนูน้ำแกงรสเผ็ดนัวที่ให้หน่อไม้เป็นตัวเอก หอมใบย่านาง เครื่องแกง สมุนไพร และเหมาะกินกับข้าวเหนียวหรือผักพื้นบ้าน',
+      tags: ['แกงหน่อไม้', 'เมนูอาหารเหนือ', 'หน่อไม้', 'ใบย่านาง', 'อาหารล้านนา'],
+      highlights: [
+        'หน่อไม้ต้องเป็นตัวเอกของรสและเนื้อสัมผัส',
+        'ใบย่านางและเครื่องแกงช่วยให้กลิ่นแกงลึกแบบพื้นบ้าน',
+        'กินกับข้าวเหนียว ผักลวก หรือเมนูรสอ่อนจะช่วยให้มื้อสมดุล',
+      ],
+      content: [
+        'แกงหน่อไม้เป็นเมนูอาหารเหนือที่มีเสน่ห์จากรสเผ็ดนัวและกลิ่นผักพื้นบ้าน จุดสำคัญอยู่ที่หน่อไม้ซึ่งให้ทั้งความกรอบนุ่ม กลิ่นเฉพาะตัว และรสหวานขมอ่อน ๆ เมื่อนำมาแกงกับเครื่องสมุนไพรจึงได้จานที่ไม่หนักเกินไป แต่ยังมีความลึกแบบครัวล้านนา',
+        'วัตถุดิบที่ทำให้แกงหน่อไม้ชัดคือหน่อไม้ต้มที่หั่นเป็นชิ้นหรือฉีกเป็นเส้น น้ำใบย่านางที่ให้สีเขียวเข้มและกลิ่นเย็น เครื่องแกงจากพริกแห้ง หอมแดง กระเทียม ตะไคร้ และสมุนไพรตามบ้าน บางสูตรเพิ่มปลาร้าหรือถั่วเน่าเพื่อให้รสนัวและกลิ่นหมักเบา ๆ',
+        'รสของแกงหน่อไม้ที่ดีควรมีความเผ็ดพอดี เค็มนัว หอมสมุนไพร และยังปล่อยให้รสของหน่อไม้เด่นอยู่ ถ้าใส่ผักอย่างชะอม เห็ด หรือใบแมงลัก ควรให้เป็นตัวเสริมกลิ่น ไม่กลบหน่อไม้จนกลายเป็นแกงผักรวมทั่วไป',
+        'การจัดมื้อให้แกงหน่อไม้น่ากินมักเริ่มจากข้าวเหนียวร้อน ๆ หรือข้าวสวย แล้ววางคู่กับผักลวก ไข่ต้ม หรืออาหารรสอ่อนเพื่อรับความเผ็ดนัว ถ้ามีน้ำพริกหรือเครื่องแกงเหนือบนโต๊ะ ควรเลือกตัวที่กลิ่นคั่วและสมุนไพรไปทางเดียวกัน ไม่แย่งกลิ่นใบย่านาง',
+      ],
+    },
+    en: {
+      title: 'Northern Thai Bamboo Shoot Curry: Earthy Bamboo, Yanang Leaf, and Lanna Aromatics',
+      excerpt:
+        'A professional guide to Northern Thai bamboo shoot curry, with bamboo shoots, yanang leaf, herbs, fermented depth, and balanced serving ideas.',
+      tags: ['Northern Thai bamboo shoot curry', 'bamboo shoots', 'yanang leaf', 'Northern Thai menu', 'Lanna food'],
+      highlights: [
+        'Bamboo shoots define the texture, aroma, and rustic character of the curry',
+        'Yanang leaf and pounded aromatics give the broth its herbal depth',
+        'Simple sides such as sticky rice and blanched vegetables keep the meal balanced',
+      ],
+      content: [
+        'Northern Thai bamboo shoot curry is a rustic dish built around the aroma and texture of bamboo shoots. The best versions do not hide the bamboo under heavy garnish; they let the shoots stay visible in the bowl, carrying a gentle earthiness, a light bitterness, and a tender bite that feels unmistakably local.',
+        'The broth usually gains depth from yanang leaf, dried chili, shallot, garlic, lemongrass, and local seasoning such as fermented fish or thua nao depending on the household style. These ingredients create a savory herbal base that supports the bamboo shoots instead of turning the dish into a generic green curry.',
+        'A good bowl should taste spicy, lightly salty, herbal, and rounded. Greens such as cha-om, mushrooms, or basil-like herbs can add fragrance, but they should remain supporting elements. The visual identity should show pale bamboo strips or chunks clearly against the darker green broth.',
+        'Serve the curry with warm sticky rice, blanched vegetables, boiled egg, or a mild grilled dish. If KHUA curry paste or Northern seasoning is mentioned, it should be only as a relevant helper for building roasted chili and herb aroma, not as a forced promotion.',
+      ],
+    },
+    lo: {
+      title: 'ແກງໜໍ່ໄມ້ແບບເໜືອ: ໜໍ່ໄມ້ ໃບຢ່ານາງ ແລະເຄື່ອງແກງຫອມ',
+      excerpt:
+        'ຮູ້ຈັກແກງໜໍ່ໄມ້ແບບເໜືອ ນ້ຳແກງເຜັດນົວ ຫອມໃບຢ່ານາງ ເຄື່ອງແກງ ແລະໜໍ່ໄມ້ທີ່ເປັນຕົວເອກ',
+      tags: ['ແກງໜໍ່ໄມ້', 'ເມນູອາຫານເໜືອ', 'ໜໍ່ໄມ້', 'ໃບຢ່ານາງ', 'ອາຫານລ້ານນາ'],
+      highlights: [
+        'ໜໍ່ໄມ້ເປັນຕົວເອກຂອງກິ່ນ ລົດ ແລະສຳຜັດ',
+        'ໃບຢ່ານາງແລະເຄື່ອງແກງຊ່ວຍໃຫ້ນ້ຳແກງຫອມລຶກ',
+        'ກິນກັບເຂົ້າໜຽວ ຜັກລວກ ຫຼືໄຂ່ຕົ້ມໃຫ້ມື້ອາຫານສົມດຸນ',
+      ],
+      content: [
+        'ແກງໜໍ່ໄມ້ແບບເໜືອເປັນເມນູທີ່ໃຫ້ໜໍ່ໄມ້ເປັນຕົວເອກ ມີຄວາມກອບນຸ່ມ ກິ່ນດິນອ່ອນ ແລະລົດຂົມຫວານເບົາໆ ເມື່ອແກງກັບສະໝຸນໄພຈຶ່ງໄດ້ລົດບ້ານໆ ທີ່ອົບອຸ່ນ.',
+        'ນ້ຳແກງມັກໄດ້ສີແລະກິ່ນຈາກໃບຢ່ານາງ ພ້ອມເຄື່ອງແກງຈາກໝາກເຜັດແຫ້ງ ຫອມແດງ ກະທຽມ ຕະໄຄ້ ແລະເຄື່ອງປຸງພື້ນບ້ານທີ່ໃຫ້ລົດນົວ.',
+        'ແກງທີ່ດີຄວນເຜັດພໍດີ ຫອມສະໝຸນໄພ ແລະຍັງເຫັນຊິ້ນໜໍ່ໄມ້ຊັດໃນຖ້ວຍ ຜັກອື່ນເຊັ່ນ ເຫັດ ຫຼືຜັກຫອມຄວນເປັນຕົວເສີມ ບໍ່ໃຫ້ກົບກິ່ນໜໍ່ໄມ້.',
+        'ເວລາຈັດມື້ ແກງໜໍ່ໄມ້ເຂົ້າກັບເຂົ້າໜຽວຮ້ອນ ຜັກລວກ ໄຂ່ຕົ້ມ ຫຼືອາຫານລົດອ່ອນ ເພື່ອຊ່ວຍຮັບລົດເຜັດນົວໃຫ້ກິນງ່າຍຂຶ້ນ.',
+      ],
+    },
+    zh: {
+      title: '泰北竹笋咖喱：竹笋、Yanang 叶与兰纳香料的家常味道',
+      excerpt:
+        '认识泰北竹笋咖喱，了解竹笋、Yanang 叶、香料与发酵调味如何形成辛香、草本又朴实的泰北风味。',
+      tags: ['泰北竹笋咖喱', '竹笋', 'Yanang 叶', '泰北菜单', '兰纳料理'],
+      highlights: [
+        '竹笋是这道菜的主角，决定口感与乡土气息',
+        'Yanang 叶和捣制香料让汤汁更有草本深度',
+        '搭配糯米、烫蔬菜或清淡小菜能让餐桌更平衡',
+      ],
+      content: [
+        '泰北竹笋咖喱是一道以竹笋为核心的家常菜。好的版本会让竹笋清楚出现在碗中，保留柔韧口感、淡淡土香和微苦回甘，而不是被大量绿叶或肉块盖过。',
+        '汤底常使用 Yanang 叶带出深绿色与草本香，再加入干辣椒、红葱头、大蒜、香茅等香料。有些家庭会用发酵鱼或泰北发酵黄豆增加鲜味，让味道更有层次。',
+        '这道菜的方向应是辛香、咸鲜、草本而不厚重。蘑菇、cha-om 或香草可以作为辅助，但画面与味道都应让竹笋保持主角位置，避免变成普通绿叶蔬菜汤。',
+        '上桌时可搭配热糯米、烫蔬菜、白煮蛋或味道较清淡的烤物。如果提到 KHUA 的咖喱酱或泰北调味，应只放在帮助建立烘烤辣椒与香草香气的脉络中。',
+      ],
+    },
+  }
+  const text = contentByLocale[locale] || contentByLocale.en
+
+  return stripEditorialInstructions({
+    slug: `daily-${date}-gaeng-nor-mai-northern-menu`,
     title: text.title,
     excerpt: text.excerpt,
     category: localizedFocusedCategory(locale, 'northernMenu', category),
@@ -3525,6 +3651,10 @@ export async function generateResearchedArticleSet(date, brief = '', category = 
 export function buildArticle(date, locale, brief = '', category = '') {
   if (isSaaJinMenu(brief, category)) {
     return buildSaaJinMenuArticle(date, locale, category)
+  }
+
+  if (isGaengNorMaiMenu(brief, category)) {
+    return buildGaengNorMaiMenuArticle(date, locale, category)
   }
 
   if (isPhakKhaoTongLocalVegetable(brief, category)) {

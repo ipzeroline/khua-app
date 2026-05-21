@@ -123,17 +123,13 @@ export async function POST(request: NextRequest) {
     }
 
     const primary = localizedArticles.th ?? Object.values(localizedArticles)[0]
-    const imageResult = await generator.generateCoverImage(primary.slug, primary, {
-      skipRemote: true,
-    })
-    const { coverImageUrl, imagePrompt } = imageResult
 
     await connection.beginTransaction()
 
     const [result] = await connection.execute<ResultSetHeader>(
       `INSERT INTO articles (slug, status, cover_image_url, image_prompt, published_at, author_id)
        VALUES (?, 'draft', ?, ?, ?, ?)`,
-      [primary.slug, coverImageUrl, imagePrompt, `${date} 08:00:00`, ctx.user.id],
+      [primary.slug, null, null, `${date} 08:00:00`, ctx.user.id],
     )
     const articleId = result.insertId
 
@@ -165,12 +161,9 @@ export async function POST(request: NextRequest) {
       {
         id: articleId,
         slug: primary.slug,
-        cover_image_url: coverImageUrl,
+        cover_image_url: null,
         image: {
-          fallback: Boolean(imageResult.fallback),
-          generated: Boolean(imageResult.generated),
-          reason: imageResult.reason,
-          reused: Boolean(imageResult.reused),
+          upload_required: true,
         },
       },
       { status: 201 },

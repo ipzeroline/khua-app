@@ -61,7 +61,7 @@ export default function ArticleEditor({ lang, article }: ArticleEditorProps) {
   const isNew = !article
   const [activeLocale, setActiveLocale] = useState(LOCALES[0])
   const [saving, setSaving] = useState(false)
-  const [regeneratingCover, setRegeneratingCover] = useState(false)
+  const [uploadingCover, setUploadingCover] = useState(false)
   const [error, setError] = useState('')
 
   const [form, setForm] = useState<ArticleData>(
@@ -139,25 +139,32 @@ export default function ArticleEditor({ lang, article }: ArticleEditorProps) {
     }
   }
 
-  const regenerateCover = async () => {
+  const uploadCover = async (file: File | null) => {
     if (isNew || !article?.id) return
+    if (!file) return
     setError('')
-    setRegeneratingCover(true)
+    setUploadingCover(true)
 
     try {
-      const res = await fetch(`/api/admin/articles/${article.id}/cover`, { method: 'POST' })
+      const formData = new FormData()
+      formData.append('cover', file)
+
+      const res = await fetch(`/api/admin/articles/${article.id}/cover/upload`, {
+        method: 'POST',
+        body: formData,
+      })
       const data = await res.json() as CoverResponse
-      if (!res.ok) throw new Error(data.error || 'Regenerate failed')
+      if (!res.ok) throw new Error(data.error || 'Upload failed')
       setForm((f) => ({
         ...f,
-        cover_image_url: data.cover_image_url || f.cover_image_url,
-        image_prompt: data.image_prompt || f.image_prompt,
+        cover_image_url: data.cover_image_url ?? f.cover_image_url,
+        image_prompt: data.image_prompt ?? f.image_prompt,
       }))
       router.refresh()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Regenerate failed')
+      setError(err instanceof Error ? err.message : 'Upload failed')
     } finally {
-      setRegeneratingCover(false)
+      setUploadingCover(false)
     }
   }
 
@@ -201,15 +208,31 @@ export default function ArticleEditor({ lang, article }: ArticleEditorProps) {
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div>
-          <label className="block text-sm font-medium text-text">Image Prompt</label>
-          <textarea
-            value={form.image_prompt}
-            onChange={(e) => setForm({ ...form, image_prompt: e.target.value })}
-            rows={5}
-            className="mt-1 w-full rounded-xl border border-border bg-white/70 px-4 py-2.5 text-sm outline-none focus:border-gold/50"
-            placeholder="Generated image prompt"
+        <div className="rounded-2xl border border-border bg-surface p-5">
+          <label className="block text-sm font-medium text-text">Upload Cover Image</label>
+          <p className="mt-1 text-sm leading-6 text-text-secondary">
+            Upload a JPG, PNG, or WebP image. The file will be cropped and optimized to a 3:2 article cover.
+          </p>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            disabled={isNew || uploadingCover}
+            onChange={(event) => {
+              const file = event.target.files?.[0] || null
+              void uploadCover(file)
+              event.target.value = ''
+            }}
+            className="mt-4 block w-full rounded-xl border border-border bg-white/70 px-4 py-2.5 text-sm text-text-secondary file:mr-4 file:rounded-full file:border-0 file:bg-gold file:px-4 file:py-2 file:text-sm file:font-medium file:text-white disabled:cursor-not-allowed disabled:opacity-50"
           />
+          {isNew ? (
+            <p className="mt-2 text-xs text-text-secondary">
+              Save the article first, then upload or replace the cover image.
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-text-secondary">
+              {uploadingCover ? 'Uploading and optimizing image...' : 'Uploading replaces the current cover image.'}
+            </p>
+          )}
         </div>
         <div className="rounded-2xl border border-border bg-surface p-3">
           <div className="relative aspect-[3/2] overflow-hidden rounded-xl bg-border/30">
@@ -230,17 +253,12 @@ export default function ArticleEditor({ lang, article }: ArticleEditorProps) {
           </div>
           <button
             type="button"
-            onClick={regenerateCover}
-            disabled={isNew || regeneratingCover}
+            onClick={() => setForm((f) => ({ ...f, cover_image_url: '', image_prompt: '' }))}
+            disabled={!form.cover_image_url || saving || uploadingCover}
             className="mt-3 w-full rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-gold/40 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {regeneratingCover ? 'Generating image...' : 'Generate New Image'}
+            Remove Cover From Article
           </button>
-          {isNew && (
-            <p className="mt-2 text-xs text-text-secondary">
-              Save the article first to generate a cover image.
-            </p>
-          )}
         </div>
       </div>
 
