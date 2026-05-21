@@ -1969,6 +1969,164 @@ function focusedSubjectSlug(subject = '', fallback = 'custom-topic') {
   return found?.[1] || briefSlug(subject) || fallback
 }
 
+function localizedSubjectName(slug = '', fallback = '', locale = 'th') {
+  const names = {
+    'northern-kitchen-wisdom': {
+      th: 'ภูมิปัญญาครัวเหนือ',
+      en: 'Northern kitchen wisdom',
+      lo: 'ພູມປັນຍາຄົວເໜືອ',
+      zh: '泰北厨房智慧',
+    },
+    'northern-kitchen': {
+      th: 'ครัวเหนือ',
+      en: 'Northern kitchen',
+      lo: 'ຄົວເໜືອ',
+      zh: '泰北厨房',
+    },
+    'dried-chili': {
+      th: 'พริกแห้ง',
+      en: 'Dried chili',
+      lo: 'ໝາກເຜັດແຫ້ງ',
+      zh: '干辣椒',
+    },
+    'roasted-chili': {
+      th: 'พริกคั่ว',
+      en: 'Roasted chili',
+      lo: 'ໝາກເຜັດຄົ່ວ',
+      zh: '烘烤辣椒',
+    },
+    'chili-selection': {
+      th: 'วิธีเลือกพริก',
+      en: 'Chili selection',
+      lo: 'ວິທີເລືອກໝາກເຜັດ',
+      zh: '辣椒挑选',
+    },
+    'roasted-curry-paste-technique': {
+      th: 'เทคนิคคั่วพริกแกงให้หอม',
+      en: 'Roasting curry paste aromatics',
+      lo: 'ເທັກນິກຄົ່ວເຄື່ອງແກງໃຫ້ຫອມ',
+      zh: '炒香咖喱酱香料技巧',
+    },
+    'curry-paste': {
+      th: 'เครื่องแกง',
+      en: 'Curry paste',
+      lo: 'ເຄື່ອງແກງ',
+      zh: '咖喱酱',
+    },
+    'gaeng-hung-lay': {
+      th: 'แกงฮังเล',
+      en: 'Gaeng Hung Lay',
+      lo: 'ແກງຮັງເລ',
+      zh: '泰北杭莱咖喱',
+    },
+    'khao-soi': {
+      th: 'ข้าวซอย',
+      en: 'Khao Soi',
+      lo: 'ເຂົ້າຊອຍ',
+      zh: '泰北咖喱面',
+    },
+    'sai-ua': {
+      th: 'ไส้อั่ว',
+      en: 'Sai Ua',
+      lo: 'ໄສ້ອົ່ວ',
+      zh: '泰北香肠',
+    },
+    'nam-prik-num': {
+      th: 'น้ำพริกหนุ่ม',
+      en: 'Nam Prik Num',
+      lo: 'ນ້ຳພິກໜຸ່ມ',
+      zh: '泰北青辣椒酱',
+    },
+    'nam-prik-ong': {
+      th: 'น้ำพริกอ่อง',
+      en: 'Nam Prik Ong',
+      lo: 'ນ້ຳພິກອ່ອງ',
+      zh: '泰北番茄肉末辣椒酱',
+    },
+    'sawtooth-coriander': {
+      th: 'ผักชีฝรั่ง',
+      en: 'Sawtooth coriander',
+      lo: 'ຜັກຫອມເປ',
+      zh: '刺芫荽',
+    },
+    'vietnamese-coriander': {
+      th: 'ผักแพว',
+      en: 'Vietnamese coriander',
+      lo: 'ຜັກແພວ',
+      zh: '越南香菜',
+    },
+    'ma-khwaen': {
+      th: 'มะแขว่น',
+      en: 'Ma-khwaen',
+      lo: 'ໝາກແຂວ່ນ',
+      zh: '泰北花椒',
+    },
+    'thua-nao': {
+      th: 'ถั่วเน่า',
+      en: 'Thua Nao fermented soybean',
+      lo: 'ຖົ່ວເນົ່າ',
+      zh: '泰北发酵大豆',
+    },
+    'long-pepper': {
+      th: 'ดีปลี',
+      en: 'Long pepper',
+      lo: 'ດີປີ',
+      zh: '荜茇',
+    },
+    galangal: {
+      th: 'ข่า',
+      en: 'Galangal',
+      lo: 'ຂ່າ',
+      zh: '南姜',
+    },
+    lemongrass: {
+      th: 'ตะไคร้',
+      en: 'Lemongrass',
+      lo: 'ຕະໄຄ້',
+      zh: '香茅',
+    },
+    turmeric: {
+      th: 'ขมิ้น',
+      en: 'Turmeric',
+      lo: 'ຂີ້ໝິ້ນ',
+      zh: '姜黄',
+    },
+    shallot: {
+      th: 'หอมแดง',
+      en: 'Shallot',
+      lo: 'ຫອມແດງ',
+      zh: '红葱头',
+    },
+    garlic: {
+      th: 'กระเทียม',
+      en: 'Garlic',
+      lo: 'ກະທຽມ',
+      zh: '大蒜',
+    },
+    'kaffir-lime-leaf': {
+      th: 'ใบมะกรูด',
+      en: 'Kaffir lime leaf',
+      lo: 'ໃບໝາກຂີ້ຫູດ',
+      zh: '泰国青柠叶',
+    },
+    'khantoke-table': {
+      th: 'จัดโต๊ะอาหารเหนือแบบขันโตก',
+      en: 'Khantoke-style Northern table setting',
+      lo: 'ຈັດໂຕະອາຫານເໜືອແບບຂັນໂຕກ',
+      zh: '康托克式泰北餐桌布置',
+    },
+    'table-setting': {
+      th: 'จัดโต๊ะ',
+      en: 'Table setting',
+      lo: 'ຈັດໂຕະ',
+      zh: '餐桌布置',
+    },
+  }
+
+  if (locale === 'th') return String(fallback || names[slug]?.th || '').trim()
+  return names[slug]?.[locale] || String(fallback || names[slug]?.en || '').trim()
+}
+
 function categoryKind(category = '') {
   const value = String(category || '').trim().toLowerCase()
   const groups = {
@@ -2004,11 +2162,12 @@ function localizedFocusedCategory(locale, kind, category = '') {
 }
 
 function buildFocusedCategoryArticle(date, locale, brief = '', category = '') {
-  const subject = cleanBriefSubject(brief)
+  const requestedSubject = cleanBriefSubject(brief)
   const kind = categoryKind(category)
-  if (!subject || !kind || kind === 'lannaIngredients') return null
+  if (!requestedSubject || !kind || kind === 'lannaIngredients') return null
 
-  const slug = focusedSubjectSlug(subject, kind.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`))
+  const slug = focusedSubjectSlug(requestedSubject, kind.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`))
+  const subject = localizedSubjectName(slug, requestedSubject, locale)
   const categoryLabel = localizedFocusedCategory(locale, kind, category)
   const subjectTag = subject.length > 32 ? subject.slice(0, 32).trim() : subject
   const configs = {
@@ -2242,13 +2401,14 @@ function buildFocusedCategoryArticle(date, locale, brief = '', category = '') {
 }
 
 function buildLannaIngredientArticle(date, locale, brief = '', category = '') {
-  const subject = cleanBriefSubject(brief) || {
+  const requestedSubject = cleanBriefSubject(brief) || {
     th: 'วัตถุดิบล้านนา',
     en: 'Lanna ingredient',
     lo: 'ວັດຖຸດິບລ້ານນາ',
     zh: '兰纳食材',
   }[locale] || 'Lanna ingredient'
-  const slug = lannaIngredientSlug(subject)
+  const slug = lannaIngredientSlug(requestedSubject)
+  const subject = localizedSubjectName(slug, requestedSubject, locale)
   const profiles = {
     'ma-khwaen': {
       flavor: 'กลิ่นหอมซ่าแบบเปลือกส้มปนพริกไทย มีความเผ็ดชาเบา ๆ และเป็นกลิ่นจำของลาบเหนือกับน้ำพริกลาบ',
