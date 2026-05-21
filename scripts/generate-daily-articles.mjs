@@ -13,6 +13,22 @@ const locales = ['th', 'en', 'lo', 'zh']
 loadEnvFile(path.join(root, '.env'))
 loadEnvFile(path.join(root, '.env.local'))
 
+function envInt(name, fallback) {
+  const value = Number.parseInt(process.env[name] || '', 10)
+  return Number.isFinite(value) && value > 0 ? value : fallback
+}
+
+async function fetchWithTimeout(url, init = {}, timeoutMs = 30000) {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(url, { ...init, signal: controller.signal })
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
 const uploadsDir = process.env.KHUA_ARTICLE_UPLOADS_DIR
   ? path.resolve(process.env.KHUA_ARTICLE_UPLOADS_DIR)
   : path.join(process.cwd(), 'public', 'uploads', 'articles')
@@ -1614,8 +1630,18 @@ export async function generateCoverImage(slug, article, options = {}) {
     }
   }
 
+  if (options.skipRemote) {
+    return {
+      coverImageUrl: '/khua-lanna-table-scene.png',
+      imagePrompt: prompt,
+      generated: false,
+      fallback: true,
+      reason: 'Remote image generation skipped for fast article draft creation',
+    }
+  }
+
   try {
-    const response = await fetch('https://api.openai.com/v1/images/generations', {
+    const response = await fetchWithTimeout('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
@@ -1628,7 +1654,7 @@ export async function generateCoverImage(slug, article, options = {}) {
         quality: process.env.OPENAI_IMAGE_QUALITY || 'medium',
         output_format: 'png',
       }),
-    })
+    }, options.timeoutMs || envInt('OPENAI_IMAGE_TIMEOUT_MS', 25000))
 
     if (!response.ok) {
       const body = await response.text()
@@ -3440,7 +3466,7 @@ export async function generateResearchedArticleSet(date, brief = '', category = 
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/responses', {
+    const response = await fetchWithTimeout('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
@@ -3461,7 +3487,7 @@ export async function generateResearchedArticleSet(date, brief = '', category = 
           },
         },
       }),
-    })
+    }, envInt('OPENAI_RESEARCH_TIMEOUT_MS', 9000))
 
     if (!response.ok) {
       const body = await response.text()

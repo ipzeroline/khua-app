@@ -29,6 +29,7 @@ type ArticleGenerator = {
   generateCoverImage: (
     slug: string,
     article: GeneratedArticle,
+    options?: { skipRemote?: boolean; timeoutMs?: number },
   ) => Promise<{
     coverImageUrl: string
     imagePrompt: string
@@ -122,7 +123,9 @@ export async function POST(request: NextRequest) {
     }
 
     const primary = localizedArticles.th ?? Object.values(localizedArticles)[0]
-    const imageResult = await generator.generateCoverImage(primary.slug, primary)
+    const imageResult = await generator.generateCoverImage(primary.slug, primary, {
+      skipRemote: true,
+    })
     const { coverImageUrl, imagePrompt } = imageResult
 
     await connection.beginTransaction()
