@@ -6,30 +6,30 @@ interface CraftsmanshipSectionProps {
 
 export default function CraftsmanshipSection({ dict }: CraftsmanshipSectionProps) {
   return (
-    <section className="py-24 px-6 bg-surface border-y border-border">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="apple-eyebrow text-gold/60 text-xs uppercase mb-4">
+    <section className="bg-surface px-6 py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-14 grid gap-4 border-b border-border pb-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+          <p className="apple-eyebrow text-xs uppercase text-gold/60">
             {dict.craftsmanship.label}
           </p>
-          <h2 className="apple-headline text-3xl sm:text-4xl text-text">
+          <h2 className="apple-headline max-w-3xl text-3xl text-text sm:text-4xl lg:justify-self-end lg:text-right">
             {dict.craftsmanship.title}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {dict.craftsmanship.items.map((item, i) => (
             <div
               key={item.title}
-              className="text-center"
+              className="border border-border bg-bg/60 p-6 sm:p-8"
             >
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full border border-gold/15 flex items-center justify-center text-3xl bg-gold-pale/50 transition-all duration-500">
-                {['🌾', '🏺', '🍲'][i]}
-              </div>
-              <h3 className="apple-headline text-xl text-text mb-3">
+              <p className="mb-8 text-xs font-semibold text-gold">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h3 className="apple-headline mb-3 text-xl text-text">
                 {item.title}
               </h3>
-              <p className="text-text-secondary text-sm leading-relaxed">
+              <p className="text-sm leading-relaxed text-text-secondary">
                 {item.description}
               </p>
             </div>

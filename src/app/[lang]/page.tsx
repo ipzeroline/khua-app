@@ -20,8 +20,8 @@ import HomeArticlesSection from '@/components/home/HomeArticlesSection'
 import PhayaoCuisineSection from '@/components/home/PhayaoCuisineSection'
 import PhayaoSeoSection from '@/components/home/PhayaoSeoSection'
 import HomeSeoAuthoritySection from '@/components/home/HomeSeoAuthoritySection'
-import HomeSeoFooterSection from '@/components/home/HomeSeoFooterSection'
 import HomeFaqSection from '@/components/home/HomeFaqSection'
+import { getPublishedArticles } from '@/lib/articles'
 
 interface HomePageProps {
   params: Promise<{ lang: string }>
@@ -74,6 +74,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const { lang } = await params
   const locale = lang as Locale
   const dict = await getDictionary(locale)
+  const latestArticles = (await getPublishedArticles(locale, dict)).slice(0, 3)
   const siteUrl = `${SITE_URL}/${locale}`
   const homeFaqSchemaByLocale: Record<
     Locale,
@@ -231,7 +232,7 @@ export default async function HomePage({ params }: HomePageProps) {
       },
     ],
   }
-  const homeFaqSchemaItems = homeFaqSchemaByLocale[locale]
+  const homeFaqSchemaItems = homeFaqSchemaByLocale[locale] ?? homeFaqSchemaByLocale.th
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -320,17 +321,16 @@ export default async function HomePage({ params }: HomePageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <HeroSection dict={dict} />
-      <PhayaoCuisineSection dict={dict} />
       <FeaturedProducts dict={dict} lang={locale} />
-      <HomeRoastingSection dict={dict} />
+      <PhayaoCuisineSection dict={dict} />
       <PhayaoSeoSection dict={dict} />
-      <HomeSeoAuthoritySection dict={dict} />
+      <HomeRoastingSection dict={dict} />
       <LannaSoulSection dict={dict} />
       <StorySection dict={dict} />
       <HomeServingSection dict={dict} />
-      <HomeArticlesSection dict={dict} lang={locale} />
+      <HomeArticlesSection dict={dict} lang={locale} articles={latestArticles} />
+      <HomeSeoAuthoritySection dict={dict} />
       <CraftsmanshipSection dict={dict} />
-      <HomeSeoFooterSection dict={dict} />
       <HomeFaqSection dict={dict} />
     </>
   )

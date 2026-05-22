@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { DEFAULT_OG_IMAGE, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import { DEFAULT_OG_IMAGE, SITE_URL, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import AboutContent from '@/components/about/AboutContent'
 
 interface AboutPageProps {
@@ -14,9 +14,9 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}/about` })
-  const title = fitSeoText(`เกี่ยวกับ KHUA น้ำพริกพะเยาตำรับล้านนา`, 60)
+  const title = fitSeoText(`${dict.about.title} | ${dict.site.name}`, 60)
   const description = fitSeoText(
-    `รู้จัก KHUA แบรนด์น้ำพริกพะเยาและน้ำพริกเหนือพรีเมียม ตำรับล้านนา คั่วหอมจากวัตถุดิบพื้นถิ่น เหมาะเป็นของฝากภาคเหนือ`,
+    dict.aboutExperience.originParagraphs[0],
     160,
   )
 
@@ -53,6 +53,59 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const { lang } = await params
   const locale = lang as Locale
   const dict = await getDictionary(locale)
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: dict.about.title,
+      description: dict.aboutExperience.originParagraphs[0],
+      url: `${SITE_URL}/${locale}/about`,
+      inLanguage: locale,
+      mainEntity: {
+        '@type': 'Brand',
+        name: dict.site.name,
+        description: dict.site.description,
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: dict.nav.home,
+          item: `${SITE_URL}/${locale}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: dict.about.label,
+          item: `${SITE_URL}/${locale}/about`,
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: dict.aboutExperience.faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ]
 
-  return <AboutContent dict={dict} />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <AboutContent dict={dict} />
+    </>
+  )
 }

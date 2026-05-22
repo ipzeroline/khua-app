@@ -14,7 +14,7 @@ interface Article {
   updated_at: string
 }
 
-interface GenerateArticleResponse {
+interface ImportArticleResponse {
   id?: number
   error?: string
 }
@@ -46,14 +46,16 @@ export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [generating, setGenerating] = useState(false)
+  const [importing, setImporting] = useState(false)
   const [error, setError] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
   const [categories, setCategories] = useState<string[]>([])
-  const [showGenerateForm, setShowGenerateForm] = useState(false)
-  const [generateBrief, setGenerateBrief] = useState('')
-  const [generateCategory, setGenerateCategory] = useState('')
+  const [showImportForm, setShowImportForm] = useState(false)
+  const [importSource, setImportSource] = useState('')
+  const [importCategory, setImportCategory] = useState('')
+  const [importStatus, setImportStatus] = useState<'draft' | 'published'>('draft')
+  const [importCoverImageUrl, setImportCoverImageUrl] = useState('')
   const lang = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'th'
 
   const buildParams = useCallback(() => {
@@ -104,36 +106,38 @@ export default function AdminArticlesPage() {
     fetchArticles()
   }
 
-  const handleGenerate = async () => {
-    if (!generateCategory.trim()) {
+  const handleImportWithAi = async () => {
+    if (!importCategory.trim()) {
       setError('Please choose an article category first.')
-      setShowGenerateForm(true)
+      setShowImportForm(true)
       return
     }
 
-    if (!generateBrief.trim()) {
-      setError('Please add generation details first.')
-      setShowGenerateForm(true)
+    if (!importSource.trim()) {
+      setError('Please paste article details first.')
+      setShowImportForm(true)
       return
     }
 
     setError('')
-    setGenerating(true)
+    setImporting(true)
     try {
-      const res = await fetch('/api/admin/articles/generate', {
+      const res = await fetch('/api/admin/articles/ai-import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          brief: generateBrief.trim(),
-          category: generateCategory.trim(),
+          source: importSource.trim(),
+          category: importCategory.trim(),
+          status: importStatus,
+          cover_image_url: importCoverImageUrl.trim(),
         }),
       })
-      const data = await parseJsonResponse<GenerateArticleResponse>(res)
-      if (!res.ok) throw new Error(data.error || 'Generate failed')
+      const data = await parseJsonResponse<ImportArticleResponse>(res)
+      if (!res.ok) throw new Error(data.error || 'AI import failed')
       window.location.href = `/${lang}/admin/articles/${data.id}/edit`
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Generate failed')
-      setGenerating(false)
+      setError(err instanceof Error ? err.message : 'AI import failed')
+      setImporting(false)
     }
   }
 
@@ -150,13 +154,13 @@ export default function AdminArticlesPage() {
           <button
             type="button"
             onClick={() => {
-              setGenerateCategory((current) => current || categoryFilter || categories[0] || '')
-              setShowGenerateForm(true)
+              setImportCategory((current) => current || categoryFilter || categories[0] || '')
+              setShowImportForm(true)
             }}
-            disabled={generating}
+            disabled={importing}
             className="premium-button rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50"
           >
-            {generating ? 'Generating...' : 'Generate Article'}
+            {importing ? 'Importing...' : 'AI Import Article'}
           </button>
           <Link
             href={`/${lang}/admin/articles/new`}
@@ -171,49 +175,71 @@ export default function AdminArticlesPage() {
         <div className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
       )}
 
-      {showGenerateForm && (
+      {showImportForm && (
         <div className="mt-6 rounded-2xl border border-border bg-surface p-5 shadow-sm">
-          <div className="grid gap-4 lg:grid-cols-[minmax(180px,260px)_1fr_auto] lg:items-end">
+          <div className="grid gap-4 lg:grid-cols-[minmax(180px,260px)_minmax(160px,220px)_1fr]">
             <label>
               <span className="text-sm font-medium text-text">Category</span>
-              <select
-                value={generateCategory}
-                onChange={(event) => setGenerateCategory(event.target.value)}
+              <input
+                value={importCategory}
+                onChange={(event) => setImportCategory(event.target.value)}
+                list="article-category-options"
+                placeholder="สูตรอาหารเหนือ"
                 className="mt-2 min-h-12 w-full rounded-xl border border-border bg-white px-4 text-sm text-text outline-none transition focus:border-gold"
-              >
-                <option value="">Choose category</option>
+              />
+              <datalist id="article-category-options">
                 {categories.map((category) => (
                   <option key={category} value={category}>{category}</option>
                 ))}
+              </datalist>
+            </label>
+            <label>
+              <span className="text-sm font-medium text-text">Status</span>
+              <select
+                value={importStatus}
+                onChange={(event) => setImportStatus(event.target.value as 'draft' | 'published')}
+                className="mt-2 min-h-12 w-full rounded-xl border border-border bg-white px-4 text-sm text-text outline-none transition focus:border-gold"
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
               </select>
             </label>
             <label>
-              <span className="text-sm font-medium text-text">Generation details</span>
+              <span className="text-sm font-medium text-text">Cover Image URL</span>
+              <input
+                value={importCoverImageUrl}
+                onChange={(event) => setImportCoverImageUrl(event.target.value)}
+                placeholder="/uploads/articles/..."
+                className="mt-2 min-h-12 w-full rounded-xl border border-border bg-white px-4 text-sm text-text outline-none transition focus:border-gold"
+              />
+            </label>
+            <label className="lg:col-span-3">
+              <span className="text-sm font-medium text-text">Article details for AI import</span>
               <textarea
-                value={generateBrief}
-                onChange={(event) => setGenerateBrief(event.target.value)}
-                maxLength={800}
-                rows={4}
-                placeholder="เช่น อยากได้บทความเกี่ยวกับน้ำพริกตาแดงกับผักพื้นบ้านสำหรับ SEO ของฝากพะเยา"
+                value={importSource}
+                onChange={(event) => setImportSource(event.target.value)}
+                maxLength={20000}
+                rows={12}
+                placeholder="วางรายละเอียดบทความเต็ม เช่น หัวข้อ หมวดหมู่ เนื้อหา FAQ และคำแนะนำ SEO แล้วให้ AI จัดเป็นบทความครบทุกภาษาและบันทึกลงฐานข้อมูล"
                 className="mt-2 w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-text outline-none transition focus:border-gold"
               />
               <span className="mt-1 block text-xs text-text-secondary">
-                {generateBrief.length}/800 characters
+                {importSource.length}/20,000 characters · AI will create TH/EN/LO/ZH translations and database fields.
               </span>
             </label>
-            <div className="flex gap-2 lg:pb-6">
+            <div className="flex gap-2 lg:col-span-3">
               <button
                 type="button"
-                onClick={handleGenerate}
-                disabled={generating}
+                onClick={handleImportWithAi}
+                disabled={importing}
                 className="rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50"
               >
-                {generating ? 'Generating...' : 'Generate Draft'}
+                {importing ? 'Importing...' : 'Send to AI and Save'}
               </button>
               <button
                 type="button"
-                onClick={() => setShowGenerateForm(false)}
-                disabled={generating}
+                onClick={() => setShowImportForm(false)}
+                disabled={importing}
                 className="rounded-full border border-border bg-white px-5 py-2.5 text-sm font-medium text-text-secondary disabled:opacity-50"
               >
                 Cancel

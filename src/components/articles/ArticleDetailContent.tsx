@@ -11,12 +11,59 @@ interface ArticleDetailContentProps {
   lang: Locale
 }
 
-function buildSectionHeading(article: ArticleData, index: number) {
-  const highlight = article.highlights[index - 1]
-  if (highlight) return highlight
+function renderContentBlock(block: string, index: number) {
+  const trimmed = block.trim()
+  if (!trimmed) return null
 
-  const tag = article.tags[index % Math.max(article.tags.length, 1)]
-  return tag ? `${article.category}: ${tag}` : article.category
+  if (trimmed.startsWith('## ')) {
+    return (
+      <h3 key={`${index}-${trimmed}`} className="text-xl font-semibold leading-snug text-text">
+        {trimmed.replace(/^##\s+/, '')}
+      </h3>
+    )
+  }
+
+  if (trimmed.startsWith('# ')) {
+    return (
+      <h2 key={`${index}-${trimmed}`} className="pt-4 text-3xl font-semibold leading-snug text-text">
+        {trimmed.replace(/^#\s+/, '')}
+      </h2>
+    )
+  }
+
+  const imageMatch = trimmed.match(/^!\[(.*)]\((.*)\)$/)
+  if (imageMatch) {
+    const [, alt, src] = imageMatch
+    return (
+      <figure key={`${index}-${trimmed}`} className="overflow-hidden rounded-2xl bg-gold-pale">
+        <div className="relative aspect-[16/9]">
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover"
+          />
+        </div>
+      </figure>
+    )
+  }
+
+  const lines = trimmed.split('\n').map((line) => line.trim()).filter(Boolean)
+  if (lines.length > 0 && lines.every((line) => line.startsWith('* '))) {
+    return (
+      <ul key={`${index}-${trimmed}`} className="space-y-2 rounded-2xl border border-border bg-white/45 p-5">
+        {lines.map((line) => (
+          <li key={line} className="flex gap-3">
+            <span className="mt-3 h-1.5 w-1.5 flex-none rounded-full bg-gold" />
+            <span>{line.replace(/^\*\s+/, '')}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  return <p key={`${index}-${trimmed}`}>{trimmed}</p>
 }
 
 export default function ArticleDetailContent({
@@ -24,8 +71,6 @@ export default function ArticleDetailContent({
   dict,
   lang,
 }: ArticleDetailContentProps) {
-  const [intro, ...sections] = article.content
-
   return (
     <article className="pt-32 pb-24 px-6">
       <motion.header
@@ -83,33 +128,8 @@ export default function ArticleDetailContent({
               </p>
             ))}
           </div>
-          <div className="space-y-8 text-base leading-8 text-text-secondary">
-            {intro ? <p>{intro}</p> : null}
-            {sections.map((paragraph, index) => {
-              const heading = buildSectionHeading(article, index + 1)
-
-              return (
-                <section key={paragraph} className="space-y-3">
-                  <h2 className="text-2xl font-semibold leading-snug text-text">
-                    {heading}
-                  </h2>
-                  <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-gold/80">
-                    {article.tags[index % Math.max(article.tags.length, 1)] || article.category}
-                  </h3>
-                  <p>{paragraph}</p>
-                </section>
-              )
-            })}
-            {sections.length === 0 && article.highlights.length > 0 ? (
-              <section className="space-y-3">
-                <h2 className="text-2xl font-semibold leading-snug text-text">
-                  {article.category}
-                </h2>
-                <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-gold/80">
-                  {article.tags[0] || article.category}
-                </h3>
-              </section>
-            ) : null}
+          <div className="space-y-6 text-base leading-8 text-text-secondary">
+            {article.content.map(renderContentBlock)}
           </div>
           <Link
             href={`/${lang}/articles`}

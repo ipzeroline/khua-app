@@ -1,15 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dictionary, Locale } from '@/i18n'
+import { ArticleData } from '@/i18n/types'
 
 interface HomeArticlesSectionProps {
   dict: Dictionary
   lang: Locale
+  articles: ArticleData[]
 }
 
-export default function HomeArticlesSection({ dict, lang }: HomeArticlesSectionProps) {
-  const articles = dict.articles_data.slice(0, 3)
-
+export default function HomeArticlesSection({ dict, lang, articles }: HomeArticlesSectionProps) {
   return (
     <section className="bg-surface px-3 py-3 sm:px-4">
       <div className="mx-auto max-w-7xl">
@@ -50,33 +50,48 @@ export default function HomeArticlesSection({ dict, lang }: HomeArticlesSectionP
           </Link>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-3">
-          {articles.map((article) => (
-            <article
-              key={article.slug}
-              className="premium-card flex min-h-[280px] flex-col bg-bg p-6"
-            >
-              <div className="flex items-center justify-between gap-4 text-xs text-text-secondary">
-                <span className="apple-eyebrow uppercase text-gold/70">
-                  {article.category}
-                </span>
-                <span>{article.readTime}</span>
-              </div>
-              <h3 className="apple-headline mt-5 text-2xl text-text">
-                {article.title}
-              </h3>
-              <p className="mt-4 flex-1 text-sm leading-relaxed text-text-secondary">
-                {article.excerpt}
-              </p>
-              <Link
-                href={`/${lang}/articles/${article.slug}`}
-                className="premium-link mt-6 inline-flex w-fit text-sm font-medium text-gold"
+        {articles.length > 0 ? (
+          <div className="grid gap-3 md:grid-cols-3">
+            {articles.map((article) => (
+              <article
+                key={article.slug}
+                className="premium-card group flex min-h-[420px] flex-col overflow-hidden bg-bg"
               >
-                {dict.articles.readMore}
-              </Link>
-            </article>
-          ))}
-        </div>
+                <Link href={`/${lang}/articles/${article.slug}`} className="flex h-full flex-col">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-gold-pale">
+                    {article.coverImage ? (
+                      <Image
+                        src={article.coverImage}
+                        alt={article.title}
+                        fill
+                        sizes="(min-width: 768px) 30vw, 92vw"
+                        className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                      />
+                    ) : null}
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,11,7,0),rgba(18,11,7,0.24))]" />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex items-center justify-between gap-4 text-xs text-text-secondary">
+                      <span className="apple-eyebrow uppercase text-gold/70">
+                        {article.category}
+                      </span>
+                      <span>{article.readTime}</span>
+                    </div>
+                    <h3 className="apple-headline mt-5 text-2xl text-text transition group-hover:text-gold">
+                      {article.title}
+                    </h3>
+                    <p className="mt-4 flex-1 text-sm leading-relaxed text-text-secondary">
+                      {article.excerpt}
+                    </p>
+                    <span className="premium-link mt-6 inline-flex w-fit text-sm font-medium text-gold">
+                      {dict.articles.readMore}
+                    </span>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+        ) : null}
 
         <div className="mt-10 text-center">
           <Link

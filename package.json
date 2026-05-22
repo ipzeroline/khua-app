@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start -p 7778",
     "lint": "eslint",
-    "migrate": "tsx scripts/migrate.ts",
-    "articles:generate": "node scripts/generate-daily-articles.mjs"
+    "migrate": "tsx scripts/migrate.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

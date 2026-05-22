@@ -402,6 +402,68 @@ const dict: Dictionary = {
     notFound: 'Article Not Found',
   },
 
+  articlesHub: {
+    metaTitle: 'Phayao Northern Thai Food Articles | Recipes & Lanna Culture – KHUA',
+    metaDescription:
+      'Explore KHUA articles on Phayao-style Northern Thai food, laab, nam ngiao, gaeng khae, Lanna spices, herbs, and local food culture.',
+    heroTitle: 'Phayao Northern Thai Food Articles',
+    heroSubtitle: 'Recipes, stories, and Lanna food culture from the KHUA kitchen',
+    heroDescription:
+      'Learn how to make Northern Thai laab, nam ngiao, gaeng khae, and local Lanna dishes with stories about herbs, roasted spices, and traditional Phayao food wisdom.',
+    introTitle: 'A Knowledge Hub for Phayao-Style Northern Thai Food',
+    introParagraphs: [
+      'KHUA Articles is designed as a deep resource for people who want to understand authentic Northern Thai food, from Lanna recipes and curry paste techniques to the food culture of Phayao.',
+      'Every topic starts with aroma: roasted spices, ma-khwaen pepper, dried Northern chilies, Lanna herbs, and the quiet kitchen techniques that give Northern Thai food its depth.',
+    ],
+    categoryTitle: 'Article Categories',
+    categorySubtitle: 'Clear topic paths help readers explore Northern Thai recipes, ingredients, and Lanna culture.',
+    categories: [
+      { title: 'Northern Thai Recipes', description: 'Practical Lanna recipes and home-kitchen tips.', href: '/collections/northern-thai-food' },
+      { title: 'Northern Laab', description: 'Laab muang, laab spices, ma-khwaen, and Phayao-style technique.', href: '/products/nam-prik-larb-phayao' },
+      { title: 'Nam Ngiao', description: 'Nam ngiao curry paste, dried cotton tree flowers, broth, and noodles.', href: '/products/nam-prik-nam-ngiao-phayao' },
+      { title: 'Lanna Spices', description: 'Ma-khwaen, roasted chilies, herbs, and the aroma at the heart of Lanna food.', href: '/collections/lanna-food' },
+      { title: 'Phayao Local Food', description: 'Local flavors, kitchen stories, and food traditions from Phayao.', href: '/collections/phayao-recipe' },
+      { title: 'Khan Tok & Culture', description: 'Lanna dining culture, family meals, ceremonies, and shared dishes.', href: '/collections/lanna-food' },
+      { title: 'Northern Local Greens', description: 'Fresh greens, boiled vegetables, and pairings for Northern chili paste.', href: '/collections/northern-thai-food' },
+      { title: 'Northern Cooking Tips', description: 'Roasting, pounding, frying, and seasoning techniques for deeper aroma.', href: '/collections/phayao-recipe' },
+    ],
+    featuredTitle: 'Featured Topics to Build Authority',
+    featuredSubtitle: 'Core topics that position KHUA as a specialist in Phayao-style Northern Thai food.',
+    featuredItems: [
+      { title: 'How to Make Phayao Northern Laab', description: 'Understand laab muang, ma-khwaen aroma, roasted spices, and the Phayao way of cooking Northern laab.', keyword: 'Phayao northern laab', href: '/products/nam-prik-larb-phayao', image: '/khua-articles-larb-feature.png' },
+      { title: 'How to Make Authentic Nam Ngiao', description: 'Learn nam ngiao curry paste, dried cotton tree flowers, broth depth, and Lanna seasoning tips.', keyword: 'Northern Thai nam ngiao', href: '/products/nam-prik-nam-ngiao-phayao', image: '/khua-articles-hero.png' },
+      { title: 'What Is Ma-Khwaen?', description: 'Discover the Lanna spice with a bright aromatic note and why it defines Northern Thai laab.', keyword: 'ma-khwaen pepper', href: '/collections/lanna-food', image: '/khua-articles-spices-feature.png' },
+      { title: 'What to Eat in Northern Thailand', description: 'A guide to chili pastes, Northern laab, gaeng khae, nam ngiao, and khan tok dishes.', keyword: 'Northern Thai food', href: '/collections/northern-thai-food', image: '/khua-articles-hero.png' },
+      { title: 'What Is Lanna Khan Tok?', description: 'The story of Northern Thai dining culture, shared dishes, and ceremonial meals.', keyword: 'khan tok', href: '/collections/lanna-food', image: '/khua-articles-spices-feature.png' },
+      { title: 'Phayao Local Food Guide', description: 'Explore regional flavors and dishes shaped by Phayao home kitchens.', keyword: 'Phayao food', href: '/collections/phayao-recipe', image: '/khua-articles-hero.png' },
+      { title: 'How to Use Northern Curry Paste', description: 'Use phrik gaeng nuea for gaeng khae, gaeng om, jackfruit curry, and more Lanna dishes.', keyword: 'Northern Thai curry paste', href: '/products/nam-prik-kaeng-nuea-phayao', image: '/khua-articles-spices-feature.png' },
+    ],
+    authorityTitle: 'Topical Authority: Phayao Northern Thai Food',
+    authorityParagraphs: [
+      'KHUA anchors its content around Phayao-style Northern Thai food, so articles, products, and collections connect naturally across laab, nam ngiao, red chili paste, Northern curry paste, and Lanna herbs.',
+      'When content explains recipes, culture, ingredients, and related products together, search engines can understand KHUA as a focused food authority rather than only a product storefront.',
+    ],
+    structureTitle: 'KHUA Article Structure',
+    structureItems: [
+      'A hero image that tells a Northern Thai food story',
+      'SEO intro with a clear topic and keyword',
+      'Story or cultural context',
+      'Cooking method and technique',
+      'Tips for aroma and flavor',
+      'FAQ for common search questions',
+      'Internal links to related products, collections, and articles',
+      'Product recommendation and Recipe Schema for recipe articles',
+    ],
+    emptyTitle: 'New Articles Are Being Prepared',
+    emptyDescription:
+      'The article archive has been cleared, but this page still works as a knowledge hub and a premium path into KHUA products, collections, and Northern Thai food topics.',
+    footerTitle: 'Phayao Northern Thai Food and Lanna Culture',
+    footerParagraphs: [
+      'KHUA shares Northern Thai food through local recipes, Lanna herbs, and the traditional cooking wisdom of Phayao Province.',
+      'From Northern laab and nam ngiao to gaeng khae and local Lanna dishes, every article is created to preserve the charm of the Northern kitchen and pass authentic Lanna flavor to a new generation.',
+    ],
+  },
+
   craftsmanship: {
     label: 'Our Craft',
     title: 'Wisdom in Every Detail',
@@ -484,6 +546,51 @@ const dict: Dictionary = {
         description:
           'Each jar is prepared as a gift, a pantry staple, and a Northern flavor ready for your table.',
       },
+    ],
+  },
+
+  aboutExperience: {
+    originTitle: 'Born in Phayao',
+    originParagraphs: [
+      'KHUA was created to carry the local Northern Thai flavor of Phayao into the kitchens of a new generation.',
+      'We grew up with the aroma of roasted chilies, ma-khwaen, shallots, and Lanna herbs drifting from wooden kitchens in the morning.',
+      'Northern Thai food is not only about taste. For us, it is memory and the way of life of Lanna people.',
+      'KHUA takes home-style recipes from Phayao and presents them in a modern, easy-to-use form while keeping the spirit of authentic Northern Thai food intact.',
+    ],
+    philosophyTitle: 'Aroma Is the Heart of Northern Thai Food',
+    philosophyParagraphs: [
+      'Authentic Northern Thai food is not measured by heat alone. It is measured by aroma.',
+      'The scent of roasted chilies, ma-khwaen, and Lanna herbs gives Northern food its identity.',
+      'Every KHUA process gives careful attention to roasting spices so the deep Lanna aroma can fully open. This is the flavor we want to pass forward.',
+    ],
+    cultureTitle: 'Northern Thai Identity and the Lanna Kitchen',
+    cultureParagraphs: [
+      'Northern Thai food is shaped by herbs, roasted aroma, and Lanna culture. Dishes like Northern larb, nam ngiao, red eye chili paste, and local curries belong to family tables, ceremonies, and everyday life.',
+      'Phayao food is calm, deep, and clear in its roasted spice character. KHUA protects that Northern kitchen identity in every recipe.',
+    ],
+    founderTitle: 'A Small Intention, Carefully Kept',
+    founderParagraphs: [
+      'KHUA began with a small intention: to keep home-style Northern Thai food alive in the present day.',
+      'We want a new generation to cook authentic Northern food more easily, without losing the roasted aroma, herbs, and memory of a Phayao kitchen.',
+    ],
+    whyTitle: 'Why KHUA',
+    whyItems: [
+      { title: 'Authentic Phayao Recipes', description: 'Inspired by local Phayao food and traditional Lanna kitchens.' },
+      { title: 'Freshly Roasted Every Batch', description: 'Chilies, spices, and herbs are roasted gently to release deep aroma.' },
+      { title: 'Lanna Herbs', description: 'Built around ma-khwaen, dried chilies, shallots, garlic, and local herbs.' },
+      { title: 'No Preservatives', description: 'Focused on quality ingredients and natural flavor for modern kitchens.' },
+      { title: 'Authentic Northern Flavor', description: 'Making Lanna food easier to cook while keeping its roots and character.' },
+    ],
+    faqTitle: 'Questions About KHUA',
+    faqItems: [
+      { question: 'What is KHUA?', answer: 'KHUA is a Phayao-style Northern Thai chili paste and curry paste brand that presents traditional Lanna flavor in a modern format.' },
+      { question: 'Why does KHUA use Phayao recipes?', answer: 'Because Phayao has a distinctive Northern Thai food identity built around roasted spice aroma and local Lanna herbs.' },
+      { question: 'What makes Phayao-style Northern Thai food distinctive?', answer: 'Phayao-style Northern Thai food is known for roasted spice aroma, bold depth, and the use of Lanna herbs.' },
+    ],
+    footerTitle: 'A Luxury Northern Thai Food Brand from Phayao',
+    footerParagraphs: [
+      'KHUA is more than a Northern chili paste brand. We carry local Phayao Lanna flavor through chili pastes and curry pastes that focus on roasted spice aroma, quality ingredients, and ease of use for the modern kitchen.',
+      'Every jar connects the memory of a wooden Lanna kitchen with the table of a new generation, so authentic Northern Thai food can continue with quiet confidence.',
     ],
   },
 
@@ -1495,101 +1602,7 @@ const dict: Dictionary = {
     },
   ],
 
-  articles_data: [
-    {
-      slug: 'how-to-pair-nam-prik',
-      title: 'Phayao Chili Paste: How to Pair Northern Flavor with Everyday Meals',
-      excerpt:
-        'A practical guide to pairing Phayao-origin chili paste with sticky rice, blanched vegetables, boiled eggs, and simple premium meals.',
-      category: 'Flavor Guide',
-      date: 'May 18, 2026',
-      readTime: '8 min read',
-      tags: [
-        'Phayao chili paste',
-        'Northern Thai chili paste',
-        'Phayao souvenir',
-        'Lanna food',
-        'authentic Lanna recipe',
-      ],
-      highlights: [
-        'Choosing the right paste for the meal makes Northern flavor feel clear without adding too many condiments.',
-        'Phayao ingredients bring roasted depth, gentle heat, and a natural fit with sticky rice, vegetables, eggs, and grilled dishes.',
-        'A premium Phayao food souvenir should be practical in the kitchen and carry a clear story of place.',
-      ],
-      content: [
-        'Great Phayao chili paste should not be reserved for special meals. The roasted aroma of chilies and local herbs can instantly bring depth to simple food.',
-        'Phayao food has a calm, grounded character. Dried chilies, shallots, garlic, and local spices become expressive when slowly roasted, giving heat that builds with aroma instead of overwhelming the plate.',
-        'For an elegant Northern Thai meal at home, start with warm sticky rice, seasonal blanched vegetables, boiled eggs, and one grilled or fried protein. Then choose the chili paste that matches the weight of the dish.',
-        'Nam Prik Larb Nuea works beautifully with warm sticky rice, boiled eggs, and sweet fresh vegetables because its dry spices add structure without overwhelming the plate.',
-        'Nam Prik Ta Daeng Nuea is for days when you want bold heat and clear smoke. Try a small touch with grilled pork or blanched greens for a balanced bite of heat, salt, and aroma.',
-        'Nam Prik Kaeng Nuea is best for hot cooking such as curries, stir-fries, or marinades because it has a stronger flavor structure and herbs that hold up well to heat.',
-        'Nam Prik Nam Ngiao Nuea is made for anyone who wants a convenient base for Northern noodle soup while keeping the character of roasted chilies, fermented soybean, and Lanna herbs.',
-        'To keep the aroma stable, use a clean dry spoon, close the lid tightly, and refrigerate after opening. This helps preserve the roasted notes that make Phayao chili paste memorable.',
-        'The secret is restraint. A small spoon of chili paste can turn an ordinary plate into a memorable meal.',
-      ],
-    },
-    {
-      slug: 'slow-roasted-lanna-craft',
-      title: 'Why Slow Roasting Matters in Lanna Chili Paste',
-      excerpt:
-        'Behind KHUA’s deep aroma are time, low heat, and patience that let dried chilies and spices fully open up.',
-      category: 'Craft',
-      date: 'May 12, 2026',
-      readTime: '7 min read',
-      tags: [
-        'slow roasted chilies',
-        'Lanna chili paste',
-        'Phayao chili paste',
-        'Northern Thai kitchen',
-        'artisan Thai food',
-      ],
-      highlights: [
-        'Slow roasting draws aromatic oils from chilies, shallots, garlic, and spices.',
-        'Stable low heat creates deeper aroma while reducing harsh bitterness or burnt notes.',
-        'Stone-ground texture gives the paste more dimension than a flat, industrial condiment.',
-      ],
-      content: [
-        'Roasting is not only about cooking ingredients. It wakes the aromatic oils in chilies, shallots, garlic, and spices.',
-        'In Lanna cooking, heat is part of the language of flavor. If the pan is too hot, dried chilies burn before their aroma opens. With patient low heat, the scent becomes deeper, rounder, and more elegant.',
-        'Properly roasted garlic and shallots bring natural sweetness. They soften the chili heat and help the paste feel balanced rather than sharp.',
-        'High heat gives quick char, but low heat gives depth and roundness. This is why traditional chili paste needs time and a careful eye.',
-        'At KHUA, consistency matters. Color, aroma, and texture should feel reliable from jar to jar because premium chili paste should perform well every time it is opened.',
-        'After roasting, stone grinding keeps the texture alive. Tiny pieces of ingredients remain, making every bite feel crafted rather than flat.',
-        'This is why a premium Phayao chili paste should show more than heat. It should offer roasted fragrance, layered spice, and a clean herbal finish.',
-      ],
-    },
-    {
-      slug: 'lanna-pantry-essentials',
-      title: 'Essential Lanna Pantry Ingredients to Keep at Home',
-      excerpt:
-        'Meet dried chilies, ma-khwaen peppercorns, mineral salt, and herbs that make Northern Thai flavor unmistakable.',
-      category: 'Ingredients',
-      date: 'May 5, 2026',
-      readTime: '7 min read',
-      tags: [
-        'Lanna ingredients',
-        'ma-khwaen',
-        'roasted dried chili',
-        'Northern Thai chili paste',
-        'Phayao food',
-      ],
-      highlights: [
-        'Dried chilies, shallots, garlic, and ma-khwaen form the aromatic base of many Lanna recipes.',
-        'Sourcing with a sense of place helps the flavor speak clearly of Phayao and Northern Thailand.',
-        'Good ingredients allow a chili paste to taste deep and aromatic without becoming overly salty or aggressive.',
-      ],
-      content: [
-        'A Lanna pantry earns its character from a few ingredients chosen carefully. Dried chilies bring heat and color; ma-khwaen gives a bright, tingling aroma.',
-        'Phayao food is often about quiet detail. Ingredients do not need to be excessive, but they should be clean, aromatic, and ready to reveal themselves when roasted.',
-        'Mineral salt sharpens flavor without making it harsh, while roasted shallots and garlic form the warm base of many pastes.',
-        'Ma-khwaen is one of the ingredients that makes Northern Thai flavor distinct from other regional heat. Its citrusy, tingling aroma gives larb, chili paste, and curry a recognizable Lanna profile.',
-        'Good dried chilies should provide color, aroma, and balanced heat. Once roasted, they create the deep fragrance that defines authentic Lanna chili paste.',
-        'Fermented soybean and local herbs matter in certain recipes, especially Nam Prik Nam Ngiao Nuea, where they add umami and make the soup base feel fuller.',
-        'For a home pantry, keep at least two styles of chili paste: a dry aromatic paste for rice and vegetables, and a curry-style paste for hot cooking.',
-        'When good ingredients meet experienced hands, the flavor does not need to shout. That restraint is what makes Northern food elegant.',
-      ],
-    },
-  ],
+  articles_data: [],
 
   collections_data: [
     {

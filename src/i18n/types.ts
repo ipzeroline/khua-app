@@ -355,6 +355,40 @@ export interface Dictionary {
     notFound: string
   }
 
+  articlesHub: {
+    metaTitle: string
+    metaDescription: string
+    heroTitle: string
+    heroSubtitle: string
+    heroDescription: string
+    introTitle: string
+    introParagraphs: string[]
+    categoryTitle: string
+    categorySubtitle: string
+    categories: Array<{
+      title: string
+      description: string
+      href: string
+    }>
+    featuredTitle: string
+    featuredSubtitle: string
+    featuredItems: Array<{
+      title: string
+      description: string
+      keyword: string
+      href: string
+      image: string
+    }>
+    authorityTitle: string
+    authorityParagraphs: string[]
+    structureTitle: string
+    structureItems: string[]
+    emptyTitle: string
+    emptyDescription: string
+    footerTitle: string
+    footerParagraphs: string[]
+  }
+
   craftsmanship: {
     label: string
     title: string
@@ -382,6 +416,29 @@ export interface Dictionary {
       title: string
       description: string
     }>
+  }
+
+  aboutExperience: {
+    originTitle: string
+    originParagraphs: string[]
+    philosophyTitle: string
+    philosophyParagraphs: string[]
+    cultureTitle: string
+    cultureParagraphs: string[]
+    founderTitle: string
+    founderParagraphs: string[]
+    whyTitle: string
+    whyItems: Array<{
+      title: string
+      description: string
+    }>
+    faqTitle: string
+    faqItems: Array<{
+      question: string
+      answer: string
+    }>
+    footerTitle: string
+    footerParagraphs: string[]
   }
 
   contact: {

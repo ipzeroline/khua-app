@@ -1,32 +1,15 @@
 import type { Metadata } from 'next'
 import { connection } from 'next/server'
+import { redirect } from 'next/navigation'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { DEFAULT_OG_IMAGE, SITE_URL, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import { SITE_URL, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import ArticlesContent from '@/components/articles/ArticlesContent'
 import { getPublishedArticles } from '@/lib/articles'
+import { getArticleCategorySlug, getArticleListing } from '@/lib/article-listing'
 
 interface ArticlesPageProps {
   params: Promise<{ lang: string }>
   searchParams: Promise<{ q?: string; page?: string; category?: string }>
-}
-
-const ARTICLES_PER_PAGE = 6
-
-function matchesArticle(
-  article: { title: string; excerpt: string; category: string; tags: string[]; highlights: string[]; content: string[] },
-  query: string,
-) {
-  if (!query) return true
-  const haystack = [
-    article.title,
-    article.excerpt,
-    article.category,
-    ...article.tags,
-    ...article.highlights,
-    ...article.content,
-  ].join(' ').toLowerCase()
-
-  return haystack.includes(query.toLowerCase())
 }
 
 export async function generateMetadata({ params }: ArticlesPageProps): Promise<Metadata> {
@@ -36,18 +19,18 @@ export async function generateMetadata({ params }: ArticlesPageProps): Promise<M
 
   const alternates: Record<string, string> = {}
   LOCALES.forEach((l) => { alternates[l] = `/${l}/articles` })
-  const title = fitSeoText(`บทความอาหารเหนือ น้ำพริกพะเยา | ${dict.site.name}`, 60)
-  const description = fitSeoText(
-    `อ่านบทความอาหารเหนือ น้ำพริกพะเยา เมนูอาหารเหนือ ผักพื้นบ้าน สมุนไพรล้านนา และของฝากพะเยา พร้อมแนวทางเลือกซื้อและทำอาหาร`,
-    160,
-  )
+  const title = fitSeoText(dict.articlesHub.metaTitle, 60)
+  const description = fitSeoText(dict.articlesHub.metaDescription, 160)
 
   return {
     title: { absolute: title },
     description,
     keywords: mergeKeywords(
       THAI_SEO_KEYWORDS,
-      dict.articles.title,
+      dict.articlesHub.heroTitle,
+      dict.articlesHub.categoryTitle,
+      dict.articlesHub.featuredItems.map((item) => item.keyword),
+      dict.articlesHub.categories.map((item) => item.title),
       dict.phayaoSeo.title,
       dict.products.originValue,
       dict.products.seoTagsBase,
@@ -62,13 +45,13 @@ export async function generateMetadata({ params }: ArticlesPageProps): Promise<M
       siteName: dict.site.name,
       locale: getOpenGraphLocale(locale),
       type: 'website',
-      images: [{ url: DEFAULT_OG_IMAGE, width: 1024, height: 1024, alt: 'KHUA บทความอาหารเหนือ' }],
+      images: [{ url: '/khua-articles-hero.png', width: 1536, height: 1024, alt: dict.articlesHub.heroTitle }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [DEFAULT_OG_IMAGE],
+      images: ['/khua-articles-hero.png'],
     },
   }
 }
@@ -79,32 +62,47 @@ export default async function ArticlesPage({ params, searchParams }: ArticlesPag
   const locale = lang as Locale
   const dict = await getDictionary(locale)
   const search = await searchParams
-  const query = typeof search.q === 'string' ? search.q.trim() : ''
-  const category = typeof search.category === 'string' ? search.category.trim() : ''
-  const allArticles = await getPublishedArticles(locale, dict)
-  const categories = Array.from(
-    new Set(allArticles.map((article) => article.category).filter(Boolean)),
-  ).sort((a, b) => a.localeCompare(b, locale))
-  const filteredArticles = allArticles.filter((article) =>
-    matchesArticle(article, query) && (!category || article.category === category),
-  )
-  const totalPages = Math.max(1, Math.ceil(filteredArticles.length / ARTICLES_PER_PAGE))
+  const categoryParam = typeof search.category === 'string' ? search.category.trim() : ''
   const requestedPage = Number.parseInt(search.page ?? '1', 10)
-  const page = Number.isFinite(requestedPage)
-    ? Math.min(Math.max(requestedPage, 1), totalPages)
+  const pageParam = Number.isFinite(requestedPage) && requestedPage > 1
+    ? Math.floor(requestedPage)
     : 1
-  const articles = filteredArticles.slice(
-    (page - 1) * ARTICLES_PER_PAGE,
-    page * ARTICLES_PER_PAGE,
-  )
+  if (categoryParam) {
+    const params = new URLSearchParams()
+    if (typeof search.q === 'string' && search.q.trim()) params.set('q', search.q.trim())
+    const suffix = params.toString()
+    const categoryPath = `/${locale}/articles/${getArticleCategorySlug(categoryParam)}`
+    redirect(`${pageParam > 1 ? `${categoryPath}/page/${pageParam}` : categoryPath}${suffix ? `?${suffix}` : ''}`)
+  }
+
+  if (pageParam > 1) {
+    const params = new URLSearchParams()
+    if (typeof search.q === 'string' && search.q.trim()) params.set('q', search.q.trim())
+    const suffix = params.toString()
+    redirect(`/${locale}/articles/page/${pageParam}${suffix ? `?${suffix}` : ''}`)
+  }
+
+  const allArticles = await getPublishedArticles(locale, dict)
+  const listing = getArticleListing(allArticles, locale, search)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: dict.articles.title,
-    description: dict.articles.subtitle,
+    name: dict.articlesHub.heroTitle,
+    description: dict.articlesHub.heroDescription,
     url: `${SITE_URL}/${locale}/articles`,
     inLanguage: locale,
-    mainEntity: allArticles.map((article) => ({
+    about: dict.articlesHub.categories.map((item) => item.title),
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: dict.articlesHub.featuredItems.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.title,
+        description: item.description,
+        url: `${SITE_URL}/${locale}${item.href}`,
+      })),
+    },
+    hasPart: allArticles.map((article) => ({
       '@type': 'Article',
       headline: article.title,
       description: article.excerpt,
@@ -139,12 +137,13 @@ export default async function ArticlesPage({ params, searchParams }: ArticlesPag
       <ArticlesContent
         dict={dict}
         lang={locale}
-        articles={articles}
-        query={query}
-        category={category}
-        categories={categories}
-        page={page}
-        totalPages={totalPages}
+        articles={listing.articles}
+        query={listing.query}
+        category={listing.category}
+        categorySlug={listing.categorySlug}
+        categories={listing.categories}
+        page={listing.page}
+        totalPages={listing.totalPages}
       />
     </>
   )
