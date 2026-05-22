@@ -16,6 +16,41 @@ export interface ProductData {
   nameEn: string
   description: string
   longDescription: string
+  metaTitle?: string
+  metaDescription?: string
+  seoContent?: {
+    h1?: string
+    opening: string[]
+    sections: Array<{
+      title: string
+      paragraphs?: string[]
+      items?: string[]
+      table?: {
+        headers: string[]
+        rows: string[][]
+      }
+      recipe?: {
+        ingredientsTitle: string
+        ingredients: string[]
+        stepsTitle: string
+        steps: string[]
+      }
+    }>
+    faq?: Array<{
+      question: string
+      answer: string
+    }>
+    internalLinksTitle?: string
+    internalLinks?: Array<{
+      label: string
+      slug: string
+    }>
+    blogClustersTitle?: string
+    blogClusters?: Array<{
+      title: string
+      keywords: string[]
+    }>
+  }
   ingredients: string[]
   price: string
   compareAtPrice?: string
@@ -42,6 +77,24 @@ export interface ArticleData {
   tags: string[]
   highlights: string[]
   content: string[]
+}
+
+export interface CollectionData {
+  slug: string
+  title: string
+  metaTitle: string
+  metaDescription: string
+  excerpt: string
+  heroEyebrow: string
+  sections: Array<{
+    title: string
+    content: string[]
+    links?: Array<{
+      label: string
+      href: string
+    }>
+  }>
+  relatedProductSlugs: string[]
 }
 
 export interface Dictionary {
@@ -78,6 +131,45 @@ export interface Dictionary {
     label: string
     title: string
     paragraphs: string[]
+  }
+
+  homePhayaoCuisine: {
+    title: string
+    paragraphs: string[]
+    audienceTitle: string
+    audience: string[]
+    menusTitle: string
+    menus: string[]
+    closing: string
+    whyTitle: string
+    whyItems: string[]
+    faqTitle: string
+    faqs: Array<{
+      question: string
+      answer: string
+    }>
+  }
+
+  homeSeoAuthority: {
+    eyebrow: string
+    title: string
+    intro: string
+    sections: Array<{
+      title: string
+      content: string
+    }>
+  }
+
+  seoFooter: {
+    title: string
+    content: string
+  }
+
+  collections: {
+    label: string
+    title: string
+    subtitle: string
+    view: string
   }
 
   faq: {
@@ -123,6 +215,37 @@ export interface Dictionary {
     addToCart: string
     addedToCart: string
     seoTagsBase: string[]
+  }
+
+  productsPageSeo: {
+    introTitle: string
+    introParagraphs: string[]
+    collectionTitle: string
+    collectionItems: Array<{
+      title: string
+      description: string
+      href: string
+    }>
+    menuTitle: string
+    menuItems: Array<{
+      title: string
+      description: string
+      keyword: string
+      href: string
+      image: string
+    }>
+    whyTitle: string
+    whyItems: Array<{
+      title: string
+      description: string
+    }>
+    faqTitle: string
+    faqItems: Array<{
+      question: string
+      answer: string
+    }>
+    footerTitle: string
+    footerParagraphs: string[]
   }
 
   cart: {
@@ -285,6 +408,7 @@ export interface Dictionary {
 
   products_data: ProductData[]
   articles_data: ArticleData[]
+  collections_data: CollectionData[]
 
   admin: {
     dashboard: string

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Dictionary, Locale, ProductData } from '@/i18n'
 import Button from '@/components/ui/Button'
 import SectionDivider from '@/components/ui/SectionDivider'
@@ -65,7 +66,7 @@ export default function ProductDetailContent({
             <h1
               className="apple-headline gold-text overflow-visible break-words py-1 text-3xl leading-[1.28] sm:text-4xl sm:leading-[1.28] [overflow-wrap:anywhere]"
             >
-              {product.name}
+              {product.seoContent?.h1 || product.name}
             </h1>
             <p className="text-gold/50 text-sm mt-2 font-medium">
               {product.nameEn}
@@ -187,6 +188,203 @@ export default function ProductDetailContent({
               })}
             </div>
           </motion.section>
+        ) : null}
+
+        {product.seoContent ? (
+          <motion.article
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.22 }}
+            className="mx-auto mt-20 max-w-4xl border-t border-gold/10 pt-14 text-text sm:mt-24 sm:pt-16"
+          >
+            <div className="space-y-5 text-base leading-8 text-text-secondary sm:text-lg">
+              {product.seoContent.opening.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="mt-12 space-y-14">
+              {product.seoContent.sections.map((section) => (
+                <section key={section.title}>
+                  <h2 className="apple-headline text-2xl text-text sm:text-3xl">
+                    {section.title}
+                  </h2>
+
+                  {section.paragraphs?.length ? (
+                    <div className="mt-5 space-y-4 text-base leading-8 text-text-secondary">
+                      {section.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  {section.items?.length ? (
+                    <ul className="mt-5 grid gap-3 text-text-secondary sm:grid-cols-2">
+                      {section.items.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <span className="mt-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold/70" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
+                  {section.table ? (
+                    <div className="mt-6 overflow-hidden rounded-2xl border border-gold/15 bg-white/70">
+                      <table className="w-full border-collapse text-left text-sm sm:text-base">
+                        <thead className="bg-gold-pale/70 text-text">
+                          <tr>
+                            {section.table.headers.map((header) => (
+                              <th key={header} className="px-4 py-3 font-semibold sm:px-6">
+                                {header}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {section.table.rows.map((row) => (
+                            <tr key={row.join('-')} className="text-text-secondary">
+                              {row.map((cell) => (
+                                <td key={cell} className="px-4 py-3 sm:px-6">
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : null}
+
+                  {section.recipe ? (
+                    <div className="mt-6 grid gap-8 md:grid-cols-2">
+                      <div>
+                        <h3 className="apple-headline text-lg text-text">
+                          {section.recipe.ingredientsTitle}
+                        </h3>
+                        <ul className="mt-4 space-y-3 text-text-secondary">
+                          {section.recipe.ingredients.map((ingredient) => (
+                            <li key={ingredient} className="flex gap-3">
+                              <span className="mt-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold/70" />
+                              <span>{ingredient}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 className="apple-headline text-lg text-text">
+                          {section.recipe.stepsTitle}
+                        </h3>
+                        <ol className="mt-4 space-y-3 text-text-secondary">
+                          {section.recipe.steps.map((step, index) => (
+                            <li key={step} className="flex gap-3">
+                              <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gold-pale text-sm font-semibold text-gold">
+                                {index + 1}
+                              </span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    </div>
+                  ) : null}
+                </section>
+              ))}
+            </div>
+
+            {product.seoContent.faq?.length ? (
+              <section className="mt-14 border-t border-gold/10 pt-12">
+                <h2 className="apple-headline text-2xl text-text sm:text-3xl">
+                  FAQ
+                </h2>
+                <div className="mt-6 divide-y divide-border rounded-2xl border border-gold/15 bg-white/70">
+                  {product.seoContent.faq.map((item) => (
+                    <div key={item.question} className="p-5 sm:p-6">
+                      <h3 className="apple-headline text-lg text-text">
+                        {item.question}
+                      </h3>
+                      <p className="mt-3 leading-7 text-text-secondary">
+                        {item.answer}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {product.seoContent.internalLinks?.length ? (
+              <section className="mt-14 border-t border-gold/10 pt-10">
+                <h2 className="apple-headline text-xl text-text">
+                  {product.seoContent.internalLinksTitle || 'เมนูแนะนำจาก KHUA'}
+                </h2>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {product.seoContent.internalLinks.map((link) => (
+                    <Link
+                      key={link.slug}
+                      href={`/${dict.locale}/products/${link.slug}`}
+                      className="rounded-full border border-gold/20 bg-white/70 px-4 py-2 text-sm font-medium text-gold transition-colors hover:border-gold/40 hover:bg-gold-pale"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {dict.collections_data.length ? (
+              <section className="mt-14 border-t border-gold/10 pt-10">
+                <h2 className="apple-headline text-xl text-text">
+                  {dict.collections.title}
+                </h2>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {dict.collections_data
+                    .filter((collection) => collection.relatedProductSlugs.includes(product.slug))
+                    .map((collection) => (
+                      <Link
+                        key={collection.slug}
+                        href={`/${dict.locale}/collections/${collection.slug}`}
+                        className="border border-gold/15 bg-white/70 p-4 text-sm font-medium text-text transition-colors hover:border-gold/35 hover:bg-gold-pale"
+                      >
+                        <span className="block text-gold">{collection.title}</span>
+                        <span className="mt-2 block leading-6 text-text-secondary">
+                          {collection.excerpt}
+                        </span>
+                      </Link>
+                    ))}
+                </div>
+              </section>
+            ) : null}
+
+            {product.seoContent.blogClusters?.length ? (
+              <section className="mt-14 border-t border-gold/10 pt-10">
+                <h2 className="apple-headline text-xl text-text">
+                  {product.seoContent.blogClustersTitle || 'บทความแนะนำ'}
+                </h2>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  {product.seoContent.blogClusters.map((cluster) => (
+                    <div
+                      key={cluster.title}
+                      className="rounded-2xl border border-gold/15 bg-white/70 p-5"
+                    >
+                      <h3 className="apple-headline text-base text-text">
+                        {cluster.title}
+                      </h3>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {cluster.keywords.map((keyword) => (
+                          <span
+                            key={keyword}
+                            className="rounded-full bg-gold-pale px-3 py-1 text-xs font-medium text-gold"
+                          >
+                            {keyword}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+          </motion.article>
         ) : null}
       </div>
     </div>

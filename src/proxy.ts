@@ -21,6 +21,53 @@ export function proxy(request: NextRequest) {
   }
 
   const pathLocale = pathname.split('/')[1]
+  const oldLarbProductPath = `/${pathLocale}/products/nam-prik-larb-nuea`
+
+  if (isValidLocale(pathLocale) && pathname === oldLarbProductPath) {
+    const newUrl = new URL(`/${pathLocale}/products/nam-prik-larb-phayao`, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.redirect(newUrl, 308)
+  }
+
+  const oldTaDaengProductPath = `/${pathLocale}/products/nam-prik-ta-daeng`
+
+  if (isValidLocale(pathLocale) && pathname === oldTaDaengProductPath) {
+    const newUrl = new URL(`/${pathLocale}/products/nam-prik-ta-daeng-phayao`, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.redirect(newUrl, 308)
+  }
+
+  const oldTaDaengMangDaProductPath = `/${pathLocale}/products/nam-prik-ta-daeng-mang-da`
+
+  if (isValidLocale(pathLocale) && pathname === oldTaDaengMangDaProductPath) {
+    const newUrl = new URL(`/${pathLocale}/products/nam-prik-ta-daeng-mang-da-phayao`, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.redirect(newUrl, 308)
+  }
+
+  const oldKaengNueaProductPath = `/${pathLocale}/products/nam-prik-kaeng-nuea`
+
+  if (isValidLocale(pathLocale) && pathname === oldKaengNueaProductPath) {
+    const newUrl = new URL(`/${pathLocale}/products/nam-prik-kaeng-nuea-phayao`, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.redirect(newUrl, 308)
+  }
+
+  const oldNamNgiaoProductPath = `/${pathLocale}/products/nam-prik-nam-ngiao-nuea`
+
+  if (isValidLocale(pathLocale) && pathname === oldNamNgiaoProductPath) {
+    const newUrl = new URL(`/${pathLocale}/products/nam-prik-nam-ngiao-phayao`, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.redirect(newUrl, 308)
+  }
+
+  const oldLannaSetProductPath = `/${pathLocale}/products/khua-lanna-set-5`
+
+  if (isValidLocale(pathLocale) && pathname === oldLannaSetProductPath) {
+    const newUrl = new URL(`/${pathLocale}/products/khua-lanna-set-5-phayao`, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.redirect(newUrl, 308)
+  }
 
   // Redirect /admin to /{locale}/admin/login if not already on a localized path
   if (pathname.startsWith('/admin')) {

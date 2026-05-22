@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getDictionary, type Locale, LOCALES } from '@/i18n'
-import { DEFAULT_OG_IMAGE, SITE_URL, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
+import { DEFAULT_OG_IMAGE, SITE_URL, absoluteUrl, fitSeoText, getOpenGraphLocale, mergeKeywords, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import ProductsContent from '@/components/products/ProductsContent'
 
 interface ProductsPageProps {
@@ -55,23 +55,81 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
   const { lang } = await params
   const locale = lang as Locale
   const dict = await getDictionary(locale)
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: dict.products.title,
-    description: dict.products.subtitle,
-    url: `${SITE_URL}/${locale}/products`,
-    inLanguage: locale,
-    mainEntity: {
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: dict.productsPageSeo.introTitle,
+      description: dict.productsPageSeo.introParagraphs[0],
+      url: `${SITE_URL}/${locale}/products`,
+      inLanguage: locale,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: dict.products_data.map((product, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          url: `${SITE_URL}/${locale}/products/${product.slug}`,
+          name: product.name,
+        })),
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: dict.nav.home,
+          item: `${SITE_URL}/${locale}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: dict.products.title,
+          item: `${SITE_URL}/${locale}/products`,
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
       '@type': 'ItemList',
+      name: dict.products.title,
       itemListElement: dict.products_data.map((product, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: `${SITE_URL}/${locale}/products/${product.slug}`,
-        name: product.name,
+        item: {
+          '@type': 'Product',
+          name: product.name,
+          description: product.description,
+          image: product.image ? absoluteUrl(product.image) : undefined,
+          brand: {
+            '@type': 'Brand',
+            name: dict.site.name,
+          },
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'THB',
+            price: product.price,
+            availability: 'https://schema.org/InStock',
+            url: `${SITE_URL}/${locale}/products/${product.slug}`,
+          },
+        },
       })),
     },
-  }
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: dict.productsPageSeo.faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ]
 
   return (
     <>

@@ -43,6 +43,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       )
     }
 
+    for (const collection of dict.collections_data) {
+      entries.push(
+        sitemapEntry(
+          `/${locale}/collections/${collection.slug}`,
+          locale === 'th' ? 0.88 : 0.58,
+          'weekly',
+        ),
+      )
+    }
+
     for (const article of dict.articles_data) {
       entries.push(
         sitemapEntry(`/${locale}/articles/${article.slug}`, locale === 'th' ? 0.8 : 0.5, 'daily'),

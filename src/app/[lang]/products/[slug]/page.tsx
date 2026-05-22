@@ -31,8 +31,8 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     ...dict.products.seoTagsBase,
     ...product.ingredients,
   ])
-  const title = fitSeoText(`${product.name} น้ำพริกพะเยา | ${dict.site.name}`, 60)
-  const description = fitSeoText(
+  const title = product.metaTitle || fitSeoText(`${product.name} น้ำพริกพะเยา | ${dict.site.name}`, 60)
+  const description = product.metaDescription || fitSeoText(
     `${product.description} ${dict.products.originLabel}: ${dict.products.originValue}. พร้อมส่ง เหมาะเป็นของฝากพะเยาและอาหารเหนือประจำบ้าน`,
     160,
   )
@@ -102,12 +102,27 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       ],
     },
   ]
+  const faqJsonLd = product.seoContent?.faq?.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: product.seoContent.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      }
+    : null
+  const structuredData = faqJsonLd ? [...jsonLd, faqJsonLd] : jsonLd
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
       />
       <ProductDetailContent product={product} dict={dict} lang={locale} />
     </>
