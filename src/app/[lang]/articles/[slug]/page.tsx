@@ -13,6 +13,10 @@ interface ArticleDetailPageProps {
   searchParams?: Promise<{ q?: string; page?: string }>
 }
 
+const SHARE_IMAGE_WIDTH = 1200
+const SHARE_IMAGE_HEIGHT = 630
+const FACEBOOK_APP_ID = '2052165095332670'
+
 function compactText(value: string) {
   return value.replace(/\s+/g, ' ').trim()
 }
@@ -37,6 +41,15 @@ function articleSeoDescription(article: ArticleData) {
 
 function articleIsoDate(article: ArticleData) {
   return article.slug.match(/^daily-(\d{4}-\d{2}-\d{2})-/)?.[1] || undefined
+}
+
+function shareImageMetadata(image: string, alt: string) {
+  return {
+    url: absoluteUrl(image),
+    width: SHARE_IMAGE_WIDTH,
+    height: SHARE_IMAGE_HEIGHT,
+    alt,
+  }
 }
 
 function serializeJsonLd(value: unknown) {
@@ -95,6 +108,7 @@ export async function generateMetadata({ params }: ArticleDetailPageProps): Prom
       `${dict.articlesHub.categorySubtitle} ${dict.articlesHub.heroDescription}`,
       160,
     )
+    const image = '/khua-articles-hero.png'
 
     const alternates: Record<string, string> = {}
     LOCALES.forEach((l) => { alternates[l] = `/${l}/articles/${listing.categorySlug}` })
@@ -111,13 +125,13 @@ export async function generateMetadata({ params }: ArticleDetailPageProps): Prom
         siteName: dict.site.name,
         locale: getOpenGraphLocale(locale),
         type: 'website',
-        images: [{ url: absoluteUrl('/khua-articles-hero.png'), alt: listing.category }],
+        images: [shareImageMetadata(image, listing.category)],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: [absoluteUrl('/khua-articles-hero.png')],
+        images: [absoluteUrl(image)],
       },
     }
   }
@@ -151,7 +165,10 @@ export async function generateMetadata({ params }: ArticleDetailPageProps): Prom
       type: 'article',
       publishedTime: isoDate,
       modifiedTime: isoDate,
-      images: [{ url: absoluteUrl(image), alt: article.title }],
+      images: [shareImageMetadata(image, article.title)],
+    },
+    facebook: {
+      appId: FACEBOOK_APP_ID,
     },
     twitter: {
       card: 'summary_large_image',
@@ -195,7 +212,7 @@ export default async function ArticleDetailPage({ params, searchParams }: Articl
         '@type': 'Article',
         headline: article.title,
         description: article.excerpt,
-        image: article.coverImage,
+        image: absoluteUrl(article.coverImage || '/khua-logo.png'),
         datePublished: article.date,
       })),
     }
@@ -344,7 +361,12 @@ export default async function ArticleDetailPage({ params, searchParams }: Articl
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
-      <ArticleDetailContent article={article} dict={dict} lang={locale} />
+      <ArticleDetailContent
+        article={article}
+        dict={dict}
+        lang={locale}
+        articleUrl={absoluteUrl(canonical)}
+      />
     </>
   )
 }

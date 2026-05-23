@@ -1643,12 +1643,12 @@ const dict: Dictionary = {
     },
     {
       slug: 'lanna-food',
-      title: 'Lanna Food',
-      metaTitle: 'Authentic Lanna Food | Northern Thai Culture and Local Dishes – KHUA',
+      title: 'Authentic Lanna Food from Phayao',
+      metaTitle: 'Authentic Lanna Food from Phayao | Northern Thai Spices – KHUA',
       metaDescription:
-        'Learn about Lanna food culture, Northern larb, nam ngiao, gaeng khae, chili pastes, herbs, and KHUA Phayao-style products.',
+        'Explore authentic Lanna food from Phayao, Northern larb paste, nam ngiao, Northern curry paste, Lanna spices, and KHUA home-kitchen seasonings.',
       excerpt:
-        'A guide to Lanna food culture, khantoke meals, local vegetables, Northern herbs, and dishes built around roasted spice aroma.',
+        'A regional guide to Phayao Lanna food, Northern Thai spices, local ingredients, larb paste, nam ngiao, curry paste, and KHUA home-kitchen flavor.',
       heroEyebrow: 'Lanna Food',
       sections: [
         {
@@ -1669,12 +1669,12 @@ const dict: Dictionary = {
     },
     {
       slug: 'phayao-recipe',
-      title: 'Phayao Recipes',
-      metaTitle: 'Phayao Recipes | Lanna Chili Pastes and Curry Pastes – KHUA',
+      title: 'Phayao Recipes and Northern Thai Seasonings',
+      metaTitle: 'Phayao Recipes and Northern Thai Seasonings | KHUA',
       metaDescription:
-        'Explore Phayao recipes and local Lanna flavor, including Northern larb, red eye chili paste, Northern curry, and nam ngiao.',
+        'Explore Phayao recipes, Northern Thai seasonings, Northern larb paste, nam ngiao paste, Northern curry paste, red eye chili paste, and Lanna ingredients from KHUA.',
       excerpt:
-        'Learn what makes Phayao flavor distinctive: roasted spices, local herbs, and Lanna dishes with deep aroma.',
+        'A guide to Lanna curry pastes, chili pastes, and local Northern Thai ingredients from Phayao, made for Northern larb, nam ngiao, gaeng khae, red eye chili paste, and everyday Lanna cooking.',
       heroEyebrow: 'Phayao Recipe',
       sections: [
         {
@@ -1743,8 +1743,8 @@ const dict: Dictionary = {
   },
 
   social: {
-    instagram: 'https://instagram.com/khua.foods',
-    facebook: 'https://facebook.com/khuafoods',
+    instagram: 'https://www.instagram.com/khualab/',
+    facebook: 'https://www.facebook.com/khualab',
     line: 'https://line.me/R/ti/p/@khua',
   },
 }

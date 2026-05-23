@@ -1,6 +1,6 @@
 import { ArticleData, Locale } from '@/i18n/types'
 
-export const ARTICLES_PER_PAGE = 6
+export const ARTICLES_PER_PAGE = 7
 
 const CATEGORY_SLUG_ALIASES = new Map<string, string>(
   [

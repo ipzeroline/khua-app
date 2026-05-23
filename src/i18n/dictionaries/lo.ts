@@ -1393,10 +1393,10 @@ const dict: Dictionary = {
     },
     {
       slug: 'lanna-food',
-      title: 'ອາຫານລ້ານນາ',
-      metaTitle: 'ອາຫານລ້ານນາແທ້ | KHUA',
-      metaDescription: 'ຮູ້ຈັກວັດທະນະທຳອາຫານລ້ານນາ ລາບເໜືອ ນ້ຳເງ້ຍວ ແກງແຄ ແລະນ້ຳພິກສູດພະເຍົາ',
-      excerpt: 'ຄູ່ມືອາຫານລ້ານນາ ຂັນໂຕກ ຜັກພື້ນບ້ານ ສະໝຸນໄພເໜືອ ແລະກິ່ນເຄື່ອງເທດຄົ່ວ',
+      title: 'ອາຫານລ້ານນາແທ້ຈາກພະເຍົາ',
+      metaTitle: 'ອາຫານລ້ານນາແທ້ຈາກພະເຍົາ | KHUA',
+      metaDescription: 'ລວມອາຫານລ້ານນາ ນ້ຳພິກລາບ ນ້ຳເງ້ຍວ ເຄື່ອງແກງເໜືອ ເຄື່ອງເທດລ້ານນາ ແລະວັດຖຸດິບພະເຍົາຈາກ KHUA',
+      excerpt: 'ຄູ່ມືອາຫານລ້ານນາຈາກພະເຍົາ ເຄື່ອງເທດເໜືອ ນ້ຳພິກລາບ ນ້ຳເງ້ຍວ ແລະເລື່ອງຄົວ KHUA',
       heroEyebrow: 'Lanna Food',
       sections: [
         {
@@ -1410,10 +1410,10 @@ const dict: Dictionary = {
     },
     {
       slug: 'phayao-recipe',
-      title: 'ສູດພະເຍົາ',
-      metaTitle: 'ສູດອາຫານພະເຍົາ | KHUA',
-      metaDescription: 'ລວມສູດອາຫານພະເຍົາ ລາບເໜືອ ນ້ຳພິກຕາແດງ ແກງເໜືອ ແລະນ້ຳເງ້ຍວ',
-      excerpt: 'ຮູ້ຈັກລົດຊາດພະເຍົາ ກິ່ນເຄື່ອງເທດຄົ່ວ ສະໝຸນໄພພື້ນບ້ານ ແລະອາຫານລ້ານນາ',
+      title: 'ສູດອາຫານພະເຍົາ ແລະເຄື່ອງປຸງອາຫານເໜືອ',
+      metaTitle: 'ສູດອາຫານພະເຍົາ ແລະເຄື່ອງປຸງອາຫານເໜືອ | KHUA',
+      metaDescription: 'ລວມສູດອາຫານພະເຍົາ ເຄື່ອງປຸງອາຫານເໜືອ ນ້ຳພິກລາບ ນ້ຳເງ້ຍວ ແກງເໜືອ ແລະນ້ຳພິກຕາແດງຈາກ KHUA',
+      excerpt: 'ຄູ່ມືເຄື່ອງແກງ ນ້ຳພິກ ແລະວັດຖຸດິບອາຫານເໜືອຈາກສູດລ້ານນາຂອງພະເຍົາ ສຳລັບລາບເໜືອ ນ້ຳເງ້ຍວ ແກງແຄ ແລະນ້ຳພິກຕາແດງ',
       heroEyebrow: 'Phayao Recipe',
       sections: [
         { title: 'ສູດພະເຍົາມີຈຸດເດັ່ນຢ່າງໃດ', content: ['ສູດພະເຍົາເນັ້ນພິກແຫ້ງ ຫອມ ກະທຽມ ແລະເຄື່ອງເທດເໜືອທີ່ຄົ່ວຈົນຫອມ'] },
@@ -1456,8 +1456,8 @@ const dict: Dictionary = {
   },
 
   social: {
-    instagram: 'https://instagram.com/khua.foods',
-    facebook: 'https://facebook.com/khuafoods',
+    instagram: 'https://www.instagram.com/khualab/',
+    facebook: 'https://www.facebook.com/khualab',
     line: 'https://line.me/R/ti/p/@khua',
   },
 }

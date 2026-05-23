@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { ArticleData, Dictionary, Locale } from '@/i18n'
 
@@ -9,6 +11,47 @@ interface ArticleDetailContentProps {
   article: ArticleData
   dict: Dictionary
   lang: Locale
+  articleUrl: string
+}
+
+const shareLabels: Record<Locale, string> = {
+  th: 'แชร์ไป Facebook',
+  en: 'Share on Facebook',
+  lo: 'ແຊຣ໌ໄປ Facebook',
+  zh: '分享到 Facebook',
+}
+
+const likeLabels: Record<Locale, string> = {
+  th: 'ถูกใจบทความนี้',
+  en: 'Like this article',
+  lo: 'ກົດຖືກໃຈບົດຄວາມນີ້',
+  zh: '赞这篇文章',
+}
+
+const likeActionLabels: Record<Locale, string> = {
+  th: 'ถูกใจ',
+  en: 'Like',
+  lo: 'ຖືກໃຈ',
+  zh: '赞',
+}
+
+const facebookSdkLocales: Record<Locale, string> = {
+  th: 'th_TH',
+  en: 'en_US',
+  lo: 'lo_LA',
+  zh: 'zh_CN',
+}
+
+const FACEBOOK_APP_ID = '2052165095332670'
+
+declare global {
+  interface Window {
+    FB?: {
+      XFBML?: {
+        parse: () => void
+      }
+    }
+  }
 }
 
 function renderContentBlock(block: string, index: number) {
@@ -70,23 +113,70 @@ export default function ArticleDetailContent({
   article,
   dict,
   lang,
+  articleUrl,
 }: ArticleDetailContentProps) {
+  const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
+  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v20.0&appId=${FACEBOOK_APP_ID}`
+
+  useEffect(() => {
+    window.FB?.XFBML?.parse()
+  }, [articleUrl])
+
   return (
     <article className="pt-32 pb-24 px-6">
+      <div id="fb-root" />
+      <Script
+        id="facebook-jssdk"
+        src={facebookSdkUrl}
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+        nonce=""
+        onLoad={() => window.FB?.XFBML?.parse()}
+      />
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-3xl text-center"
+        className="mx-auto w-full max-w-3xl text-center"
       >
         <p className="apple-eyebrow mb-4 text-xs uppercase text-gold/70">
           {article.category}
         </p>
-        <h1 className="apple-headline text-4xl text-text sm:text-5xl">
+        <h1 className="apple-headline break-words text-4xl text-text sm:text-5xl">
           {article.title}
         </h1>
         <p className="mt-5 text-sm text-text-secondary">
           {article.date} · {article.readTime}
         </p>
+        <div className="relative left-[calc((100%-100vw)/2)] ml-0 mr-auto mt-8 inline-flex w-[calc(100vw-3rem)] max-w-xs flex-col items-center justify-center gap-2 rounded-[1.75rem] border border-white/80 bg-white/70 p-1.5 shadow-[0_18px_50px_rgba(29,29,31,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-gold/10 backdrop-blur-xl sm:left-auto sm:mx-auto sm:w-auto sm:max-w-full sm:flex-row sm:rounded-[2rem] sm:gap-3">
+          <a
+            href={facebookShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={shareLabels[lang]}
+            className="premium-button inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[#1877f2]/25 bg-[linear-gradient(135deg,#1877f2_0%,#0f5fd0_52%,#0b4ca8_100%)] px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(24,119,242,0.22),inset_0_1px_0_rgba(255,255,255,0.26)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(24,119,242,0.28),inset_0_1px_0_rgba(255,255,255,0.34)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1877f2]/35 focus-visible:ring-offset-2 sm:w-auto"
+          >
+            <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm font-bold leading-none text-[#1877f2] shadow-[inset_0_-1px_0_rgba(29,29,31,0.08)]">
+              f
+            </span>
+            {shareLabels[lang]}
+          </a>
+          <div className="flex min-h-12 w-full min-w-28 items-center justify-center gap-2 rounded-full border border-gold/20 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(251,243,223,0.58))] px-4 text-sm font-semibold text-text shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_8px_22px_rgba(168,120,36,0.08)] sm:w-auto">
+            <span className="sr-only">{likeLabels[lang]}</span>
+            <span aria-hidden="true" className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1877f2]/10 text-xs font-bold text-[#1877f2]">
+              f
+            </span>
+            <span aria-hidden="true">{likeActionLabels[lang]}</span>
+            <div
+              className="fb-like"
+              data-href={articleUrl}
+              data-width=""
+              data-layout="button_count"
+              data-action="like"
+              data-size="large"
+              data-share="false"
+            />
+          </div>
+        </div>
       </motion.header>
 
       <motion.div

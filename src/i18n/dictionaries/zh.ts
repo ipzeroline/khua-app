@@ -1522,10 +1522,10 @@ const dict: Dictionary = {
     },
     {
       slug: 'lanna-food',
-      title: '兰纳料理',
-      metaTitle: '正宗兰纳料理 | 泰北饮食文化与地方菜 – KHUA',
-      metaDescription: '了解兰纳饮食文化、泰北拉布、南蕖、แกงแค、辣椒酱、香草和 KHUA 帕尧产品。',
-      excerpt: '兰纳饮食文化、康托克餐、地方蔬菜、泰北香草与烘烤香料菜肴指南。',
+      title: '来自帕尧的正宗兰纳料理',
+      metaTitle: '来自帕尧的正宗兰纳料理 | 泰北香料与辣椒酱 – KHUA',
+      metaDescription: '探索帕尧正宗兰纳料理、泰北拉布辣椒酱、南妮欧、泰北咖喱酱、兰纳香料与 KHUA 家庭厨房调味料。',
+      excerpt: '帕尧兰纳料理、泰北香料、地方食材、拉布辣椒酱、南妮欧、咖喱酱与 KHUA 家庭厨房风味指南。',
       heroEyebrow: 'Lanna Food',
       sections: [
         { title: '兰纳料理由火候与香草塑造', content: ['兰纳料理常先烘烤辣椒、红葱、蒜或香料，让香气在调味前先出现。'] },
@@ -1534,10 +1534,10 @@ const dict: Dictionary = {
     },
     {
       slug: 'phayao-recipe',
-      title: '帕尧食谱',
-      metaTitle: '帕尧食谱 | 兰纳辣椒酱与咖喱酱 – KHUA',
-      metaDescription: '探索帕尧食谱与地方兰纳风味，包括泰北拉布、红眼辣椒酱、泰北咖喱和南蕖。',
-      excerpt: '了解帕尧风味的特色：烘烤香料、地方香草与深层香气。',
+      title: '帕尧食谱与泰北调味料',
+      metaTitle: '帕尧食谱与泰北调味料 | KHUA',
+      metaDescription: '探索帕尧食谱、泰北调味料、泰北拉布辣椒酱、南妮欧酱、泰北咖喱酱、红眼辣椒酱与 KHUA 兰纳食材。',
+      excerpt: '来自帕尧兰纳传统的咖喱酱、辣椒酱与泰北地方食材指南，适合制作泰北拉布、南妮欧、แกงแค、红眼辣椒酱与家常兰纳菜。',
       heroEyebrow: 'Phayao Recipe',
       sections: [
         { title: '帕尧食谱有什么特色', content: ['帕尧食谱强调烘烤干辣椒、红葱、蒜与泰北香料，形成深层香气和柔和辣度。'] },
@@ -1580,8 +1580,8 @@ const dict: Dictionary = {
   },
 
   social: {
-    instagram: 'https://instagram.com/khua.foods',
-    facebook: 'https://facebook.com/khuafoods',
+    instagram: 'https://www.instagram.com/khualab/',
+    facebook: 'https://www.facebook.com/khualab',
     line: 'https://line.me/R/ti/p/@khua',
   },
 }

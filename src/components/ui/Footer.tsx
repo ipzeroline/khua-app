@@ -8,6 +8,18 @@ interface FooterProps {
 
 export default function Footer({ dict }: FooterProps) {
   const lang: Locale = dict.locale
+  const facebookLabels: Record<Locale, string> = {
+    th: 'ติดตาม Facebook Page',
+    en: 'Follow Facebook Page',
+    lo: 'ຕິດຕາມ Facebook Page',
+    zh: '关注 Facebook Page',
+  }
+  const instagramLabels: Record<Locale, string> = {
+    th: 'ติดตาม Instagram',
+    en: 'Follow Instagram',
+    lo: 'ຕິດຕາມ Instagram',
+    zh: '关注 Instagram',
+  }
   const navLinks = [
     { href: `/${lang}`, label: dict.nav.home },
     { href: `/${lang}/products`, label: dict.nav.products },
@@ -39,6 +51,32 @@ export default function Footer({ dict }: FooterProps) {
             <p className="mt-3 text-text-secondary text-sm leading-relaxed max-w-xs">
               {dict.site.tagline}
             </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href={dict.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/30 bg-gradient-to-b from-white/80 to-gold-pale/35 px-4 pr-5 text-sm font-medium text-text shadow-[0_14px_34px_rgba(38,24,10,0.08)] backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white hover:text-gold"
+              >
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-gold/55 bg-[#17110c] text-[1rem] font-semibold leading-none text-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(92,64,28,0.22)] transition duration-300 group-hover:bg-gold group-hover:text-white">
+                  f
+                </span>
+                {facebookLabels[lang]}
+              </a>
+              <a
+                href={dict.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/30 bg-gradient-to-b from-white/80 to-gold-pale/35 px-4 pr-5 text-sm font-medium text-text shadow-[0_14px_34px_rgba(38,24,10,0.08)] backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white hover:text-gold"
+              >
+                <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-gold/55 bg-[#17110c] text-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(92,64,28,0.22)] transition duration-300 group-hover:bg-gold group-hover:text-white">
+                  <span className="h-3.5 w-3.5 rounded-[5px] border border-current" />
+                  <span className="absolute h-1.5 w-1.5 rounded-full border border-current" />
+                  <span className="absolute right-[9px] top-[9px] h-1 w-1 rounded-full bg-current" />
+                </span>
+                {instagramLabels[lang]}
+              </a>
+            </div>
           </div>
 
           {/* Links */}
