@@ -12,7 +12,7 @@ const dict: Dictionary = {
       'น้ำพริกเหนือพรีเมียม ตำรับดั้งเดิมจากล้านนา คัดสรรวัตถุดิบคุณภาพ ปรุงสดใหม่ทุกชุด',
     lineId: '@khua',
     phone: '081-234-5678',
-    email: 'hello@khua-foods.com',
+    email: 'hello@khualab.com',
   },
 
   nav: {

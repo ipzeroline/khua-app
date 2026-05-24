@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getDictionary, LOCALES, type Locale } from '@/i18n'
 
-const SITE_URL = 'https://khua-foods.com'
+const SITE_URL = 'https://khualab.com'
 
 const staticPaths = ['', '/products', '/articles', '/about', '/contact', '/account']
 

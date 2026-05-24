@@ -1,6 +1,6 @@
 import { Locale } from './types'
 
-export const SITE_URL = 'https://khua-foods.com'
+export const SITE_URL = 'https://khualab.com'
 export const DEFAULT_OG_IMAGE = '/khua-logo.png'
 
 export const THAI_SEO_KEYWORDS = [

@@ -12,7 +12,7 @@ const dict: Dictionary = {
       'ນ້ຳພິກເໜືອພຣີມຽມ ຕຳລັບດັ້ງເດີມຈາກລ້ານນາ ຄັດສັນວັດຖຸດິບຄຸນນະພາບ ປຸງສົດໃໝ່ທຸກຊຸດ',
     lineId: '@khua',
     phone: '081-234-5678',
-    email: 'hello@khua-foods.com',
+    email: 'hello@khualab.com',
   },
 
   nav: {
