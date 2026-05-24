@@ -119,7 +119,7 @@ export default function ArticleDetailContent({
   const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v22.0&appId=${FACEBOOK_APP_ID}`
 
   useEffect(() => {
-    if (window.FB) {
+    if (window.FB?.XFBML) {
       window.FB.XFBML.parse()
     }
   }, [articleUrl])
@@ -133,7 +133,7 @@ export default function ArticleDetailContent({
         strategy="afterInteractive"
         crossOrigin="anonymous"
         onLoad={() => {
-          if (window.FB) {
+          if (window.FB?.XFBML) {
             window.FB.XFBML.parse()
           }
         }}
