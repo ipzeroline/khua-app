@@ -116,10 +116,12 @@ export default function ArticleDetailContent({
   articleUrl,
 }: ArticleDetailContentProps) {
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
-  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v20.0&appId=${FACEBOOK_APP_ID}`
+  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v22.0&appId=${FACEBOOK_APP_ID}`
 
   useEffect(() => {
-    window.FB?.XFBML?.parse()
+    if (window.FB) {
+      window.FB.XFBML.parse()
+    }
   }, [articleUrl])
 
   return (
@@ -128,10 +130,13 @@ export default function ArticleDetailContent({
       <Script
         id="facebook-jssdk"
         src={facebookSdkUrl}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         crossOrigin="anonymous"
-        nonce=""
-        onLoad={() => window.FB?.XFBML?.parse()}
+        onLoad={() => {
+          if (window.FB) {
+            window.FB.XFBML.parse()
+          }
+        }}
       />
       <motion.header
         initial={{ opacity: 0, y: 20 }}
