@@ -12,7 +12,7 @@ const dict: Dictionary = {
       '高端泰北辣椒酱，源自兰纳传统配方，严选优质食材，每一批新鲜制作。',
     lineId: '@khua',
     phone: '081-234-5678',
-    email: 'hello@khualab.com',
+    email: 'khualabofficial@gmail.com',
   },
 
   nav: {

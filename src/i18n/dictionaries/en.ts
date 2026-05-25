@@ -12,7 +12,7 @@ const dict: Dictionary = {
       'Premium Northern Thai chili pastes. Traditional Lanna recipes, artisanal quality, freshly prepared for every order.',
     lineId: '@khua',
     phone: '081-234-5678',
-    email: 'hello@khualab.com',
+    email: 'khualabofficial@gmail.com',
   },
 
   nav: {
