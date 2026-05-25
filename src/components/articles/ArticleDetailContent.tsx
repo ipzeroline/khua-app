@@ -1,9 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { ArticleData, Dictionary, Locale } from '@/i18n'
 
@@ -28,31 +26,7 @@ const likeLabels: Record<Locale, string> = {
   zh: '赞这篇文章',
 }
 
-const socialProofLabels: Record<Locale, string> = {
-  th: 'คนที่ถูกใจบน Facebook',
-  en: 'Facebook likes',
-  lo: 'ຄົນທີ່ຖືກໃຈໃນ Facebook',
-  zh: 'Facebook 赞',
-}
-
-const facebookSdkLocales: Record<Locale, string> = {
-  th: 'th_TH',
-  en: 'en_US',
-  lo: 'lo_LA',
-  zh: 'zh_CN',
-}
-
 const FACEBOOK_APP_ID = '2052165095332670'
-
-declare global {
-  interface Window {
-    FB?: {
-      XFBML?: {
-        parse: () => void
-      }
-    }
-  }
-}
 
 function renderContentBlock(block: string, index: number) {
   const trimmed = block.trim()
@@ -116,32 +90,14 @@ export default function ArticleDetailContent({
   articleUrl,
 }: ArticleDetailContentProps) {
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
-  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v22.0&appId=${FACEBOOK_APP_ID}`
+  const facebookLikeUrl = `https://www.facebook.com/plugins/like.php?href=${encodeURIComponent(articleUrl)}&width=120&layout=button_count&action=like&size=small&share=false&height=28&appId=${FACEBOOK_APP_ID}`
 
   const handleShare = () => {
     window.open(facebookShareUrl, '_blank', 'noopener,noreferrer')
   }
 
-  useEffect(() => {
-    if (window.FB?.XFBML) {
-      window.FB.XFBML.parse()
-    }
-  }, [articleUrl])
-
   return (
     <article className="pt-32 pb-24 px-6">
-      <div id="fb-root" />
-      <Script
-        id="facebook-jssdk"
-        src={facebookSdkUrl}
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
-        onReady={() => {
-          if (window.FB?.XFBML) {
-            window.FB.XFBML.parse()
-          }
-        }}
-      />
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -171,24 +127,22 @@ export default function ArticleDetailContent({
                 <path d="M12 2v14" />
               </svg>
             </button>
-          </div>
-        </div>
-        <div className="mx-auto mt-3 w-full max-w-[360px] rounded-2xl border border-white/80 bg-white/70 px-4 py-3 text-left shadow-[0_12px_32px_rgba(29,29,31,0.07),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-gold/10 backdrop-blur-xl">
-          <p className="mb-2 text-[11px] font-semibold text-gold">
-            {socialProofLabels[lang]}
-          </p>
-          <div className="min-h-[52px] overflow-hidden">
-            <span className="sr-only">{likeLabels[lang]}</span>
-            <div
-              className="fb-like"
-              data-href={articleUrl}
-              data-width="320"
-              data-layout="standard"
-              data-action="like"
-              data-size="small"
-              data-share="false"
-              data-show-faces="true"
-            />
+            <span className="h-4 w-px bg-border" aria-hidden="true" />
+            <span className="flex h-7 w-[120px] flex-none items-center justify-center bg-white">
+              <span className="sr-only">{likeLabels[lang]}</span>
+              <iframe
+                title={likeLabels[lang]}
+                src={facebookLikeUrl}
+                width="120"
+                height="28"
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen
+                allow="encrypted-media; clipboard-write; web-share"
+                className="border-0 overflow-hidden"
+                referrerPolicy="origin-when-cross-origin"
+              />
+            </span>
           </div>
         </div>
       </motion.header>
