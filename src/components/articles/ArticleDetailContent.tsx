@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { ArticleData, Dictionary, Locale } from '@/i18n'
 
@@ -25,6 +26,25 @@ const likeLabels: Record<Locale, string> = {
   en: 'Like this article',
   lo: 'ກົດຖືກໃຈບົດຄວາມນີ້',
   zh: '赞这篇文章',
+}
+
+const facebookSdkLocales: Record<Locale, string> = {
+  th: 'th_TH',
+  en: 'en_US',
+  lo: 'lo_LA',
+  zh: 'zh_CN',
+}
+
+const FACEBOOK_APP_ID = '2052165095332670'
+
+declare global {
+  interface Window {
+    FB?: {
+      XFBML?: {
+        parse: () => void
+      }
+    }
+  }
 }
 
 function renderContentBlock(block: string, index: number) {
@@ -89,25 +109,32 @@ export default function ArticleDetailContent({
   articleUrl,
 }: ArticleDetailContentProps) {
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
-  const likeStorageKey = `khua-liked:${articleUrl}`
-  const [liked, setLiked] = useState(() => (
-    typeof window !== 'undefined' && window.localStorage.getItem(likeStorageKey) === '1'
-  ))
+  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v22.0&appId=${FACEBOOK_APP_ID}`
 
   const handleShare = () => {
     window.open(facebookShareUrl, '_blank', 'noopener,noreferrer')
   }
 
-  const handleLike = () => {
-    setLiked((current) => {
-      const next = !current
-      window.localStorage.setItem(likeStorageKey, next ? '1' : '0')
-      return next
-    })
-  }
+  useEffect(() => {
+    if (window.FB?.XFBML) {
+      window.FB.XFBML.parse()
+    }
+  }, [articleUrl])
 
   return (
     <article className="pt-32 pb-24 px-6">
+      <div id="fb-root" />
+      <Script
+        id="facebook-jssdk"
+        src={facebookSdkUrl}
+        strategy="afterInteractive"
+        crossOrigin="anonymous"
+        onReady={() => {
+          if (window.FB?.XFBML) {
+            window.FB.XFBML.parse()
+          }
+        }}
+      />
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -138,19 +165,18 @@ export default function ArticleDetailContent({
               </svg>
             </button>
             <span className="h-4 w-px bg-border" aria-hidden="true" />
-            <button
-              type="button"
-              onClick={handleLike}
-              aria-label={likeLabels[lang]}
-              aria-pressed={liked}
-              title={likeLabels[lang]}
-              className={`inline-flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/25 focus-visible:ring-offset-2 ${liked ? 'bg-gold text-white shadow-[0_6px_14px_rgba(168,120,36,0.2)]' : 'text-text-secondary hover:bg-gold/10 hover:text-text'}`}
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-                <path d="M7 11l4-9a3 3 0 0 1 3 3v4h5a2 2 0 0 1 2 2l-1 8a3 3 0 0 1-3 3H7z" />
-              </svg>
-            </button>
+            <div className="flex h-7 min-w-[72px] flex-none items-center justify-center overflow-hidden rounded-full bg-white px-2">
+              <span className="sr-only">{likeLabels[lang]}</span>
+              <div
+                className="fb-like leading-none"
+                data-href={articleUrl}
+                data-width="72"
+                data-layout="button_count"
+                data-action="like"
+                data-size="small"
+                data-share="false"
+              />
+            </div>
           </div>
         </div>
       </motion.header>
