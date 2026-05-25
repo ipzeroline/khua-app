@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { ArticleData, Dictionary, Locale } from '@/i18n'
 
@@ -26,25 +25,6 @@ const likeLabels: Record<Locale, string> = {
   en: 'Like this article',
   lo: 'ກົດຖືກໃຈບົດຄວາມນີ້',
   zh: '赞这篇文章',
-}
-
-const facebookSdkLocales: Record<Locale, string> = {
-  th: 'th_TH',
-  en: 'en_US',
-  lo: 'lo_LA',
-  zh: 'zh_CN',
-}
-
-const FACEBOOK_APP_ID = '2052165095332670'
-
-declare global {
-  interface Window {
-    FB?: {
-      XFBML?: {
-        parse: () => void
-      }
-    }
-  }
 }
 
 function renderContentBlock(block: string, index: number) {
@@ -108,33 +88,28 @@ export default function ArticleDetailContent({
   lang,
   articleUrl,
 }: ArticleDetailContentProps) {
+  const [isLiked, setIsLiked] = useState(false)
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
-  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v22.0&appId=${FACEBOOK_APP_ID}`
+  const likeStorageKey = `khua:article-like:${article.slug}`
 
   const handleShare = () => {
     window.open(facebookShareUrl, '_blank', 'noopener,noreferrer')
   }
 
+  const handleLike = () => {
+    setIsLiked((current) => {
+      const next = !current
+      window.localStorage.setItem(likeStorageKey, next ? '1' : '0')
+      return next
+    })
+  }
+
   useEffect(() => {
-    if (window.FB?.XFBML) {
-      window.FB.XFBML.parse()
-    }
-  }, [articleUrl])
+    setIsLiked(window.localStorage.getItem(likeStorageKey) === '1')
+  }, [likeStorageKey])
 
   return (
     <article className="pt-32 pb-24 px-6">
-      <div id="fb-root" />
-      <Script
-        id="facebook-jssdk"
-        src={facebookSdkUrl}
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
-        onReady={() => {
-          if (window.FB?.XFBML) {
-            window.FB.XFBML.parse()
-          }
-        }}
-      />
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -165,18 +140,32 @@ export default function ArticleDetailContent({
               </svg>
             </button>
             <span className="h-4 w-px bg-border" aria-hidden="true" />
-            <div className="flex h-7 min-w-[104px] flex-none items-center justify-center rounded-full bg-white px-1.5">
+            <button
+              type="button"
+              onClick={handleLike}
+              aria-label={likeLabels[lang]}
+              aria-pressed={isLiked}
+              title={likeLabels[lang]}
+              className={`inline-flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/25 focus-visible:ring-offset-2 ${
+                isLiked
+                  ? 'bg-gold/15 text-gold'
+                  : 'text-text-secondary hover:bg-gold/10 hover:text-text'
+              }`}
+            >
               <span className="sr-only">{likeLabels[lang]}</span>
-              <div
-                className="fb-like leading-none"
-                data-href={articleUrl}
-                data-width="104"
-                data-layout="button_count"
-                data-action="like"
-                data-size="small"
-                data-share="false"
-              />
-            </div>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill={isLiked ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20.8 4.6c-1.6-1.7-4.2-1.7-5.8 0L12 7.7 9 4.6c-1.6-1.7-4.2-1.7-5.8 0-1.6 1.7-1.6 4.4 0 6.1L12 20l8.8-9.3c1.6-1.7 1.6-4.4 0-6.1Z" />
+              </svg>
+            </button>
           </div>
         </div>
       </motion.header>
