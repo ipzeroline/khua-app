@@ -165,12 +165,12 @@ export default function ArticleDetailContent({
               </svg>
             </button>
             <span className="h-4 w-px bg-border" aria-hidden="true" />
-            <div className="flex h-7 min-w-[72px] flex-none items-center justify-center overflow-hidden rounded-full bg-white px-2">
+            <div className="flex h-7 min-w-[104px] flex-none items-center justify-center rounded-full bg-white px-1.5">
               <span className="sr-only">{likeLabels[lang]}</span>
               <div
                 className="fb-like leading-none"
                 data-href={articleUrl}
-                data-width="72"
+                data-width="104"
                 data-layout="button_count"
                 data-action="like"
                 data-size="small"
