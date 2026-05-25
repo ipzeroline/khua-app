@@ -49,7 +49,7 @@ export default function HeroSection({ dict }: HeroSectionProps) {
             <span>{dict.hero.subtitle}</span>
           </div>
           <span className="inline-flex whitespace-nowrap rounded-full border border-gold-light/25 bg-black/20 px-3 py-1 text-xs font-medium leading-none text-gold-light shadow-[0_12px_30px_rgba(0,0,0,0.18)] backdrop-blur-sm">
-            {dict.site.nameThai} จากพะเยา
+            {dict.hero.originBadge}
           </span>
         </div>
 

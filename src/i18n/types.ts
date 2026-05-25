@@ -122,6 +122,7 @@ export interface Dictionary {
 
   hero: {
     subtitle: string
+    originBadge: string
     title: string
     description: string
     cta: string

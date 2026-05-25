@@ -26,6 +26,7 @@ const dict: Dictionary = {
 
   hero: {
     subtitle: '高端泰北辣椒酱',
+    originBadge: 'KHUA 来自帕尧',
     title: '帕尧辣椒酱，兰纳传统配方',
     description:
       'KHUA 以帕尧府为产地，制作高端泰北辣椒酱。源自兰纳配方，慢火烘烤香料，严选本地食材，小批量新鲜制作。',

@@ -26,6 +26,7 @@ const dict: Dictionary = {
 
   hero: {
     subtitle: 'Premium Northern Thai Chili Paste',
+    originBadge: 'KHUA from Phayao',
     title: 'Phayao Chili Paste, Crafted from Lanna Recipes',
     description:
       'KHUA crafts premium Northern Thai chili paste from Phayao Province using Lanna recipes, slow-roasted spices, local ingredients, and fresh small-batch preparation.',
