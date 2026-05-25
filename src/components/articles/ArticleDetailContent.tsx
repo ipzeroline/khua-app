@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -25,8 +26,6 @@ const likeLabels: Record<Locale, string> = {
   lo: 'ກົດຖືກໃຈບົດຄວາມນີ້',
   zh: '赞这篇文章',
 }
-
-const FACEBOOK_APP_ID = '2052165095332670'
 
 function renderContentBlock(block: string, index: number) {
   const trimmed = block.trim()
@@ -89,12 +88,25 @@ export default function ArticleDetailContent({
   lang,
   articleUrl,
 }: ArticleDetailContentProps) {
+  const [isLiked, setIsLiked] = useState(false)
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
-  const facebookLikeUrl = `https://www.facebook.com/plugins/like.php?href=${encodeURIComponent(articleUrl)}&width=120&layout=button_count&action=like&size=small&share=false&height=28&appId=${FACEBOOK_APP_ID}`
+  const likeStorageKey = `khua:article-like:${article.slug}`
 
   const handleShare = () => {
     window.open(facebookShareUrl, '_blank', 'noopener,noreferrer')
   }
+
+  const handleLike = () => {
+    setIsLiked((current) => {
+      const next = !current
+      window.localStorage.setItem(likeStorageKey, next ? '1' : '0')
+      return next
+    })
+  }
+
+  useEffect(() => {
+    setIsLiked(window.localStorage.getItem(likeStorageKey) === '1')
+  }, [likeStorageKey])
 
   return (
     <article className="pt-32 pb-24 px-6">
@@ -128,21 +140,32 @@ export default function ArticleDetailContent({
               </svg>
             </button>
             <span className="h-4 w-px bg-border" aria-hidden="true" />
-            <span className="flex h-7 w-[120px] flex-none items-center justify-center bg-white">
+            <button
+              type="button"
+              onClick={handleLike}
+              aria-label={likeLabels[lang]}
+              aria-pressed={isLiked}
+              title={likeLabels[lang]}
+              className={`inline-flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/25 focus-visible:ring-offset-2 ${
+                isLiked
+                  ? 'bg-gold/15 text-gold'
+                  : 'text-text-secondary hover:bg-gold/10 hover:text-text'
+              }`}
+            >
               <span className="sr-only">{likeLabels[lang]}</span>
-              <iframe
-                title={likeLabels[lang]}
-                src={facebookLikeUrl}
-                width="120"
-                height="28"
-                scrolling="no"
-                frameBorder="0"
-                allowFullScreen
-                allow="encrypted-media; clipboard-write; web-share"
-                className="border-0 overflow-hidden"
-                referrerPolicy="origin-when-cross-origin"
-              />
-            </span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill={isLiked ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20.8 4.6c-1.6-1.7-4.2-1.7-5.8 0L12 7.7 9 4.6c-1.6-1.7-4.2-1.7-5.8 0-1.6 1.7-1.6 4.4 0 6.1L12 20l8.8-9.3c1.6-1.7 1.6-4.4 0-6.1Z" />
+              </svg>
+            </button>
           </div>
         </div>
       </motion.header>
