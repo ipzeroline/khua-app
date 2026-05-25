@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { ArticleData, Dictionary, Locale } from '@/i18n'
 
@@ -26,38 +25,6 @@ const likeLabels: Record<Locale, string> = {
   en: 'Like this article',
   lo: 'ກົດຖືກໃຈບົດຄວາມນີ້',
   zh: '赞这篇文章',
-}
-
-const likeActionLabels: Record<Locale, string> = {
-  th: 'ถูกใจ',
-  en: 'Like',
-  lo: 'ຖືກໃຈ',
-  zh: '赞',
-}
-
-const facebookSdkLocales: Record<Locale, string> = {
-  th: 'th_TH',
-  en: 'en_US',
-  lo: 'lo_LA',
-  zh: 'zh_CN',
-}
-
-const FACEBOOK_APP_ID = '2052165095332670'
-
-declare global {
-  interface Window {
-    FB?: {
-      XFBML?: {
-        parse: () => void
-      }
-      ui?: (params: {
-        method: string
-        href: string
-        quote?: string
-        hashtag?: string
-      }) => void
-    }
-  }
 }
 
 function renderContentBlock(block: string, index: number) {
@@ -122,41 +89,25 @@ export default function ArticleDetailContent({
   articleUrl,
 }: ArticleDetailContentProps) {
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`
-  const facebookSdkUrl = `https://connect.facebook.net/${facebookSdkLocales[lang]}/sdk.js#xfbml=1&version=v22.0&appId=${FACEBOOK_APP_ID}`
+  const likeStorageKey = `khua-liked:${articleUrl}`
+  const [liked, setLiked] = useState(() => (
+    typeof window !== 'undefined' && window.localStorage.getItem(likeStorageKey) === '1'
+  ))
 
   const handleShare = () => {
-    if (window.FB?.ui) {
-      window.FB.ui({
-        method: 'share',
-        href: articleUrl,
-        quote: article.excerpt,
-        hashtag: '#KHUA',
-      })
-    } else {
-      window.open(facebookShareUrl, '_blank', 'noopener,noreferrer')
-    }
+    window.open(facebookShareUrl, '_blank', 'noopener,noreferrer')
   }
 
-  useEffect(() => {
-    if (window.FB?.XFBML) {
-      window.FB.XFBML.parse()
-    }
-  }, [articleUrl])
+  const handleLike = () => {
+    setLiked((current) => {
+      const next = !current
+      window.localStorage.setItem(likeStorageKey, next ? '1' : '0')
+      return next
+    })
+  }
 
   return (
     <article className="pt-32 pb-24 px-6">
-      <div id="fb-root" />
-      <Script
-        id="facebook-jssdk"
-        src={facebookSdkUrl}
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
-        onLoad={() => {
-          if (window.FB?.XFBML) {
-            window.FB.XFBML.parse()
-          }
-        }}
-      />
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -171,33 +122,35 @@ export default function ArticleDetailContent({
         <p className="mt-5 text-sm text-text-secondary">
           {article.date} · {article.readTime}
         </p>
-        <div className="relative left-[calc((100%-100vw)/2)] ml-0 mr-auto mt-8 inline-flex w-[calc(100vw-3rem)] max-w-xs flex-col items-center justify-center gap-2 rounded-[1.75rem] border border-white/80 bg-white/70 p-1.5 shadow-[0_18px_50px_rgba(29,29,31,0.08),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-gold/10 backdrop-blur-xl sm:left-auto sm:mx-auto sm:w-auto sm:max-w-full sm:flex-row sm:rounded-[2rem] sm:gap-3">
-          <button
-            type="button"
-            onClick={handleShare}
-            aria-label={shareLabels[lang]}
-            className="premium-button inline-flex min-h-12 w-full cursor-pointer items-center justify-center rounded-full border border-[#1877f2]/25 bg-[linear-gradient(135deg,#1877f2_0%,#0f5fd0_52%,#0b4ca8_100%)] px-5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(24,119,242,0.22),inset_0_1px_0_rgba(255,255,255,0.26)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(24,119,242,0.28),inset_0_1px_0_rgba(255,255,255,0.34)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1877f2]/35 focus-visible:ring-offset-2 sm:w-auto"
-          >
-            <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm font-bold leading-none text-[#1877f2] shadow-[inset_0_-1px_0_rgba(29,29,31,0.08)]">
-              f
-            </span>
-            {shareLabels[lang]}
-          </button>
-          <div className="flex min-h-12 w-full min-w-28 items-center justify-center gap-2 rounded-full border border-gold/20 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(251,243,223,0.58))] px-4 text-sm font-semibold text-text shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_8px_22px_rgba(168,120,36,0.08)] sm:w-auto">
-            <span className="sr-only">{likeLabels[lang]}</span>
-            <span aria-hidden="true" className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1877f2]/10 text-xs font-bold text-[#1877f2]">
-              f
-            </span>
-            <span aria-hidden="true">{likeActionLabels[lang]}</span>
-            <div
-              className="fb-like"
-              data-href={articleUrl}
-              data-width=""
-              data-layout="button_count"
-              data-action="like"
-              data-size="large"
-              data-share="false"
-            />
+        <div className="mt-5 flex items-center justify-center">
+          <div className="inline-flex h-9 flex-nowrap items-center gap-1.5 rounded-full border border-white/80 bg-white/70 p-1 shadow-[0_12px_32px_rgba(29,29,31,0.07),inset_0_1px_0_rgba(255,255,255,0.95)] ring-1 ring-gold/10 backdrop-blur-xl">
+            <button
+              type="button"
+              onClick={handleShare}
+              aria-label={shareLabels[lang]}
+              title={shareLabels[lang]}
+              className="inline-flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full text-text-secondary transition hover:bg-gold/10 hover:text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/25 focus-visible:ring-offset-2"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" />
+                <path d="M16 6l-4-4-4 4" />
+                <path d="M12 2v14" />
+              </svg>
+            </button>
+            <span className="h-4 w-px bg-border" aria-hidden="true" />
+            <button
+              type="button"
+              onClick={handleLike}
+              aria-label={likeLabels[lang]}
+              aria-pressed={liked}
+              title={likeLabels[lang]}
+              className={`inline-flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/25 focus-visible:ring-offset-2 ${liked ? 'bg-gold text-white shadow-[0_6px_14px_rgba(168,120,36,0.2)]' : 'text-text-secondary hover:bg-gold/10 hover:text-text'}`}
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                <path d="M7 11l4-9a3 3 0 0 1 3 3v4h5a2 2 0 0 1 2 2l-1 8a3 3 0 0 1-3 3H7z" />
+              </svg>
+            </button>
           </div>
         </div>
       </motion.header>
@@ -221,7 +174,7 @@ export default function ArticleDetailContent({
           </div>
         ) : null}
         <div className="p-6 sm:p-10">
-          <div className="mb-8 flex flex-wrap justify-center gap-2">
+          <div className="mb-8 flex flex-wrap justify-center gap-2 border-b border-border pb-6 sm:justify-start">
             {article.tags.map((tag) => (
               <span
                 key={tag}
@@ -231,7 +184,7 @@ export default function ArticleDetailContent({
               </span>
             ))}
           </div>
-          <div className="mb-8 grid gap-3 border-b border-border pb-8 sm:grid-cols-3">
+          <div className="mb-8 grid gap-3 sm:grid-cols-3">
             {article.highlights.map((highlight) => (
               <p
                 key={highlight}
