@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import Script from 'next/script'
 import { DEFAULT_OG_IMAGE, SITE_URL, THAI_SEO_KEYWORDS } from '@/i18n/seo'
 import './globals.css'
 
@@ -29,6 +30,8 @@ const notoSansThai = localFont({
   variable: '--font-noto-sans-thai',
   display: 'swap',
 })
+
+const GA_MEASUREMENT_ID = 'G-KLKX3BJC3M'
 
 export const metadata: Metadata = {
   title: 'KHUA — น้ำพริกพะเยา น้ำพริกตำรับล้านนา',
@@ -89,6 +92,18 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <body className="min-h-full">{children}</body>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_MEASUREMENT_ID}');
+        `}
+      </Script>
     </html>
   )
 }

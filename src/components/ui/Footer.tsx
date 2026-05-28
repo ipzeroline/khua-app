@@ -20,6 +20,10 @@ export default function Footer({ dict }: FooterProps) {
     lo: 'ຕິດຕາມ Instagram',
     zh: '关注 Instagram',
   }
+  const socialLinkLabels = {
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+  }
   const navLinks = [
     { href: `/${lang}`, label: dict.nav.home },
     { href: `/${lang}/products`, label: dict.nav.products },
@@ -51,30 +55,32 @@ export default function Footer({ dict }: FooterProps) {
             <p className="mt-3 text-text-secondary text-sm leading-relaxed max-w-xs">
               {dict.site.tagline}
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-2.5">
               <a
                 href={dict.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/30 bg-gradient-to-b from-white/80 to-gold-pale/35 px-4 pr-5 text-sm font-medium text-text shadow-[0_14px_34px_rgba(38,24,10,0.08)] backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white hover:text-gold"
+                aria-label={facebookLabels[lang]}
+                className="group inline-flex min-h-11 items-center gap-3 rounded-md border border-border bg-white/55 px-3.5 pr-4 text-sm font-medium text-text-secondary shadow-[0_10px_30px_rgba(38,24,10,0.04)] transition duration-300 hover:border-gold/40 hover:bg-white hover:text-text"
               >
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-gold/55 bg-[#17110c] text-[1rem] font-semibold leading-none text-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(92,64,28,0.22)] transition duration-300 group-hover:bg-gold group-hover:text-white">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#1877f2]/20 bg-[#1877f2]/8 text-[0.95rem] font-semibold leading-none text-[#1877f2] transition duration-300 group-hover:border-[#1877f2]/35 group-hover:bg-[#1877f2]/12">
                   f
                 </span>
-                {facebookLabels[lang]}
+                <span>{socialLinkLabels.facebook}</span>
               </a>
               <a
                 href={dict.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/30 bg-gradient-to-b from-white/80 to-gold-pale/35 px-4 pr-5 text-sm font-medium text-text shadow-[0_14px_34px_rgba(38,24,10,0.08)] backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white hover:text-gold"
+                aria-label={instagramLabels[lang]}
+                className="group inline-flex min-h-11 items-center gap-3 rounded-md border border-border bg-white/55 px-3.5 pr-4 text-sm font-medium text-text-secondary shadow-[0_10px_30px_rgba(38,24,10,0.04)] transition duration-300 hover:border-gold/40 hover:bg-white hover:text-text"
               >
-                <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-gold/55 bg-[#17110c] text-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(92,64,28,0.22)] transition duration-300 group-hover:bg-gold group-hover:text-white">
-                  <span className="h-3.5 w-3.5 rounded-[5px] border border-current" />
+                <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#e1306c]/20 bg-[linear-gradient(135deg,rgba(245,133,41,0.12),rgba(225,48,108,0.10),rgba(131,58,180,0.12))] text-[#e1306c] transition duration-300 group-hover:border-[#e1306c]/35 group-hover:bg-[linear-gradient(135deg,rgba(245,133,41,0.16),rgba(225,48,108,0.14),rgba(131,58,180,0.16))]">
+                  <span className="h-3.5 w-3.5 rounded-[4px] border border-current" />
                   <span className="absolute h-1.5 w-1.5 rounded-full border border-current" />
-                  <span className="absolute right-[9px] top-[9px] h-1 w-1 rounded-full bg-current" />
+                  <span className="absolute right-[8px] top-[8px] h-1 w-1 rounded-full bg-current" />
                 </span>
-                {instagramLabels[lang]}
+                <span>{socialLinkLabels.instagram}</span>
               </a>
             </div>
           </div>
