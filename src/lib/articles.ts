@@ -1,6 +1,8 @@
+import { unstable_cache } from 'next/cache'
 import pool from '@/lib/db'
 import { ArticleData, Locale } from '@/i18n'
 import { getGeneratedArticles } from '@/data/articles'
+import { ARTICLE_CACHE_TAG } from '@/lib/cache-tags'
 
 interface ArticleRow {
   slug: string
@@ -64,7 +66,9 @@ function fallbackArticles(locale: Locale, fallback?: ArticleFallback) {
   ]
 }
 
-async function queryArticles(locale: Locale, slug?: string) {
+const ARTICLE_CACHE_REVALIDATE_SECONDS = 60 * 5
+
+async function queryArticlesUncached(locale: Locale, slug?: string) {
   if (!hasDbConfig()) return null
 
   const connection = await pool.getConnection()
@@ -102,6 +106,15 @@ async function queryArticles(locale: Locale, slug?: string) {
     connection.release()
   }
 }
+
+const queryArticles = unstable_cache(
+  queryArticlesUncached,
+  ['published-articles'],
+  {
+    revalidate: ARTICLE_CACHE_REVALIDATE_SECONDS,
+    tags: [ARTICLE_CACHE_TAG],
+  },
+)
 
 export async function getPublishedArticles(locale: Locale, fallback?: ArticleFallback) {
   try {

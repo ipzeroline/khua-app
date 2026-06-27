@@ -1,8 +1,10 @@
 import type { ResultSetHeader } from 'mysql2'
 import type { NextRequest } from 'next/server'
+import { revalidateTag } from 'next/cache'
 import pool from '@/lib/db'
 import { requirePermission, AuthContext } from '@/lib/api-auth'
 import { PERMISSIONS } from '@/lib/permissions'
+import { ARTICLE_CACHE_TAG } from '@/lib/cache-tags'
 
 const LOCALES = ['th', 'en', 'lo', 'zh'] as const
 
@@ -303,6 +305,7 @@ export async function POST(request: NextRequest) {
     }
 
     await connection.commit()
+    revalidateTag(ARTICLE_CACHE_TAG, 'max')
     return Response.json({ id: articleId, slug }, { status: 201 })
   } catch (error) {
     if (connection) await connection.rollback().catch(() => {})

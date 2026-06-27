@@ -1,7 +1,42 @@
 import { NextRequest } from 'next/server'
+import { revalidateTag } from 'next/cache'
+import type { RowDataPacket } from 'mysql2'
 import pool from '@/lib/db'
 import { requirePermission } from '@/lib/api-auth'
 import { PERMISSIONS } from '@/lib/permissions'
+import { ARTICLE_CACHE_TAG } from '@/lib/cache-tags'
+
+interface ArticleAdminRow extends RowDataPacket {
+  id: number
+  slug: string
+  status: string
+  cover_image_url: string | null
+  image_prompt: string | null
+  published_at: Date | string | null
+  author_id: number | null
+  article_meta_title: string | null
+  article_meta_description: string | null
+  created_at: Date | string
+  updated_at: Date | string
+  author_name: string | null
+}
+
+interface ArticleTranslationRow extends RowDataPacket {
+  tags_json: string | unknown[]
+  highlights_json: string | unknown[]
+  content_json: string | unknown[]
+}
+
+function parseJsonList(value: string | unknown[]) {
+  if (Array.isArray(value)) return value
+
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
 
 export async function GET(
   _request: NextRequest,
@@ -13,7 +48,7 @@ export async function GET(
   const { id } = await params
   const connection = await pool.getConnection()
   try {
-    const [rows] = await connection.execute(
+    const [rows] = await connection.execute<ArticleAdminRow[]>(
       `SELECT a.id, a.slug, a.status, a.cover_image_url, a.image_prompt,
               a.published_at, a.author_id, a.meta_title as article_meta_title,
               a.meta_description as article_meta_description,
@@ -24,23 +59,22 @@ export async function GET(
        WHERE a.id = ?`,
       [id],
     )
-    const articles = rows as any[]
-    if (articles.length === 0) {
+    if (rows.length === 0) {
       return Response.json({ error: 'Not found' }, { status: 404 })
     }
 
-    const [translations] = await connection.execute(
+    const [translations] = await connection.execute<ArticleTranslationRow[]>(
       'SELECT * FROM article_translations WHERE article_id = ?',
       [id],
     )
 
     return Response.json({
-      ...articles[0],
-      translations: (translations as any[]).map((t: any) => ({
+      ...rows[0],
+      translations: translations.map((t) => ({
         ...t,
-        tags: typeof t.tags_json === 'string' ? JSON.parse(t.tags_json) : t.tags_json,
-        highlights: typeof t.highlights_json === 'string' ? JSON.parse(t.highlights_json) : t.highlights_json,
-        content: typeof t.content_json === 'string' ? JSON.parse(t.content_json) : t.content_json,
+        tags: parseJsonList(t.tags_json),
+        highlights: parseJsonList(t.highlights_json),
+        content: parseJsonList(t.content_json),
       })),
     })
   } finally {
@@ -112,6 +146,7 @@ export async function PUT(
     }
 
     await connection.commit()
+    revalidateTag(ARTICLE_CACHE_TAG, 'max')
 
     return Response.json({ success: true })
   } catch (error) {
@@ -134,6 +169,7 @@ export async function DELETE(
   const connection = await pool.getConnection()
   try {
     await connection.execute('DELETE FROM articles WHERE id = ?', [id])
+    revalidateTag(ARTICLE_CACHE_TAG, 'max')
     return Response.json({ success: true })
   } finally {
     connection.release()

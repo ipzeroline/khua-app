@@ -36,7 +36,8 @@ export async function GET(
       headers: {
         'Content-Type': 'image/png',
         'Content-Length': String(image.length),
-        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable',
+        'X-Content-Type-Options': 'nosniff',
       },
     })
   } catch {

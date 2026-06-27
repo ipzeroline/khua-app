@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server'
+import { revalidateTag } from 'next/cache'
 import type { RowDataPacket } from 'mysql2'
 import pool from '@/lib/db'
 import { requirePermission } from '@/lib/api-auth'
 import { PERMISSIONS } from '@/lib/permissions'
+import { ARTICLE_CACHE_TAG } from '@/lib/cache-tags'
 
 type GeneratedArticle = {
   slug: string
@@ -106,6 +108,7 @@ export async function POST(
       'UPDATE articles SET cover_image_url = ?, image_prompt = ? WHERE id = ?',
       [coverImageUrl, imagePrompt, id],
     )
+    revalidateTag(ARTICLE_CACHE_TAG, 'max')
 
     return Response.json({
       cover_image_url: coverImageUrl,

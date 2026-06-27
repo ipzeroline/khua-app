@@ -1,10 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { NextRequest } from 'next/server'
+import { revalidateTag } from 'next/cache'
 import sharp from 'sharp'
 import pool from '@/lib/db'
 import { requirePermission } from '@/lib/api-auth'
 import { PERMISSIONS } from '@/lib/permissions'
+import { ARTICLE_CACHE_TAG } from '@/lib/cache-tags'
 
 const MAX_FILE_SIZE = 8 * 1024 * 1024
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
@@ -76,6 +78,7 @@ export async function POST(
       'UPDATE articles SET cover_image_url = ?, image_prompt = NULL WHERE id = ?',
       [coverImageUrl, id],
     )
+    revalidateTag(ARTICLE_CACHE_TAG, 'max')
 
     return Response.json({
       cover_image_url: coverImageUrl,
